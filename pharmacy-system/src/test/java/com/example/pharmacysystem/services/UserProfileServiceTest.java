@@ -93,7 +93,8 @@ class UserProfileServiceTest {
     void testChangePassword() {
         // Mock data
         int userId = 1;
-        User existingProfile = new User(userId, "username", "currentPassword", "street address", "city",
+        String encodedPass = userService.encoder().encode("currentPassword");
+        User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
@@ -101,14 +102,15 @@ class UserProfileServiceTest {
 
         assertTrue(passwordChanged);
         // Additional assertions to verify that the password has been changed in the system
-        assertEquals("newPassword", existingProfile.getPassword());
+        assertTrue(userService.encoder().matches("newPassword", existingProfile.getPassword()));
     }
 
     @Test
     void testChangePassword_CurrentPasswordIsWrong() {
         // Mock data
         int userId = 1;
-        User existingProfile = new User(userId, "username", "currentPassword", "street address", "city",
+        String encodedPass = userService.encoder().encode("currentPassword");
+        User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
@@ -116,14 +118,15 @@ class UserProfileServiceTest {
 
         assertFalse(passwordChanged);
         // Additional assertions to verify that the password hasn't been changed in the system
-        assertEquals("currentPassword", existingProfile.getPassword());
+        assertEquals(encodedPass, existingProfile.getPassword());
     }
 
     @Test
     void testChangePassword_GivenPasswordIsNull() {
         // Mock data
         int userId = 1;
-        User existingProfile = new User(userId, "username", "currentPassword", "street address", "city",
+        String encodedPass = userService.encoder().encode("currentPassword");
+        User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
@@ -131,7 +134,7 @@ class UserProfileServiceTest {
 
         assertFalse(passwordChanged);
         // Additional assertions to verify that the password hasn't been changed in the system
-        assertEquals("currentPassword", existingProfile.getPassword());
+        assertEquals(encodedPass, existingProfile.getPassword());
     }
 
     @Test

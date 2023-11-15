@@ -2,6 +2,7 @@ package com.example.pharmacysystem.service;
 
 
 import com.example.pharmacysystem.model.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public interface UserService {
     User getUserById(int id);
@@ -10,5 +11,8 @@ public interface UserService {
 
     boolean uploadProfilePicture(int id, String profilePicture);
 
+    PasswordEncoder encoder();
+
     boolean changePassword(int id, String currentPassword, String newPassword);
+
 }
