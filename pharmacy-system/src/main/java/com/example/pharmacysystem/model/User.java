@@ -1,5 +1,6 @@
 package com.example.pharmacysystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +13,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final int id;
     private final String username;
+    @JsonIgnore
     private String password;
     private String streetAddress;
     private String city;
