@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,6 +20,9 @@ class UserProfileServiceTest {
 
     @MockBean
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Test
     void testGetUserData() {
@@ -93,7 +97,7 @@ class UserProfileServiceTest {
     void testChangePassword() {
         // Mock data
         int userId = 1;
-        String encodedPass = userService.encoder().encode("currentPassword");
+        String encodedPass = passwordEncoder.encode("currentPassword");
         User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
@@ -102,14 +106,14 @@ class UserProfileServiceTest {
 
         assertTrue(passwordChanged);
         // Additional assertions to verify that the password has been changed in the system
-        assertTrue(userService.encoder().matches("newPassword", existingProfile.getPassword()));
+        assertTrue(passwordEncoder.matches("newPassword", existingProfile.getPassword()));
     }
 
     @Test
     void testChangePassword_CurrentPasswordIsWrong() {
         // Mock data
         int userId = 1;
-        String encodedPass = userService.encoder().encode("currentPassword");
+        String encodedPass = passwordEncoder.encode("currentPassword");
         User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
@@ -125,7 +129,7 @@ class UserProfileServiceTest {
     void testChangePassword_GivenPasswordIsNull() {
         // Mock data
         int userId = 1;
-        String encodedPass = userService.encoder().encode("currentPassword");
+        String encodedPass = passwordEncoder.encode("currentPassword");
         User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
