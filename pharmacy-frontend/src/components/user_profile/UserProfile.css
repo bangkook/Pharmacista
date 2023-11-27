@@ -1,0 +1,139 @@
+.userprofile {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.userprofilein {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 2vh;
+    gap: 20px;
+}
+
+.userprofile .userprofilein .left {
+    width: 40%;
+    /* background-color: aqua; */
+    /*border: 1px solid rgb(207, 207, 207);
+    border-radius: 2px;*/
+    min-height: 50vh;
+}
+
+.userprofile .userprofilein .right {
+    /* background-color: aqua; */
+    border: 1px solid rgb(207, 207, 207);
+
+    display: inline-block;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    margin-top: 5%;
+    object-fit: cover;
+}
+
+.accountsettings{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.accountsettings h1{
+    align-self: self-start;
+}
+
+
+.accountsettings .form{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.accountsettings .form .form-group{
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    margin: 10px;
+}
+
+.accountsettings .form .form-group label{
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+.accountsettings .form .form-group input{
+    padding: 10px 20px;
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 5px;
+    outline: none;
+}
+
+.accountsettings .form .form-group input:focus{
+    border: 1px solid black;
+}
+
+
+.mainbutton1{
+    background: green;
+    border: 1px solid ;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 300;
+    margin: 1rem;
+    cursor: pointer;
+    color: white;
+    align-self: self-start;
+}
+  
+  
+.mainbutton1:hover {
+    background-color: green;
+    opacity: 0.8;
+    color: white;
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.mainhead1{
+    color: var(--col1);
+    font-size: 30px;
+    font-weight: 300;
+    padding: 5px 10px;
+    margin-top: 10px;
+    justify-content: flex-start;
+}
+
+.Subhead-heading {
+    flex: 1 1 auto;
+    font-weight: var(--base-text-weight-normal, 400);
+    order: 0;
+}
+
+.Subhead {
+    border-bottom: var(--borderWidth-thin, max(1px, 0.0625rem)) solid var(--borderColor-muted, var(--color-border-muted));
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    margin-top: 2vh;
+    margin-left: 10%;
+    margin-bottom: var(--stack-gap-normal, 1rem);
+    padding-bottom: var(--stack-padding-condensed, 0.5rem);
+}
+div {
+    display: block;
+}
+hr {
+    border: 0;
+    clear:both;
+    display:block;
+    width: 96%;               
+    background-color: grey;
+    height: 1px;
+  }
+  
