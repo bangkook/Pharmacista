@@ -11,7 +11,29 @@ const Login=()=>{
     const [passwordInput,setPassword]=useState('')
    
     const signInButton= async (e)=>{
-            
+        if(userNameinput==='' ||passwordInput==='' ){
+            alert("Please fill all required fileds")
+        }else{
+            const response = await fetch("http://localhost:8088/user/checkUser?"+ new URLSearchParams({
+                userName: userNameinput,
+                password:passwordInput
+            }))
+            const data = await response.json()
+            console.log(data)
+            if(data===1){
+                const registeredUser = await fetch("http://localhost:8088/user/getUserByName?"+ new URLSearchParams({
+                userName: userNameinput,
+                password:passwordInput
+                }))
+                const userData = await registeredUser.json()
+                console.log(userData)
+            }else if(data===0){
+                alert("wrong password")
+            }else{
+                alert("You don't have an account")
+            }
+            }
+        
     }
 
     return(

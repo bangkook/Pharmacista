@@ -16,10 +16,10 @@ public class UserController {
 
     @GetMapping("/getUserByName")
     public User getUsersByName(@RequestParam String userName, @RequestParam String password){
-        return null;
+        return userService.getUser(userName,password);
     }
     @GetMapping("/checkUser")
     public int checkUser(@RequestParam String userName, @RequestParam String password){
-        return 0;
+        return userService.checkUser(userName,password);
     }
 }
