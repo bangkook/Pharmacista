@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import LockIcon from '@mui/icons-material/Lock';
 
 const Login=()=>{
+    const BaseUri = 'http://localhost:8088/user'
     const paperStyle={padding: 20 , height:'50 vh', width:340 , margin:"150px auto" }
     const lockIconStyle={backgroundColor:'#b18fbf'}
     const textmargin={ margin:"10px 0px"}
@@ -14,14 +15,14 @@ const Login=()=>{
         if(userNameinput==='' ||passwordInput==='' ){
             alert("Please fill all required fileds")
         }else{
-            const response = await fetch("http://localhost:8088/user/checkUser?"+ new URLSearchParams({
+            const response = await fetch(`${BaseUri}/checkUser?`+ new URLSearchParams({
                 userName: userNameinput,
                 password:passwordInput
             }))
             const data = await response.json()
             console.log(data)
             if(data===1){
-                const registeredUser = await fetch("http://localhost:8088/user/getUserByName?"+ new URLSearchParams({
+                const registeredUser = await fetch(`${BaseUri}/getUserByName?`+ new URLSearchParams({
                 userName: userNameinput,
                 password:passwordInput
                 }))
