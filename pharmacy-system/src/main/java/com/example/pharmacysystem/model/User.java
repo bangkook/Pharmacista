@@ -36,10 +36,10 @@ public class User {
         this.profilePicture = profilePicture;
         this.role = Role.USER;
     }
-    
+
     public User() {
     }
-
+    
     @ReadOnlyProperty
     public int getId() {
         return id;
