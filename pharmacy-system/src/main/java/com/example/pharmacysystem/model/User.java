@@ -1,6 +1,5 @@
 package com.example.pharmacysystem.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,8 +12,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
-    @JsonIgnore
-
     private String password;
     private String streetAddress;
     private String city;
@@ -22,9 +19,13 @@ public class User {
     private String zipCode;
     private String phoneNumber;
     private String profilePicture;
+    private Role role;
 
-    public User(int id, String username, String password, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
-        this.id = id;
+    public enum Role {
+        USER, ADMIN
+    }
+
+    public User(String username, String password, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
         this.username = username;
         this.password = password;
         this.streetAddress = streetAddress;
@@ -33,10 +34,12 @@ public class User {
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
+        this.role = Role.USER;
     }
-    public User(){
 
+    public User() {
     }
+    
     @ReadOnlyProperty
     public int getId() {
         return id;
@@ -101,5 +104,13 @@ public class User {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
