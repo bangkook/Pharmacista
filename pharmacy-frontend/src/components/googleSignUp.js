@@ -17,6 +17,8 @@ export default function GoogleSignUp() {
         picture: userInfoResponse.data.picture,
       };
 
+      // Send the user information to the server
+      await sendUserInfoToServer(userInfo);
 
       console.log('User information:', userInfoResponse.data);
     } catch (error) {
@@ -24,6 +26,15 @@ export default function GoogleSignUp() {
     }
   };
 
+  const sendUserInfoToServer = async (userInfo) => {
+    try {
+        const serverResponse = await axios.post('http://localhost:8088/login/oauth2/', userInfo);
+        console.log('Server response:', serverResponse.data);
+    } catch (error) {
+        console.error('Error sending user information to server:', error);
+    }
+    
+};
 
   const login = useGoogleLogin({
     onSuccess: handleGoogleLogin,

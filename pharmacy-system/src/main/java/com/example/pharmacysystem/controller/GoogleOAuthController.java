@@ -14,10 +14,27 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class GoogleOAuthController {
 
+    private final UserService userService;
+    // Inject the UserService through constructor injection
+    public GoogleOAuthController(UserService userService) {
+        this.userService = userService;
+    }
     @PostMapping("/login/oauth2/")
     public ResponseEntity<String> createUser(@RequestBody Map<String, Object> payload) {//Registration Rest API
-        return null;
+//         Retrieve user information from the payload
+        String email = (String) payload.get("email");
+        String picture = (String) payload.get("picture");
+        System.out.println(payload);
+
+
+        List<String> existingUsers = userService.findAllUsers();
+        if (existingUsers.contains(email)) {
+            return ResponseEntity.ok("Existing User " + email);
+        } else {
+            User newUser = new User(0, email, null, null, null, null, null, null, picture);
+            userService.saveUser(newUser);
+            return ResponseEntity.ok("New User added " + email);
+        }
     }
 
 }
-

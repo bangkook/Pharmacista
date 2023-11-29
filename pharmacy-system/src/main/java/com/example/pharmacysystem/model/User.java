@@ -11,8 +11,8 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final int id;
-    private final String username;
+    private  int id;
+    private  String username;
     @JsonIgnore
     private String password;
     private String streetAddress;
@@ -33,7 +33,9 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
     }
+    public User(){
 
+    }
     @ReadOnlyProperty
     public int getId() {
         return id;
