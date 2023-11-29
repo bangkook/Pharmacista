@@ -55,8 +55,7 @@ public class UserServiceImpl implements UserService {
         // Disallowed: Special characters at the beginning, spaces.
         // Example: "John_Doe123"
 
-        String regex = "^[A-Za-z]\\w{5,29}$";
-        Pattern p = Pattern.compile(regex);
+        String regex = "^[A-Za-z]\\w{5,29}$";        Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(username);
 
         // Return if the username matched the Regex
