@@ -5,7 +5,6 @@ import com.example.pharmacysystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,13 +14,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     public User saveUser(User user) {
-        return null;
+        return userRepository.save(user);
     }
 
     @Override
     public List<String> findAllUsers() {
-
-        return null;
+        List<User> users = userRepository.findAll();
+        List<String> usernames = users.stream()
+                .map(User::getUsername)
+                .collect(Collectors.toList());
+        return usernames;
     }
 
 }
