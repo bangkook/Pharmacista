@@ -1,4 +1,4 @@
-package com.example.pharmacysystem.controller;
+package com.example.pharmacysystem.controllers;
 
 import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;

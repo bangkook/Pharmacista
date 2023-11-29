@@ -1,8 +1,9 @@
-package com.example.pharmacysystem.service;
+package com.example.pharmacysystem.services;
 
 import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
+import com.example.pharmacysystem.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
