@@ -13,7 +13,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
-    //@JsonIgnore
+    @JsonIgnore
+
     private String password;
     private String streetAddress;
     private String city;
@@ -36,7 +37,9 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
     }
+    public User(){
 
+    }
     @ReadOnlyProperty
     public int getId() {
         return id;
