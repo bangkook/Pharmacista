@@ -20,6 +20,7 @@ public class UserController {
     @GetMapping("/login")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Boolean> checkUserExist(@RequestParam(name = "email") String email) {
-        return null;
+        Boolean userExists = userService.currentUserEmail(email);
+        return ResponseEntity.ok(userExists);
     }
 }
