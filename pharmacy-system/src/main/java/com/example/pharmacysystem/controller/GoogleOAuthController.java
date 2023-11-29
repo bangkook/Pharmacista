@@ -20,11 +20,11 @@ public class GoogleOAuthController {
         this.userService = userService;
     }
     @PostMapping("/login/oauth2/")
-    public ResponseEntity<String> createUser(@RequestBody Map<String, Object> payload) {//Registration Rest API
-//         Retrieve user information from the payload
-        String email = (String) payload.get("email");
-        String picture = (String) payload.get("picture");
-        System.out.println(payload);
+    public ResponseEntity<String> createUser(@RequestBody Map<String, String> Response) {//Registration Rest API
+//         Retrieve user information from the Response
+        String email =  Response.get("email");
+        String picture =  Response.get("picture");
+        System.out.println(Response);
 
 
         List<String> existingUsers = userService.findAllUsers();

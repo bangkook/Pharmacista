@@ -36,13 +36,13 @@ export default function GoogleSignUp() {
     
 };
 
-  const login = useGoogleLogin({
+  const SignUp = useGoogleLogin({
     onSuccess: handleGoogleLogin,
   });
 
   return (
     <div className="center-container">
-      <button type="button" className="google-sign-in-button" onClick={login}>
+      <button type="button" className="google-sign-in-button" onClick={SignUp}>
         Sign up with Google
       </button>
     </div>
