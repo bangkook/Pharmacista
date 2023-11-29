@@ -1,13 +1,17 @@
-package com.example.pharmacysystem.service;
+package com.example.pharmacysystem.services;
+
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
+import com.example.pharmacysystem.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import java.util.Arrays;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -23,7 +27,7 @@ class GoogleOAuthServiceTest {
     @Test
     void testSaveUser() {
         // Arrange
-        User newUser = new User(1, "newuser@example.com", null, null, null, null, null, null, "profile_picture_url");
+        User newUser = new User("newuser@example.com", null, null, null, null, null, null, "profile_picture_url");
         Mockito.when(userRepository.save(newUser)).thenReturn(newUser);
 
         // Act
@@ -37,8 +41,8 @@ class GoogleOAuthServiceTest {
     void testFindAllUsers() {
         // Arrange
         List<User> users = Arrays.asList(
-                new User(1, "user1@example.com", null, null, null, null, null, null, "profile_picture_url1"),
-                new User(2, "user2@example.com", null, null, null, null, null, null, "profile_picture_url2")
+                new User("user1@example.com", null, null, null, null, null, null, "profile_picture_url1"),
+                new User("user2@example.com", null, null, null, null, null, null, "profile_picture_url2")
         );
         Mockito.when(userRepository.findAll()).thenReturn(users);
 

@@ -1,4 +1,4 @@
-package com.example.pharmacysystem.Controllers;
+package com.example.pharmacysystem.controllers;
 
 import com.example.pharmacysystem.controller.GoogleOAuthSignInController;
 import com.example.pharmacysystem.service.UserService;
@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,9 +35,9 @@ class UserControllerTest {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build(); //testing the userController in isolation
 
         MvcResult result = mockMvc.perform(get("/user/login")
-                        .param("email", email))
-                        .andExpect(status().isOk())
-                        .andReturn();
+                .param("email", email))
+                .andExpect(status().isOk())
+                .andReturn();
 
         String content = result.getResponse().getContentAsString();
         assertEquals("true", content);
@@ -50,9 +51,9 @@ class UserControllerTest {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
         MvcResult result = mockMvc.perform(get("/user/login")
-                        .param("email", email))
-                        .andExpect(status().isOk())
-                        .andReturn();
+                .param("email", email))
+                .andExpect(status().isOk())
+                .andReturn();
 
         String content = result.getResponse().getContentAsString();
         assertEquals("false", content);
