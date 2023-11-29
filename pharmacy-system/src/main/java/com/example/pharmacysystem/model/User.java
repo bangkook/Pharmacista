@@ -23,9 +23,6 @@ public class User {
     private String phoneNumber;
     private String profilePicture;
 
-    public User(){
-
-    }
     public User(int id, String username, String password, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
         this.id = id;
         this.username = username;

@@ -2,7 +2,7 @@ import React from 'react';
 import '../App';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import GoogleLogin from 'react-google-login';
+
 
 export default function GoogleSignIn() {
   const handleGoogleLogin = async (response) => {
