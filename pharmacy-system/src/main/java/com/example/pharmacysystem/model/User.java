@@ -11,10 +11,10 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final int id;
-    private final String username;
-    @JsonIgnore
+    private  int id;//final
+    private  String username;//final
     private String password;
+    private boolean role;
     private String streetAddress;
     private String city;
     private String country;
@@ -22,10 +22,11 @@ public class User {
     private String phoneNumber;
     private String profilePicture;
 
-    public User(int id, String username, String password, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
+    public User(int id, String username, String password, boolean role, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.role = role;
         this.streetAddress = streetAddress;
         this.city = city;
         this.country = country;
@@ -34,6 +35,7 @@ public class User {
         this.profilePicture = profilePicture;
     }
 
+    public User(){}
     @ReadOnlyProperty
     public int getId() {
         return id;
@@ -47,10 +49,15 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean isRole() {return role;}
+
+    public void setRole(boolean role) {this.role = role;}
+
+
 
     public String getStreetAddress() {
         return streetAddress;
