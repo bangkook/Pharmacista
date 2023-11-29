@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootApplication
 public class PharmacySystemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PharmacySystemApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PharmacySystemApplication.class, args);
+    }
 
 }
