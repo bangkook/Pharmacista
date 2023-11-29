@@ -27,7 +27,7 @@ class GoogleOAuthServiceTest {
     @Test
     void testSaveUser() {
         // Arrange
-        User newUser = new User("newuser@example.com", null, null, null, null, null, null, "profile_picture_url");
+        User newUser = new User("newuser", null, null, null, null, null, null, "profile_picture_url");
         Mockito.when(userRepository.save(newUser)).thenReturn(newUser);
 
         // Act
