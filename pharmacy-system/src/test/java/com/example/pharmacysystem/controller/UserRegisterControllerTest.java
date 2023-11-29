@@ -55,7 +55,6 @@ public class UserRegisterControllerTest {
                 .andReturn();
 
         String resultContent = res.getResponse().getContentAsString();
-
         String expectedResponse = "New User is added successfully";
         Assert.assertTrue(resultContent.equals(expectedResponse));
     }
@@ -70,23 +69,23 @@ public class UserRegisterControllerTest {
         MvcResult res = mockMvc.perform(post("/user/addUser")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isOk())
+                .andExpect(status().isUnprocessableEntity())
                 .andReturn();
 
         String resultContent = res.getResponse().getContentAsString();
-        Assert.assertTrue(resultContent.equals(errorMessage));
+        Assert.assertEquals(errorMessage, resultContent);
     }
     @Test
     public void addUser_Fail_InvalidUsername() throws Exception {
         String errorMessage = "Invalid username. Please follow the specified constraints.";
-        User user = new User("username", "pass", "address", "city", "country", "zip", "01271676366", null);
+        User user = new User("2username", "pass", "address", "city", "country", "zip", "01271676366", null);
         doThrow(new UserRegistrationException(errorMessage))
                 .when(userService).saveUser(any(User.class));
 
         MvcResult res = mockMvc.perform(post("/user/addUser")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isOk())
+                .andExpect(status().isUnprocessableEntity())
                 .andReturn();
 
         String resultContent = res.getResponse().getContentAsString();

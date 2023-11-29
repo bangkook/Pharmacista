@@ -4,6 +4,8 @@ import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,19 +17,19 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/addUser")
-    public String addUser(@RequestBody User user) {
+    public ResponseEntity<String> addUser(@RequestBody User user) {
         System.out.println("-----------------------------------------");
         System.out.println("In User Controller");
 //        System.out.println("User: \n" + user.toString());
         try {
             userService.saveUser(user);
             // TODO: Add automatic login here
-            return "New User is added successfully";
+            return new ResponseEntity<>("New User is added successfully", HttpStatus.OK);
         } catch (UserRegistrationException e) {
-            return e.getMessage(); // Return the specific error message
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY); // Return the specific error message
         } catch (Exception e) {
 //            e.printStackTrace();
-            return "Internal Server Error";
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

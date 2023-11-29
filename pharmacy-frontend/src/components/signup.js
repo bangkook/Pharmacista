@@ -4,6 +4,8 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import Select from "react-select";
 import countryList from "react-select-country-list";
 
+const BaseUri = 'http://localhost:8088/user'
+
 const paperStyle = {
     padding: '30px 20px',
     width: '600px',
@@ -56,34 +58,25 @@ function Signup() {
 
         let user = {}
         if (passEqualsConfPass && validPhone && passCheck  && validZip && validUsername) {
-            console.log(username, pass, confPass, stAdd, zip, phone, country.label);
             const countryName = country.label;
             user = {"username":username, "password": pass, "streetAddress": stAdd, "country": countryName, "zipCode": zip, "phoneNumber":phone };
-            console.log(user);
 
-            fetch("http://localhost:8088/user/addUser", {
+            const response = fetch(`${BaseUri}/addUser`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(user)
-            }).then(response => response.text()) // Extract response as text
-            .then(data => {
-            // Handle the response data as a string
-            console.log(data); // Output the response string
-            if(data === "New User is added successfully"){
-                console.log("username = ", username)
-                alert('Welcome to Pharmacista '+ user.username + '! Horray!!')
-            }else if(data === "Invalid username. Please follow the specified constraints."){
-                alert("Username is at least 6 and at most 30 alphanumeric character with _ only as special character. Spaces are not allowed");
-            }else {
-                alert(data);
-            }
             })
+
+            if((await response).ok){
+                alert('Welcome to Pharmacista '+ user.username + '! Horray!!')
+            } else if((await response).status == 422) {
+                alert("Username is already taken. Choose another one!")
+            }
         } 
         else if (!validUsername) {
-            alert("Username is at least 6 and at most 30 alphanumeric character with _ only as special character. Spaces are not allowed");
+            alert("Username is at least 6 and at most 30 characters (letters or numbers) with _ only as special character. Spaces are not allowed. Start with an alphabet!");
         } 
         else if (!passEqualsConfPass) {
-            console.log("Password and Confirm Password are not the same")
             // Re-enter the password
             alert("Password and Confirm Password are not the same");
             setConfPass("");
