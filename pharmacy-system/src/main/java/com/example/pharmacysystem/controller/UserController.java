@@ -1,5 +1,4 @@
 package com.example.pharmacysystem.controller;
-
 import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
@@ -9,10 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
+import com.example.pharmacysystem.model.User;
+import com.example.pharmacysystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
 
 @RequestMapping(value = {"/user"})
 @RestController
-@CrossOrigin
+@CrossOrigin()
 public class UserController {
     @Autowired
     private UserService userService;
@@ -78,5 +85,15 @@ public class UserController {
         } else {
             return new ResponseEntity<>("Current password is wrong", HttpStatus.UNPROCESSABLE_ENTITY);
         }
+    }
+
+    @GetMapping("/getUserByName")
+    public User getUsersByName(@RequestParam String userName, @RequestParam String password){
+        return userService.getUser(userName,password);
+    }
+    @GetMapping("/checkUser")
+    public int checkUser(@RequestParam String userName, @RequestParam String password){
+        return userService.checkUser(userName,password);
+
     }
 }

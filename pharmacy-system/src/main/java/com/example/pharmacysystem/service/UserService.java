@@ -1,4 +1,5 @@
 package com.example.pharmacysystem.service;
+
 import com.example.pharmacysystem.model.User;
 import org.springframework.stereotype.Service;
 import com.example.pharmacysystem.model.User;
@@ -22,4 +23,10 @@ public interface UserService {
     User saveUser(User user);
 
     List<String> findAllUsers();
+    public User getUser(String userName, String password);
+    public int checkUser(String userName, String password);
+
+
+
+
 }

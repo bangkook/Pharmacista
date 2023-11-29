@@ -35,7 +35,9 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
         this.role = Role.USER;
+
     }
+
 
     public User() {
     }
@@ -113,4 +115,7 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
 }
+
+
