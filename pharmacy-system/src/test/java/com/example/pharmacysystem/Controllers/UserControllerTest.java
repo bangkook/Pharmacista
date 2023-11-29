@@ -1,6 +1,6 @@
 package com.example.pharmacysystem.Controllers;
 
-import com.example.pharmacysystem.controller.UserController;
+import com.example.pharmacysystem.controller.GoogleOAuthSignInController;
 import com.example.pharmacysystem.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
 
     @Autowired
-    private UserController userController;
+    private GoogleOAuthSignInController userController;
 
     @MockBean
     private UserService userService;
