@@ -12,20 +12,11 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     public Boolean currentUserEmail(String email) {
-        List<String> usernames = getUsernames();
-        if (usernames.contains(email)) {
-            return true;
-        } else {
-            return false;
-        }
+        return null;
     }
 
     public List<String> getUsernames() {
-        List<User> users = userRepository.findAll();
-        List<String> usernames = users.stream()
-                .map(User::getUsername)
-                .collect(Collectors.toList());
-        return usernames;
+        return null;
     }
 
 }
