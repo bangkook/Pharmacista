@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,22 +20,18 @@ class UserProfileServiceTest {
     @MockBean
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Test
     void testGetUserData() {
         // Mock data
         int userId = 1;
         when(userRepository.findById(userId))
-                .thenReturn(java.util.Optional.of(new User(userId, "username", "password", "address", "city",
+                .thenReturn(java.util.Optional.of(new User("username", "password", "address", "city",
                         "country", "11111", "12345678911", "picture.jpg")));
 
         // Assert no exception is thrown
         assertAll(() -> userService.getUserById(userId));
 
         User user = userService.getUserById(userId);
-        assertEquals(userId, user.getId());
         assertEquals("username", user.getUsername());
         assertEquals("password", user.getPassword());
         assertEquals("address", user.getStreetAddress());
@@ -62,7 +57,7 @@ class UserProfileServiceTest {
     void testUpdateUserData() {
         // Mock data
         int userId = 1;
-        User user = new User(userId, "username", "password", "old address", "old city",
+        User user = new User("username", "password", "old address", "old city",
                 "old country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(user));
 
@@ -97,8 +92,8 @@ class UserProfileServiceTest {
     void testChangePassword() {
         // Mock data
         int userId = 1;
-        String encodedPass = passwordEncoder.encode("currentPassword");
-        User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
+        String encodedPass = "currentPassword";
+        User existingProfile = new User("username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
@@ -106,15 +101,15 @@ class UserProfileServiceTest {
 
         assertTrue(passwordChanged);
         // Additional assertions to verify that the password has been changed in the system
-        assertTrue(passwordEncoder.matches("newPassword", existingProfile.getPassword()));
+        assertEquals(("newPassword"), existingProfile.getPassword());
     }
 
     @Test
     void testChangePassword_CurrentPasswordIsWrong() {
         // Mock data
         int userId = 1;
-        String encodedPass = passwordEncoder.encode("currentPassword");
-        User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
+        String encodedPass = "currentPassword";
+        User existingProfile = new User("username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
@@ -129,8 +124,8 @@ class UserProfileServiceTest {
     void testChangePassword_GivenPasswordIsNull() {
         // Mock data
         int userId = 1;
-        String encodedPass = passwordEncoder.encode("currentPassword");
-        User existingProfile = new User(userId, "username", encodedPass, "street address", "city",
+        String encodedPass = "currentPassword";
+        User existingProfile = new User("username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
@@ -145,7 +140,7 @@ class UserProfileServiceTest {
     void testUploadProfilePicture() {
         // Mock data
         int userId = 1;
-        User existingProfile = new User(userId, "username", "password", "street address", "city",
+        User existingProfile = new User("username", "password", "street address", "city",
                 "country", "11111", "12345678911", "oldPicture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
@@ -161,7 +156,7 @@ class UserProfileServiceTest {
     void testUploadProfilePicture_PictureIsNull() {
         // Mock data
         int userId = 1;
-        User existingProfile = new User(userId, "username", "password", "street address", "city",
+        User existingProfile = new User("username", "password", "street address", "city",
                 "country", "11111", "12345678911", "oldPicture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 

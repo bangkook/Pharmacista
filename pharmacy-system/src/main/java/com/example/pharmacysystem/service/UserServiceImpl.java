@@ -3,7 +3,6 @@ package com.example.pharmacysystem.service;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,9 +11,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(int id) {
@@ -64,11 +60,11 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent() && newPassword != null) {
             User user = optionalUser.get();
-            if (!passwordEncoder.matches(currentPassword, user.getPassword()))
+            if (!(currentPassword.equals(user.getPassword())))
                 return false;
 
             // Update user data
-            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setPassword(newPassword);
 
             // Save the updated user to the database
             userRepository.save(user);
