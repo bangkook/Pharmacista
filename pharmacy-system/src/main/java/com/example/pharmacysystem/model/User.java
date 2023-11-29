@@ -11,31 +11,35 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int id;//final
-    private  String username;//final
+    private int id;
+    private String username;
     private String password;
-    private boolean role;
     private String streetAddress;
     private String city;
     private String country;
     private String zipCode;
     private String phoneNumber;
     private String profilePicture;
+    private Role role;
 
-    public User(int id, String username, String password, boolean role, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
-        this.id = id;
+    public enum Role {
+        USER, ADMIN
+    }
+
+    public User(String username, String password, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
         this.username = username;
         this.password = password;
-        this.role = role;
         this.streetAddress = streetAddress;
         this.city = city;
         this.country = country;
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
+        this.role = Role.USER;
+    }
+    public User(){
     }
 
-    public User(){}
     @ReadOnlyProperty
     public int getId() {
         return id;
@@ -49,15 +53,10 @@ public class User {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public boolean isRole() {return role;}
-
-    public void setRole(boolean role) {this.role = role;}
-
-
 
     public String getStreetAddress() {
         return streetAddress;
@@ -105,5 +104,13 @@ public class User {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
