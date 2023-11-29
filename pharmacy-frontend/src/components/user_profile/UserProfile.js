@@ -1,8 +1,13 @@
 import './UserProfile.css'
-import React,{ useState, useRef, useEffect} from 'react';
-import axios from 'axios';
+import React,{ useState, useRef, useEffect, useMemo} from 'react';
+import Select from 'react-select'
+import countryList from 'react-select-country-list'
 
-const AccountSettings = () => {
+const BaseUri = 'http://localhost:8081/api/user'
+const AccountSettings = ({userId}) => {
+  const [country, setCountry] = useState('')
+  const options = useMemo(() => countryList().getData(), [])
+
   const [formData, setFormData] = useState({
     username: '',
     phoneNumber: '',
@@ -24,11 +29,12 @@ const AccountSettings = () => {
     // Fetch user data from the backend when the component mounts
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8081/api/user/get-user/1'); // Update the endpoint to match your backend
+        const response = await fetch(`${BaseUri}/get-user/${userId}`);
         if (response.ok) {
           const userData = await response.json();
           console.log(userData)
-          setFormData(userData); // Assuming the response body structure matches the state structure
+          setFormData(userData);
+          setCountry({'label': userData.country, 'value': countryList().getValue(userData.country)})
         } else {
           console.error('Failed to fetch user data');
         }
@@ -38,23 +44,44 @@ const AccountSettings = () => {
     };
 
     fetchUserData();
-  }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+  }, [userId]); // The empty dependency array ensures that this effect runs only once when the component mounts
 
   const validateForm = () => {
     let isValid = true;
     const errors = {};
   
-    // Check if any field is empty
+    // Check if any field is empty or input is invalid
     Object.entries(formData).forEach(([key, value]) => {
-      if (key !== 'username' && value == '') {
+      if (key !== 'username' && value === '') {
         isValid = false;
         errors[key] = 'This field is required';
+      } else if(!validate(key, value)){
+        isValid = false;
+        let msg = ''
+        if(key === 'zipCode')
+          msg = 'This field should contain only 3-5 digits'
+        else if(key === 'phoneNumber')
+          msg = 'This field should contain only 11 digits'
+        else if(key === 'city')
+          msg = 'This field should contain only alphabetic characters'
+        errors[key] = msg;
       }
+
     });
   
     setFormErrors(errors);
     return isValid;
   };
+
+  const validate = (key, value) => {
+    if(key === 'phoneNumber')
+     return /^\d{11}$/.test(value);
+    if(key === 'zipCode')
+     return /^\d{3,5}$/.test(value);
+    if(key === 'city')
+      return /^[a-zA-Z]+$/.test(value) 
+    return true
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,6 +90,15 @@ const AccountSettings = () => {
       [name]: value,
     }));
   };
+
+  const handleCountryChange = (value) => {
+    setCountry(value)
+    setFormData((prevData) => ({
+      ...prevData,
+      ['country']: value.label,
+    }));
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate the form before submitting
@@ -72,7 +108,7 @@ const AccountSettings = () => {
 
     console.log(JSON.stringify(formData))
     try {
-      const response = await fetch('http://localhost:8081/api/user/update-data/1', {
+      const response = await fetch(`${BaseUri}/update-data/${userId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -82,8 +118,7 @@ const AccountSettings = () => {
 
       
       if (response.ok) {
-        const result = response.body;
-        alert('Backend Response:', result || 'Success');
+        alert('User data updated successfully');
       } else {
         alert('Error: Failed to update');
       }
@@ -146,12 +181,12 @@ const AccountSettings = () => {
 
         <div className='form-group'>
           <label htmlFor='country'>Country <span>*</span></label>
-          <input
-            type='text'
-            name='country'
-            id='country'
-            value={formData.country}
-            onChange={handleChange}
+          <Select 
+            name='country' 
+            id='country' 
+            options={options} 
+            value={country} 
+            onChange={handleCountryChange}
           />
           <span className='error'>{formErrors.country}</span>
         </div>
@@ -177,7 +212,7 @@ const AccountSettings = () => {
 };
   
 
-const ChangePassword = () => {
+const ChangePassword = ({userId}) => {
   const [formData, setFormData] = useState({
     curpass: '',
     newpass: '',
@@ -209,9 +244,10 @@ const ChangePassword = () => {
 
     // Check for empty fields
     Object.entries(formData).forEach(([key, value]) => {
-      if (!value.trim()) {
+      let valid = /^.{8,16}$/.test(value)
+      if (!value.trim() || !valid) {
         isValid = false;
-        errors[key] = 'This field is required';
+        errors[key] = 'This field must contain 8-16 characters';
       }
     });
 
@@ -227,14 +263,13 @@ const ChangePassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     // Validate the form before submitting
     if (!validateForm()) {
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8081/api/user/change-password/1?' + new URLSearchParams({
+      const response = await fetch(`${BaseUri}/change-password/${userId}?` + new URLSearchParams({
         currentPassword: formData.curpass,
         newPassword: formData.newpass
       }), {
@@ -244,11 +279,9 @@ const ChangePassword = () => {
         }
         
       });
-
-      console.log(response)
+      setFormData({cnewpass:'', curpass: '', newpass: ''})
       if (response.ok) {
-        const result = response.body;
-        window.alert(result || 'Password changed successfully');
+        window.alert('Password changed successfully');
       } else {
         window.alert('Current password is wrong');
       }
@@ -262,7 +295,7 @@ const ChangePassword = () => {
     <div className='accountsettings'>
       <h1 className='mainhead1'>Change Password</h1>
       <hr></hr>
-      <form className='form' onSubmit={handleSubmit}>
+      <form className='form' id='form'>
         <div className='form-group'>
           <label htmlFor='curpass'>Current Password <span>*</span></label>
           <div className="password-input-container">
@@ -273,9 +306,6 @@ const ChangePassword = () => {
               onChange={handleChange}
               required
             />
-            <button type="button" onClick={handleToggleMask}>
-              {isPasswordMasked ? 'Show' : 'Hide'}
-            </button>
           </div>
           <span className='error'>{formErrors.curpass}</span>
         </div>
@@ -308,7 +338,10 @@ const ChangePassword = () => {
           <span className='error'>{formErrors.cnewpass}</span>
         </div>
 
-        <button className='mainbutton1' type='submit'>
+        <button className='mainbutton1' style = {{backgroundColor: 'grey'}} type="button" onClick={handleToggleMask}>
+              {isPasswordMasked ? 'Show' : 'Hide'}
+        </button>
+        <button className='mainbutton1' type="submit" value="Submit" onClick={handleSubmit}>
           Save Changes
         </button>
       </form>
@@ -316,22 +349,10 @@ const ChangePassword = () => {
   );
 };
 
-const ProfilePictureUploader = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+const ProfilePictureUploader = ({userId}) => {
   const [imageUrl, setImageUrl] = useState(null);
   const fileInputRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-
-    // Display the selected image on the screen
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setImageUrl(e.target.result);
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  };
 
   const handleImageClick = () => {
     // Trigger the click event of the hidden file input
@@ -341,40 +362,19 @@ const ProfilePictureUploader = () => {
   };
 
   const handleUpload = async (event) => {
-    setSelectedFile(event.target.files[0]);
     // Display the selected image on the screen
     const reader = new FileReader();
     reader.onloadend = (e) => {
       setImageUrl(e.target.result);
     };
     reader.readAsDataURL(event.target.files[0]);
-
-    try {
-      // Create a FormData object to send the file
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      console.log(formData)
-      // Send the file to the backend
-      const response = await axios.post('/api/user/upload-profile-picture/1', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      // Get the image URL from the backend response
-      const { imageUrl } = response.data;
-
-      // Set the image URL in the state
-      setImageUrl(imageUrl);
-    } catch (error) {
-      console.error('Error uploading profile picture:', error);
-    }
   };
 
   return (
     <div className="img-wrap">
       <input type="file" onChange={handleUpload} ref={fileInputRef}
         style={{ display: 'none' }} />
+
       <img for="photo-upload" src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
       alt="Profile" onClick={handleImageClick}
       onMouseEnter={() => setIsHovered(true)}
@@ -389,17 +389,17 @@ const ProfilePictureUploader = () => {
   );
 };
 
-const UserProfile = () => {
+const UserProfile = ({userId = 1}) => {
   return (
     <div className='userprofile'>
 
          <div className='userprofilein'>
             <div className='left'>
-              <AccountSettings/>
-              <ChangePassword/>
+              <AccountSettings userId={userId}/>
+              <ChangePassword userId={userId}/>
             </div>
             <div className='right'>
-            <ProfilePictureUploader/>
+            <ProfilePictureUploader userId={userId}/>
             </div>
          </div>
         
