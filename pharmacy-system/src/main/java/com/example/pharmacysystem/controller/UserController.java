@@ -18,7 +18,6 @@ public class UserController {
 
     @PostMapping("/addUser")
     public ResponseEntity<String> addUser(@RequestBody User user) {
-//        System.out.println("User: \n" + user.toString());
         try {
             userService.saveUser(user);
             // TODO: Add automatic login here
@@ -26,7 +25,6 @@ public class UserController {
         } catch (UserRegistrationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY); // Return the specific error message
         } catch (Exception e) {
-//            e.printStackTrace();
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

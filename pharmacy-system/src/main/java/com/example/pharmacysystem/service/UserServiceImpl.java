@@ -4,8 +4,6 @@ import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCrypt;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.*;
@@ -14,12 +12,8 @@ import java.util.regex.*;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     public User saveUser(User user) {
-        System.out.println("-----------------------------------------");
-        System.out.println("In saveUser service");
-//        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         boolean found = isUsernameFound(user.getUsername());
         if (found) {
             throw new UserRegistrationException("Username is already taken. Choose another one!");
@@ -29,10 +23,8 @@ public class UserServiceImpl implements UserService {
         }
 
         try {
-            System.out.println("New User is added successfully");
             return userRepository.save(user);
         } catch (Exception e) {
-//            e.printStackTrace();
             throw new UserRegistrationException("An error occurred while saving the user.");
 
         }
