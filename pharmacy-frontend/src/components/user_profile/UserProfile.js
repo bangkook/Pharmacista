@@ -181,7 +181,7 @@ const AccountSettings = ({userId}) => {
 
         <div className='form-group'>
           <label htmlFor='country'>Country <span>*</span></label>
-          <Select 
+          <Select className='input'
             name='country' 
             id='country' 
             options={options} 
@@ -338,7 +338,7 @@ const ChangePassword = ({userId}) => {
           <span className='error'>{formErrors.cnewpass}</span>
         </div>
 
-        <button className='mainbutton1' style = {{backgroundColor: 'grey'}} type="button" onClick={handleToggleMask}>
+        <button className='mainbutton1' style = {{backgroundColor: isPasswordMasked? 'green': 'grey'}} type="button" onClick={handleToggleMask}>
               {isPasswordMasked ? 'Show' : 'Hide'}
         </button>
         <button className='mainbutton1' type="submit" value="Submit" onClick={handleSubmit}>
