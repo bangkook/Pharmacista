@@ -23,12 +23,11 @@ public class logInServiceTest {
 
     @Test
     public void getUser_ReturnWantedUser(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
         List<User> Users=List.of( firstUser , secondUser);
@@ -40,12 +39,11 @@ public class logInServiceTest {
 
     @Test
     public void getUser_ReturnNullAsUserNotFound(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 
@@ -57,12 +55,11 @@ public class logInServiceTest {
     }
     @Test
     public void getUser_ReturnNullAsUserNameNull(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 
@@ -74,12 +71,11 @@ public class logInServiceTest {
     }
     @Test
     public void getUser_ReturnNullAsPasswordNull(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 
@@ -91,12 +87,11 @@ public class logInServiceTest {
     }
     @Test
     public void getUser_ReturnNullAsUserNamePasswordNull(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 
@@ -109,12 +104,11 @@ public class logInServiceTest {
 
     @Test
     public void checkUser_Return1_UserNameAndPasswordCorrect(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
         List<User> Users=List.of( firstUser , secondUser);
@@ -126,12 +120,11 @@ public class logInServiceTest {
 
     @Test
     public void checkUser_ReturnNegative1_UserNameNotfound(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 
@@ -143,12 +136,11 @@ public class logInServiceTest {
     }
     @Test
     public void checkUser_Return0_wrongPassword(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 
@@ -160,12 +152,11 @@ public class logInServiceTest {
     }
     @Test
     public void checkUser_ReturnNegative1_NullPasswordOrNameOrBoth(){
-        User firstUser= new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User firstUser=new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
-        User secondUser=new User(2, "Neso", "3211",
-                false, "15 avennue", "newYork",
+        User secondUser=new User("Neso", "3211",
+                "15 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 

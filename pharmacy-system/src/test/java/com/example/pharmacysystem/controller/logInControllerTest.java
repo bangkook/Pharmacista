@@ -86,8 +86,7 @@ public class logInControllerTest {
     public void getUser_CorrectNameAndPassword() throws Exception{
         String userName = "eman";
         String password = "1234";
-        User expectedResult = new User(1, "eman", "123",
-                false, "16 avennue", "newYork",
+        User expectedResult = new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245","01123186969",
                 "profile_picture_url");
 
