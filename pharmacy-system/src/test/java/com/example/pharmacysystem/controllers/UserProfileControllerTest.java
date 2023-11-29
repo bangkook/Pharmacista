@@ -3,7 +3,6 @@ package com.example.pharmacysystem.controllers;
 import com.example.pharmacysystem.controller.UserController;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,11 +23,9 @@ public class UserProfileControllerTest {
 
     @MockBean
     private UserService userService;
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
+    
     @Test
-    public void testUpdateUserData() {
+    public void testUpdateUserData_Successfully() {
         // Mock data
         int userId = 1;
         String streetAddress = "New Address";
@@ -84,7 +81,7 @@ public class UserProfileControllerTest {
     }
 
     @Test
-    public void testGetUserData() {
+    public void testGetUserData_Successfully() {
         // Mock data
         int userId = 1;
         User mockUser = new User("username", "password", "address", "city",

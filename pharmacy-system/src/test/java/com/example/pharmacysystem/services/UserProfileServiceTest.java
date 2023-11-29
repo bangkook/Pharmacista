@@ -21,7 +21,7 @@ class UserProfileServiceTest {
     private UserRepository userRepository;
 
     @Test
-    void testGetUserData() {
+    void testGetUserData_Successfully() {
         // Mock data
         int userId = 1;
         when(userRepository.findById(userId))
@@ -54,7 +54,7 @@ class UserProfileServiceTest {
     }
 
     @Test
-    void testUpdateUserData() {
+    void testUpdateUserData_Successfully() {
         // Mock data
         int userId = 1;
         User user = new User("username", "password", "old address", "old city",
@@ -89,7 +89,7 @@ class UserProfileServiceTest {
     }
 
     @Test
-    void testChangePassword() {
+    void testChangePassword_Successfully() {
         // Mock data
         int userId = 1;
         String encodedPass = "currentPassword";
@@ -137,14 +137,13 @@ class UserProfileServiceTest {
     }
 
     @Test
-    void testUploadProfilePicture() {
+    void testUploadProfilePicture_Successfully() {
         // Mock data
         int userId = 1;
         User existingProfile = new User("username", "password", "street address", "city",
                 "country", "11111", "12345678911", "oldPicture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
-        //byte[] imageBytes = "base64EncodedImage".getBytes(); // Convert base64 to byte array
         boolean pictureUploaded = userService.uploadProfilePicture(userId, "newPicture.jpg");
 
         assertTrue(pictureUploaded);
@@ -160,7 +159,6 @@ class UserProfileServiceTest {
                 "country", "11111", "12345678911", "oldPicture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
 
-        //byte[] imageBytes = "base64EncodedImage".getBytes(); // Convert base64 to byte array
         boolean pictureUploaded = userService.uploadProfilePicture(userId, null);
 
         assertFalse(pictureUploaded);
