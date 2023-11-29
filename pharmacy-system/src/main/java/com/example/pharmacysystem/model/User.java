@@ -1,6 +1,5 @@
 package com.example.pharmacysystem.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,9 +10,8 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final int id;
-    private final String username;
-    @JsonIgnore
+    private int id;
+    private String username;
     private String password;
     private String streetAddress;
     private String city;
@@ -21,9 +19,13 @@ public class User {
     private String zipCode;
     private String phoneNumber;
     private String profilePicture;
+    private Role role;
 
-    public User(int id, String username, String password, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
-        this.id = id;
+    public enum Role {
+        USER, ADMIN
+    }
+
+    public User(String username, String password, String streetAddress, String city, String country, String zipCode, String phoneNumber, String profilePicture) {
         this.username = username;
         this.password = password;
         this.streetAddress = streetAddress;
@@ -32,6 +34,10 @@ public class User {
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
+        this.role = Role.USER;
+    }
+    
+    public User() {
     }
 
     @ReadOnlyProperty
@@ -98,5 +104,13 @@ public class User {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

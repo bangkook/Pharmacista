@@ -87,7 +87,7 @@ public class UserProfileControllerTest {
     public void testGetUserData() {
         // Mock data
         int userId = 1;
-        User mockUser = new User(userId, "username", "password", "address", "city",
+        User mockUser = new User("username", "password", "address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
 
         // Mock the service
@@ -184,6 +184,6 @@ public class UserProfileControllerTest {
         ResponseEntity<String> responseEntity = userController.changePassword(userId, wrongCurrentPassword, newPassword);
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
         assertEquals("Current password is wrong", responseEntity.getBody());
-        
+
     }
 }
