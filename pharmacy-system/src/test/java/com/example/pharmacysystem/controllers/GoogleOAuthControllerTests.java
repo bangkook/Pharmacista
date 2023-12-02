@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +39,7 @@ class GoogleOAuthControllerTests {
         payload.put("picture", "user_picture_url");
 
         // Perform the POST request
-        ResultActions result = mockMvc.perform(post("/login/oauth2/")
+        mockMvc.perform(post("/login/oauth2/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(payload)))
                 .andExpect(status().isOk())

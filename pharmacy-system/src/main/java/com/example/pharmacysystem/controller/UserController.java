@@ -1,26 +1,22 @@
 package com.example.pharmacysystem.controller;
+
 import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
+import com.example.pharmacysystem.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
-
-import com.example.pharmacysystem.model.User;
-import com.example.pharmacysystem.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 
 @RequestMapping(value = {"/user"})
 @RestController
 @CrossOrigin()
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -52,11 +48,11 @@ public class UserController {
     public ResponseEntity<String> updateUserData(@PathVariable("id") int userId,
                                                  @RequestBody Map<String, String> data) {
         boolean updated = userService.updateUserData(userId,
-                data.get("streetAddress"),
-                data.get("city"),
-                data.get("country"),
-                data.get("zipCode"),
-                data.get("phoneNumber"));
+                data.get(Constants.STREET),
+                data.get(Constants.CITY),
+                data.get(Constants.COUNTRY),
+                data.get(Constants.ZIP_CODE),
+                data.get(Constants.PHONE));
         if (updated) {
             return new ResponseEntity<>("User data updated successfully", HttpStatus.OK);
         } else {
@@ -88,12 +84,13 @@ public class UserController {
     }
 
     @GetMapping("/getUserByName")
-    public User getUsersByName(@RequestParam String userName, @RequestParam String password){
-        return userService.getUser(userName,password);
+    public User getUsersByName(@RequestParam String userName, @RequestParam String password) {
+        return userService.getUser(userName, password);
     }
-    @GetMapping("/checkUser")
-    public int checkUser(@RequestParam String userName, @RequestParam String password){
-        return userService.checkUser(userName,password);
 
+    @GetMapping("/checkUser")
+    public int checkUser(@RequestParam String userName, @RequestParam String password) {
+        return userService.checkUser(userName, password);
     }
+    
 }

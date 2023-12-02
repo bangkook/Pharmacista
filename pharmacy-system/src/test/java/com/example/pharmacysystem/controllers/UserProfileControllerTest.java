@@ -23,7 +23,7 @@ public class UserProfileControllerTest {
 
     @MockBean
     private UserService userService;
-    
+
     @Test
     public void testUpdateUserData_Successfully() {
         // Mock data
@@ -112,7 +112,7 @@ public class UserProfileControllerTest {
     }
 
     @Test
-    public void testUploadProfilePicture_Successful() throws Exception {
+    public void testUploadProfilePicture_Successful() {
         // Mock data
         int userId = 1;
 
@@ -130,7 +130,7 @@ public class UserProfileControllerTest {
     }
 
     @Test
-    public void testUploadProfilePicture_UserNotFound() throws Exception {
+    public void testUploadProfilePicture_UserNotFound() {
         // Mock data
         int nonExistentUserId = 1;
 
@@ -147,7 +147,7 @@ public class UserProfileControllerTest {
     }
 
     @Test
-    public void testChangePassword_Successfully() throws Exception {
+    public void testChangePassword_Successfully() {
         // Mock data
         int userId = 1;
 
@@ -166,7 +166,7 @@ public class UserProfileControllerTest {
     }
 
     @Test
-    public void testChangePassword_WrongCurrentPassword() throws Exception {
+    public void testChangePassword_WrongCurrentPassword() {
         // Mock data
         int userId = 1;
 

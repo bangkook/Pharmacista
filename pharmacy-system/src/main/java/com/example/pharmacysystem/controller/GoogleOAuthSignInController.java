@@ -1,6 +1,7 @@
-
 package com.example.pharmacysystem.controller;
+
 import com.example.pharmacysystem.service.UserService;
+import com.example.pharmacysystem.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.*;
 )
 
 public class GoogleOAuthSignInController {
+
     @Autowired
     private UserService userService;
+
     @GetMapping("/login")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<Boolean> checkUserExist(@RequestParam(name = "email") String email) {
+    public ResponseEntity<Boolean> checkUserExist(@RequestParam(name = Constants.EMAIL) String email) {
         Boolean userExists = userService.currentUserEmail(email);
         return ResponseEntity.ok(userExists);
     }
+    
 }

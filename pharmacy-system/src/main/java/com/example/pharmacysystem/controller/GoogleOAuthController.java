@@ -2,6 +2,7 @@ package com.example.pharmacysystem.controller;
 
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
+import com.example.pharmacysystem.utils.Constants;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +25,10 @@ public class GoogleOAuthController {
 
     @PostMapping("/login/oauth2/")
     public ResponseEntity<String> createUser(@RequestBody Map<String, String> Response) {//Registration Rest API
-//         Retrieve user information from the Response
-        String email = Response.get("email");
-        String picture = Response.get("picture");
+        // Retrieve user information from the Response
+        String email = Response.get(Constants.EMAIL);
+        String picture = Response.get(Constants.PICTURE);
         System.out.println(Response);
-
 
         List<String> existingUsers = userService.findAllUsers();
         if (existingUsers.contains(email)) {
