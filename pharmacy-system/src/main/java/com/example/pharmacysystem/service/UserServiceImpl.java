@@ -2,22 +2,25 @@ package com.example.pharmacysystem.service;
 
 
 import com.example.pharmacysystem.exceptions.UserRegistrationException;
-
 import com.example.pharmacysystem.model.User;
+import com.example.pharmacysystem.model.UserBuilder;
 import com.example.pharmacysystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.regex.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
+
     @Override
     public User saveUser(User user) {
         boolean found = isUsernameFound(user.getUsername());
@@ -43,40 +46,44 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserData(int id, String streetAddress, String city, String country, String zipCode, String phone) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            // Update user data
-            user.setStreetAddress(streetAddress);
-            user.setCity(city);
-            user.setCountry(country);
-            user.setZipCode(zipCode);
-            user.setPhoneNumber(phone);
 
-            // Save the updated user to the database
-            userRepository.save(user);
-            return true;
-        } else {
+        if (optionalUser.isEmpty()) {
             return false;
         }
+
+        User user = optionalUser.get();
+
+        // Update user data
+        user = new UserBuilder(user)
+                .buildAddress(streetAddress, city, country, zipCode)
+                .buildPhoneNumber(phone)
+                .build();
+
+        // Save the updated user to the database
+        userRepository.save(user);
+        return true;
     }
 
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
     public boolean uploadProfilePicture(int id, String profilePicture) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent() && profilePicture != null) {
-            User user = optionalUser.get();
-            // Update user data
-            user.setProfilePicture(profilePicture);
 
-            // Save the updated user to the database
-            userRepository.save(user);
-            return true;
-        } else {
+        if (optionalUser.isEmpty() || profilePicture == null) {
             return false;
         }
+
+        User user = optionalUser.get();
+        // Update user data
+        user = new UserBuilder(user).buildProfilePicture(profilePicture).build();
+
+        // Save the updated user to the database
+        userRepository.save(user);
+        return true;
     }
 
 
@@ -85,77 +92,82 @@ public class UserServiceImpl implements UserService {
         // Check if the username already exists in the database
         return userRepository.findByUsername(username) != null;
     }
+
     private boolean isValidUsername(String username) {
         // Validating the username with 6 to 30 characters,
         // starting with an alphabetical character, followed by alphanumeric characters and underscores.
         // Disallowed: Special characters at the beginning, spaces.
         // Example: "John_Doe123"
-
-        String regex = "^[A-Za-z]\\w{5,29}$";        Pattern p = Pattern.compile(regex);
+        String regex = "^[A-Za-z]\\w{5,29}$";
+        Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(username);
 
         // Return if the username matched the Regex
         return m.matches();
     }
+
+    @Override
     public boolean changePassword(int id, String currentPassword, String newPassword) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent() && newPassword != null) {
-            User user = optionalUser.get();
-            if (!(currentPassword.equals(user.getPassword())))
-                return false;
 
-            // Update user data
-            user.setPassword(newPassword);
-
-            // Save the updated user to the database
-            userRepository.save(user);
-            return true;
-        } else {
+        if (optionalUser.isEmpty() || newPassword == null) {
             return false;
         }
+
+        User user = optionalUser.get();
+        if (!(currentPassword.equals(user.getPassword())))
+            return false;
+
+        // Update user data
+        user = new UserBuilder(user).buildPassword(newPassword).build();
+
+        // Save the updated user to the database
+        userRepository.save(user);
+        return true;
     }
 
+    @Override
     public List<String> findAllUsers() {
         List<User> users = userRepository.findAll();
-        List<String> usernames = users.stream()
+        return users.stream()
                 .map(User::getUsername)
                 .collect(Collectors.toList());
-        return usernames;
     }
 
+    @Override
     public Boolean currentUserEmail(String email) {
         List<String> usernames = getUsernames();
-        if (usernames.contains(email)) {
-            return true;
-        } else {
-            return false;
-        }
+        return usernames.contains(email);
     }
 
+    @Override
     public List<String> getUsernames() {
         List<User> users = userRepository.findAll();
-        List<String> usernames = users.stream()
+        return users.stream()
                 .map(User::getUsername)
                 .collect(Collectors.toList());
-        return usernames;
     }
+
+    @Override
     public User getUser(String userName, String password) {
-        List<User> Users= userRepository.findAll();
-        if(userName==null || password==null) return null;
-        User user=null;
-        for(User u:Users){
-            if(u.getUsername().equals(userName) && u.getPassword().equals(password)) {
+        List<User> Users = userRepository.findAll();
+        if (userName == null || password == null) return null;
+        User user = null;
+        for (User u : Users) {
+            if (u.getUsername().equals(userName) && u.getPassword().equals(password)) {
                 user = u;
                 break;
             }
         }
         return user;
     }
-    public int checkUser(String userName, String password){
-        List<User> Users= userRepository.findAll();
-        if(userName==null || password==null) return -1;
-        for(User u:Users){
-            if(u.getUsername().equals(userName) ) {
+
+    @Override
+    public int checkUser(String userName, String password) {
+        List<User> Users = userRepository.findAll();
+        if (userName == null || password == null) return -1;
+        for (User u : Users) {
+            if (u.getUsername().equals(userName)) {
                 if (u.getPassword().equals(password)) {
                     return 1;//user found and correct password
                 }
@@ -164,6 +176,7 @@ public class UserServiceImpl implements UserService {
         }
         return -1;//user not in database
     }
+
 }
 
 
