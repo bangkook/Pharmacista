@@ -111,16 +111,16 @@ public class UserServiceImpl implements UserService {
         // Return if the username matched the Regex
         return m.matches();
     }
-    private boolean isValidPhone(String phone) {
-        return Pattern.matches("^\\d{11}$", phone) || phone.equals("");
+    public boolean isValidPhone(String phone) {
+        return phone == null || phone == "" || Pattern.matches("^\\d{11}$", phone) || phone.equals("");
     }
 
     public static boolean isValidPassword(String pass) {
-        return Pattern.matches("^.{8,16}$", pass);
+        return pass == null || Pattern.matches("^.{8,16}$", pass);
     }
 
     public static boolean isValidZip(String zip) {
-        return Pattern.matches("^\\d{3,5}$", zip) || zip.equals("");
+        return zip == null || zip == "" || Pattern.matches("^\\d{3,5}$", zip) || zip.equals("");
     }
 
     @Override
