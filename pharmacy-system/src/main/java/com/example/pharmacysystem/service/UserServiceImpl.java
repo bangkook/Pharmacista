@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService {
         }
         if (!isValidUsername(user.getUsername())) {
             throw new UserRegistrationException("Invalid username. Please follow the specified constraints.");
+        } else if (!isValidPassword(user.getPassword())) {
+            throw new UserRegistrationException("Invalid password. Please follow the specified constraints.");
+        } else if (!isValidZip(user.getZipCode())) {
+            throw new UserRegistrationException("Invalid zipcode. Please follow the specified constraints.");
+        } else if (!isValidPhone(user.getPhoneNumber())) {
+            throw new UserRegistrationException("Invalid phone number. Please follow the specified constraints.");
         }
         try {
             return userRepository.save(user);
@@ -104,6 +110,17 @@ public class UserServiceImpl implements UserService {
 
         // Return if the username matched the Regex
         return m.matches();
+    }
+    private boolean isValidPhone(String phone) {
+        return Pattern.matches("^\\d{11}$", phone) || phone.equals("");
+    }
+
+    public static boolean isValidPassword(String pass) {
+        return Pattern.matches("^.{8,16}$", pass);
+    }
+
+    public static boolean isValidZip(String zip) {
+        return Pattern.matches("^\\d{3,5}$", zip) || zip.equals("");
     }
 
     @Override
