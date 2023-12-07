@@ -5,6 +5,7 @@ import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserBuilder;
 import com.example.pharmacysystem.repository.UserRepository;
+import com.example.pharmacysystem.utils.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private PasswordEncoder passwordEncoder = new PasswordEncoder();
 
     @Override
     public User saveUser(User user) {
@@ -37,6 +40,9 @@ public class UserServiceImpl implements UserService {
             throw new UserRegistrationException("Invalid phone number. Please follow the specified constraints.");
         }
         try {
+            String newPass = passwordEncoder.encryptPass(user.getPassword());
+            user.setPassword(newPass);
+//            System.out.println(newPass);
             return userRepository.save(user);
         } catch (Exception e) {
             throw new UserRegistrationException("An error occurred while saving the user.");
