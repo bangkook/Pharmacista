@@ -33,7 +33,7 @@ public class logInControllerTest {
     public void CheckUser_CorrectNameAndPassword() throws Exception {
         String userName = "eman";
         String password = "1234";
-        int expectedResult = 1;
+        UserService.LoginStatus  expectedResult = UserService.LoginStatus.USER_FOUND_CORRECT_PASSWORD;
         when(userService.checkUser(userName, password)).thenReturn(expectedResult);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         MvcResult result = mockMvc.perform(get("/user/checkUser")
@@ -43,7 +43,7 @@ public class logInControllerTest {
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
-        assertEquals("1", content);
+        assertEquals("USER_FOUND_CORRECT_PASSWORD", content);
 
     }
 
@@ -51,7 +51,7 @@ public class logInControllerTest {
     public void CheckUser_CorrectNameAndIncorrectPassword() throws Exception {
         String userName = "eman";
         String password = "155234";
-        int expectedResult = 0;
+        UserService.LoginStatus  expectedResult = UserService.LoginStatus.USER_FOUND_INCORRECT_PASSWORD;
         when(userService.checkUser(userName, password)).thenReturn(expectedResult);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         MvcResult result = mockMvc.perform(get("/user/checkUser")
@@ -61,7 +61,7 @@ public class logInControllerTest {
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
-        assertEquals("0", content);
+        assertEquals("USER_FOUND_INCORRECT_PASSWORD", content);
 
     }
 
@@ -69,7 +69,7 @@ public class logInControllerTest {
     public void CheckUser_IncorrectNameAndPassword() throws Exception {
         String userName = "nesoo";
         String password = "155234";
-        int expectedResult = -1;
+        UserService.LoginStatus  expectedResult = UserService.LoginStatus.USER_NOT_FOUND;
         when(userService.checkUser(userName, password)).thenReturn(expectedResult);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         MvcResult result = mockMvc.perform(get("/user/checkUser")
@@ -79,7 +79,7 @@ public class logInControllerTest {
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
-        assertEquals("-1", content);
+        assertEquals("USER_NOT_FOUND", content);
 
     }
 

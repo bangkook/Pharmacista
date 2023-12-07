@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService {
         }
         if (!isValidUsername(user.getUsername())) {
             throw new UserRegistrationException("Invalid username. Please follow the specified constraints.");
+        } else if (!isValidPassword(user.getPassword())) {
+            throw new UserRegistrationException("Invalid password. Please follow the specified constraints.");
+        } else if (!isValidZip(user.getZipCode())) {
+            throw new UserRegistrationException("Invalid zipcode. Please follow the specified constraints.");
+        } else if (!isValidPhone(user.getPhoneNumber())) {
+            throw new UserRegistrationException("Invalid phone number. Please follow the specified constraints.");
         }
         try {
             return userRepository.save(user);
@@ -105,6 +111,17 @@ public class UserServiceImpl implements UserService {
         // Return if the username matched the Regex
         return m.matches();
     }
+    public boolean isValidPhone(String phone) {
+        return phone == null || phone == "" || Pattern.matches("^\\d{11}$", phone) || phone.equals("");
+    }
+
+    public static boolean isValidPassword(String pass) {
+        return pass == null || Pattern.matches("^.{8,16}$", pass);
+    }
+
+    public static boolean isValidZip(String zip) {
+        return zip == null || zip == "" || Pattern.matches("^\\d{3,5}$", zip) || zip.equals("");
+    }
 
     @Override
     public boolean changePassword(int id, String currentPassword, String newPassword) {
@@ -163,18 +180,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int checkUser(String userName, String password) {
+    public LoginStatus  checkUser(String userName, String password) {
         List<User> Users = userRepository.findAll();
-        if (userName == null || password == null) return -1;
+        if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
             if (u.getUsername().equals(userName)) {
                 if (u.getPassword().equals(password)) {
-                    return 1;//user found and correct password
+                    return LoginStatus.USER_FOUND_CORRECT_PASSWORD;
                 }
-                return 0; //user found but incorrect password
+                return LoginStatus.USER_FOUND_INCORRECT_PASSWORD;
             }
         }
-        return -1;//user not in database
+        return LoginStatus.USER_NOT_FOUND;
     }
 
 }
