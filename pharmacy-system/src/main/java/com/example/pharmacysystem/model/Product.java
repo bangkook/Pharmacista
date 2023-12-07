@@ -38,10 +38,6 @@ public class Product {
         return serialNumber;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
     public double getPrice() {
         return price;
     }
