@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import GoogleSignIn from './components/login';
+import GoogleSignUp from './components/googleSignUp';
+import LoginBasic from './components/LoginBasic';
+import Signup from './components/signup';
+import AccountSettings from './components/user_profile/UserProfile'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className='App'>
+        <Routes>
+          <Route path='/googleLogin' element={<GoogleSignIn/>} />
+          <Route path='/googleSignUp' element={<GoogleSignUp/>} />
+          <Route path='/LoginBasic' element={<LoginBasic/>} />
+          <Route path='/signup' element={<Signup/>} />
+          <Route path='/Account' element={<AccountSettings/>} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
