@@ -4,14 +4,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 public class Product {
 
     @Id
     private String serialNumber;
-    private double price;
+    private float price;
     private Date productionDate;
     private Date expiryDate;
     private String description;
@@ -19,7 +19,7 @@ public class Product {
     private String name;
     private String photo;
 
-    public Product(String serialNumber, double price, Date productionDate, Date expiryDate, String description, int quantity, String name, String photo) {
+    public Product(String serialNumber, float price, Date productionDate, Date expiryDate, String description, int quantity, String name, String photo) {
         this.serialNumber = serialNumber;
         this.price = price;
         this.productionDate = productionDate;
@@ -42,7 +42,7 @@ public class Product {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -94,7 +94,7 @@ public class Product {
         this.photo = photo;
     }
 
-    public String convertToString() {
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Serial Number: ").append(serialNumber).append("\n");
         stringBuilder.append("Price: ").append(price).append("\n");

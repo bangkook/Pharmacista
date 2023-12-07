@@ -1,6 +1,6 @@
 package com.example.pharmacysystem.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class ProductBuilder {
 
@@ -10,7 +10,7 @@ public class ProductBuilder {
         this.product = product;
     }
 
-    public ProductBuilder buildPrice(double price) {
+    public ProductBuilder buildPrice(float price) {
         this.product.setPrice(price);
         return this;
     }
