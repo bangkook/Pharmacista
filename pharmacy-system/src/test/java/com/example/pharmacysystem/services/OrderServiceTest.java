@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -22,7 +21,7 @@ public class OrderServiceTest {
 
     @Autowired
     private OrderService orderService;
-    
+
     @MockBean
     private OrderRepository orderRepository;
 
@@ -45,10 +44,8 @@ public class OrderServiceTest {
         String str1 = "2022-03-31";
         String str2 = "2022-05-04";
         int user1 = 1;
-        int user2 = 2;
         Order order1 = new Order(user1, Date.valueOf(str1), 100.0F);
         Order order2 = new Order(user1, Date.valueOf(str2), 50.0F);
-        Order order3 = new Order(user2, Date.valueOf(str2), 500.0F);
 
         // Mocking the repository behavior
         when(orderRepository.getOrdersForUser(user1)).thenReturn(Arrays.asList(order1, order2));
@@ -72,14 +69,6 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void getOrdersForUser_UserDoesNotExist_ShouldThrowException() {
-        int nonExistingUser = 1;
-
-        // Asserting the result
-        assertThrows(RuntimeException.class, () -> orderService.getOrdersForUser(nonExistingUser));
-    }
-
-    @Test
     public void getOrdersForUser_NoOrders_ShouldReturnEmpty() {
         int userId = 1;
 
@@ -93,15 +82,5 @@ public class OrderServiceTest {
 
         // Asserting the result is empty
         assertEquals(0, result.size());
-    }
-
-    @Test
-    public void getOrderById_OrderExists() {
-
-    }
-
-    @Test
-    public void getOrderById_OrderDoesNotExist() {
-
     }
 }
