@@ -2,9 +2,6 @@ package com.example.pharmacysystem.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 public class PasswordEncoder {
     public String encryptPass(String password) {
