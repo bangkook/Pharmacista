@@ -97,4 +97,18 @@ public class Product {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
+    public String convertToString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Serial Number: ").append(serialNumber).append("\n");
+        stringBuilder.append("Price: ").append(price).append("\n");
+        stringBuilder.append("Production Date: ").append(productionDate).append("\n");
+        stringBuilder.append("Expiry Date: ").append(expiryDate).append("\n");
+        stringBuilder.append("Description: ").append(description).append("\n");
+        stringBuilder.append("Quantity: ").append(quantity).append("\n");
+        stringBuilder.append("Name: ").append(name).append("\n");
+        stringBuilder.append("Photo: ").append(photo).append("\n");
+
+        return stringBuilder.toString();
+    }
 }
