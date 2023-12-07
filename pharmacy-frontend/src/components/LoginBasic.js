@@ -19,19 +19,21 @@ const LoginBasic=()=>{
                 userName: userNameinput,
                 password:passwordInput
             }))
-            const data = await response.json()
+            const data = await response.text()
             console.log(data)
-            if(data===1){
+            if(data==='USER_FOUND_CORRECT_PASSWORD'){
                 const registeredUser = await fetch(`${BaseUri}/getUserByName?`+ new URLSearchParams({
-                userName: userNameinput,
-                password:passwordInput
+                    userName: userNameinput,
+                    password:passwordInput
                 }))
                 const userData = await registeredUser.json()
                 console.log(userData)
-            }else if(data===0){
-                alert("wrong password")
-            }else{
-                alert("You don't have an account")
+            } else if (data === 'USER_FOUND_INCORRECT_PASSWORD') {
+                alert("Wrong password");
+            } else if (data === 'USER_NOT_FOUND') {
+                alert("You don't have an account");
+            } else if (data === 'INVALID_INPUT') {
+                alert("Invalid input");
             }
             }
         

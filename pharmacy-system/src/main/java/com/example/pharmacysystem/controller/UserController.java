@@ -89,8 +89,9 @@ public class UserController {
     }
 
     @GetMapping("/checkUser")
-    public int checkUser(@RequestParam String userName, @RequestParam String password) {
-        return userService.checkUser(userName, password);
+    public ResponseEntity<String> checkUser(@RequestParam String userName, @RequestParam String password) {
+        UserService.LoginStatus loginStatus = userService.checkUser(userName, password);
+        return ResponseEntity.ok(loginStatus.name());
     }
     
 }

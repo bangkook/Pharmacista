@@ -111,7 +111,7 @@ public class loginBasicTest {
     }
 
     @Test
-    public void checkUser_Return1_UserNameAndPasswordCorrect() {
+    public void checkUser_ReturnUserNameAndPasswordCorrect() {
         User firstUser = new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -122,12 +122,12 @@ public class loginBasicTest {
         List<User> Users = List.of(firstUser, secondUser);
         Mockito.when(userRepository.findAll()).thenReturn(Users);
 
-        int check = userService.checkUser("eman", "123");
-        assertEquals(check, 1);
+        UserService.LoginStatus loginStatus = userService.checkUser("eman", "123");
+        assertEquals(loginStatus, UserService.LoginStatus.USER_FOUND_CORRECT_PASSWORD);
     }
 
     @Test
-    public void checkUser_ReturnNegative1_UserNameNotfound() {
+    public void checkUser_ReturnUserNameNotfound() {
         User firstUser = new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -139,12 +139,12 @@ public class loginBasicTest {
         List<User> Users = List.of(firstUser, secondUser);
         Mockito.when(userRepository.findAll()).thenReturn(Users);
 
-        int check = userService.checkUser("Maria", "1423");
-        assertEquals(check, -1);
+        UserService.LoginStatus loginStatus  = userService.checkUser("Maria", "1423");
+        assertEquals(loginStatus, UserService.LoginStatus.USER_NOT_FOUND);
     }
 
     @Test
-    public void checkUser_Return0_wrongPassword() {
+    public void checkUser_ReturnWrongPassword() {
         User firstUser = new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -156,12 +156,12 @@ public class loginBasicTest {
         List<User> Users = List.of(firstUser, secondUser);
         Mockito.when(userRepository.findAll()).thenReturn(Users);
 
-        int check = userService.checkUser("eman", "666");
-        assertEquals(check, 0);
+        UserService.LoginStatus loginStatus  = userService.checkUser("eman", "666");
+        assertEquals(loginStatus, UserService.LoginStatus.USER_FOUND_INCORRECT_PASSWORD);
     }
 
     @Test
-    public void checkUser_ReturnNegative1_NullPasswordOrNameOrBoth() {
+    public void checkUser_ReturnNullPasswordOrNameOrBoth() {
         User firstUser = new User("eman", "123", "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -173,12 +173,12 @@ public class loginBasicTest {
         List<User> Users = List.of(firstUser, secondUser);
         Mockito.when(userRepository.findAll()).thenReturn(Users);
 
-        int check1 = userService.checkUser(null, "666");
-        assertEquals(check1, -1);
-        int check2 = userService.checkUser("eman", null);
-        assertEquals(check2, -1);
-        int check3 = userService.checkUser(null, null);
-        assertEquals(check3, -1);
+        UserService.LoginStatus loginStatus1  = userService.checkUser(null, "666");
+        assertEquals(loginStatus1, UserService.LoginStatus.INVALID_INPUT);
+        UserService.LoginStatus loginStatus2 = userService.checkUser("eman", null);
+        assertEquals(loginStatus2, UserService.LoginStatus.INVALID_INPUT);
+        UserService.LoginStatus loginStatus3  = userService.checkUser(null, null);
+        assertEquals(loginStatus3, UserService.LoginStatus.INVALID_INPUT);
     }
 }
 

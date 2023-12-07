@@ -30,5 +30,12 @@ public interface UserService {
 
     User getUser(String userName, String password);
 
-    int checkUser(String userName, String password);
+    LoginStatus checkUser(String userName, String password);
+
+    enum LoginStatus {
+        USER_FOUND_CORRECT_PASSWORD,
+        USER_FOUND_INCORRECT_PASSWORD,
+        USER_NOT_FOUND,
+        INVALID_INPUT
+    }
 }

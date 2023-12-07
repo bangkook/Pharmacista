@@ -180,18 +180,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int checkUser(String userName, String password) {
+    public LoginStatus  checkUser(String userName, String password) {
         List<User> Users = userRepository.findAll();
-        if (userName == null || password == null) return -1;
+        if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
             if (u.getUsername().equals(userName)) {
                 if (u.getPassword().equals(password)) {
-                    return 1;//user found and correct password
+                    return LoginStatus.USER_FOUND_CORRECT_PASSWORD;
                 }
-                return 0; //user found but incorrect password
+                return LoginStatus.USER_FOUND_INCORRECT_PASSWORD;
             }
         }
-        return -1;//user not in database
+        return LoginStatus.USER_NOT_FOUND;
     }
 
 }
