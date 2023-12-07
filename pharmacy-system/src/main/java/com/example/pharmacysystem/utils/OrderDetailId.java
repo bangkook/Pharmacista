@@ -15,6 +15,7 @@ public class OrderDetailId implements Serializable {
         this.productId = productId;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -22,6 +23,7 @@ public class OrderDetailId implements Serializable {
         return orderId == that.orderId && productId == that.productId;
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(orderId, productId);
     }

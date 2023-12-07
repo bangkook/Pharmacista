@@ -35,10 +35,6 @@ public class Order {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public Date getDateCreated() {
         return dateCreated;
     }

@@ -28,18 +28,10 @@ public class OrderDetail {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
     public int getProductId() {
         return productId;
     }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
+    
     public int getQuantity() {
         return quantity;
     }
