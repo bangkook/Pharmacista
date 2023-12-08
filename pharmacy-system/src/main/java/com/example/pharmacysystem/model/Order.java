@@ -13,15 +13,15 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private int id;
-    private int userId;
+    private String username;
     private Date dateCreated;
     private float totalPrice;
 
     public Order() {
     }
 
-    public Order(int userId, Date dateCreated, float totalPrice) {
-        this.userId = userId;
+    public Order(String username, Date dateCreated, float totalPrice) {
+        this.username = username;
         this.dateCreated = dateCreated;
         this.totalPrice = totalPrice;
     }
@@ -31,8 +31,8 @@ public class Order {
         return id;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
     public Date getDateCreated() {
