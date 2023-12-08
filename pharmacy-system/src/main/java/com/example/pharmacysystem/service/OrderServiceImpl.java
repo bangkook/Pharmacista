@@ -13,13 +13,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
 
-    // TODO : Sort orders by date
     public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+        return orderRepository.findAllByOrderByDateCreatedDesc();
     }
 
     public List<Order> getOrdersForUser(int userId) {
-        return orderRepository.getOrdersForUser(userId);
+        return orderRepository.findByUserId(userId);
     }
 
 }
