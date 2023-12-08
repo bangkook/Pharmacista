@@ -21,9 +21,9 @@ public class OrderDetailRepositoryTests {
 
     @Test
     public void findByOrderIdTest() {
-        OrderDetail orderDetail1 = new OrderDetail(1, 1, 4);
-        OrderDetail orderDetail2 = new OrderDetail(1, 5, 2);
-        OrderDetail orderDetail3 = new OrderDetail(2, 1, 1);
+        OrderDetail orderDetail1 = new OrderDetail(1, "1", 4);
+        OrderDetail orderDetail2 = new OrderDetail(1, "5", 2);
+        OrderDetail orderDetail3 = new OrderDetail(2, "1", 1);
 
         orderDetailRepository.save(orderDetail1);
         orderDetailRepository.save(orderDetail2);
@@ -35,11 +35,11 @@ public class OrderDetailRepositoryTests {
         assertEquals(2, result1.size());
 
         assertEquals(1, result1.get(0).getOrderId());
-        assertEquals(1, result1.get(0).getProductId());
+        assertEquals("1", result1.get(0).getProductSN());
         assertEquals(4, result1.get(0).getQuantity());
 
         assertEquals(1, result1.get(1).getOrderId());
-        assertEquals(5, result1.get(1).getProductId());
+        assertEquals("5", result1.get(1).getProductSN());
         assertEquals(2, result1.get(1).getQuantity());
 
         // Repeat with user 2
@@ -49,7 +49,7 @@ public class OrderDetailRepositoryTests {
         assertEquals(1, result2.size());
 
         assertEquals(2, result2.get(0).getOrderId());
-        assertEquals(1, result2.get(0).getProductId());
+        assertEquals("1", result2.get(0).getProductSN());
         assertEquals(1, result2.get(0).getQuantity());
 
         orderDetailRepository.delete(orderDetail1);

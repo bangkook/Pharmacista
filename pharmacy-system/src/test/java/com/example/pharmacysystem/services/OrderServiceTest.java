@@ -31,12 +31,12 @@ public class OrderServiceTest {
     @Test
     public void getAllOrders() {
         // Mocking the repository behavior
-        when(orderRepository.findAll()).thenReturn(Arrays.asList(new Order(), new Order()));
+        when(orderRepository.findAllByOrderByDateCreatedDesc()).thenReturn(Arrays.asList(new Order(), new Order()));
 
         List<Order> result = orderService.getAllOrders();
 
         // Verifying that the repository method was called
-        verify(orderRepository, times(1)).findAll();
+        verify(orderRepository, times(1)).findAllByOrderByDateCreatedDesc();
 
         // Asserting the result
         assertEquals(2, result.size());
@@ -44,19 +44,19 @@ public class OrderServiceTest {
 
     @Test
     public void getOrdersForUser_UserExists() {
-        String str1 = "2022-03-31";
+        String str1 = "2022-06-31";
         String str2 = "2022-05-04";
         int user1 = 1;
         Order order1 = new Order(user1, Date.valueOf(str1), 100.0F);
         Order order2 = new Order(user1, Date.valueOf(str2), 50.0F);
 
         // Mocking the repository behavior
-        when(orderRepository.getOrdersForUser(user1)).thenReturn(Arrays.asList(order1, order2));
+        when(orderRepository.findByUserId(user1)).thenReturn(Arrays.asList(order1, order2));
 
         List<Order> result = orderService.getOrdersForUser(user1);
 
         // Verifying that the repository method was called
-        verify(orderRepository, times(1)).getOrdersForUser(user1);
+        verify(orderRepository, times(1)).findByUserId(user1);
 
         // Asserting the result
         assertEquals(2, result.size());
@@ -76,12 +76,12 @@ public class OrderServiceTest {
         int userId = 1;
 
         // Mocking the repository behavior
-        when(orderRepository.getOrdersForUser(userId)).thenReturn(Collections.emptyList());
+        when(orderRepository.findByUserId(userId)).thenReturn(Collections.emptyList());
 
         List<Order> result = orderService.getOrdersForUser(userId);
 
         // Verifying that the repository method was called
-        verify(orderRepository, times(1)).getOrdersForUser(userId);
+        verify(orderRepository, times(1)).findByUserId(userId);
 
         // Asserting the result is empty
         assertEquals(0, result.size());
