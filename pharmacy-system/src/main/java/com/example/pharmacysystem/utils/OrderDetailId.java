@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class OrderDetailId implements Serializable {
+    
     private int orderId;
     private String productSN;
 
