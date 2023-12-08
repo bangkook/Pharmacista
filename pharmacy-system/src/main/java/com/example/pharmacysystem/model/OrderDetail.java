@@ -12,15 +12,15 @@ public class OrderDetail {
     @Id
     private int orderId;
     @Id
-    private int productId;
+    private String productSN; // Serial Number
     private int quantity;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(int orderId, int productId, int quantity) {
+    public OrderDetail(int orderId, String productSN, int quantity) {
         this.orderId = orderId;
-        this.productId = productId;
+        this.productSN = productSN;
         this.quantity = quantity;
     }
 
@@ -28,10 +28,10 @@ public class OrderDetail {
         return orderId;
     }
 
-    public int getProductId() {
-        return productId;
+    public String getProductSN() {
+        return productSN;
     }
-    
+
     public int getQuantity() {
         return quantity;
     }
