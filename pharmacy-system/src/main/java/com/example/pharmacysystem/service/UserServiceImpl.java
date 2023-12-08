@@ -194,6 +194,11 @@ public class UserServiceImpl implements UserService {
         return LoginStatus.USER_NOT_FOUND;
     }
 
+    @Override
+    public boolean isAdmin(User user) {
+        return user.getRole() == User.Role.ADMIN;
+    }
+
 }
 
 

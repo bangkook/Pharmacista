@@ -32,6 +32,8 @@ public interface UserService {
 
     LoginStatus checkUser(String userName, String password);
 
+    boolean isAdmin(User user);
+
     enum LoginStatus {
         USER_FOUND_CORRECT_PASSWORD,
         USER_FOUND_INCORRECT_PASSWORD,
