@@ -15,11 +15,12 @@ import java.util.List;
 @RequestMapping("/admin")
 @CrossOrigin()
 public class AdminController {
+
     @Autowired
     private AdminService adminService;
 
     @PutMapping("/promote-to-admin/{adminId}/{userId}")
-    public ResponseEntity<String> promoteUserToAdmin(@PathVariable int adminId,@PathVariable int userId) {
+    public ResponseEntity<String> promoteUserToAdmin(@PathVariable int adminId, @PathVariable int userId) {
         boolean success = adminService.promoteUser(adminId, userId);
 
         if (success) {
@@ -42,10 +43,10 @@ public class AdminController {
     @GetMapping("/searchUser/{adminId}/{username}")
     public ResponseEntity<UserInfo> searchByUsername(@PathVariable int adminId, @PathVariable String username) {
         try {
-            UserInfo u = adminService.searchByUsername(adminId, username);
-            return new ResponseEntity<>(u, HttpStatus.OK);
+            UserInfo userInfo = adminService.searchByUsername(adminId, username);
+            return new ResponseEntity<>(userInfo, HttpStatus.OK);
         }  catch (UserException e) {
-            return new ResponseEntity<> (null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<> (null, HttpStatus.OK);
         }
     }
 

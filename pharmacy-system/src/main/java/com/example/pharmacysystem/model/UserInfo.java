@@ -1,6 +1,7 @@
 package com.example.pharmacysystem.model;
 
 public class UserInfo {
+
     private String username;
     private String phoneNumber;
     private String profilePicture;
@@ -13,7 +14,6 @@ public class UserInfo {
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
     }
-
 
     public String getUsername() {
         return username;

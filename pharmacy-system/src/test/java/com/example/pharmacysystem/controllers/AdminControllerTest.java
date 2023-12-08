@@ -107,8 +107,8 @@ public class AdminControllerTest {
         int adminId = 1;
         String username = "testUser";
 
-        UserInfo u = new UserInfo("testUser", "01234567890", "pic1");
-        given(adminService.searchByUsername(adminId, username)).willReturn(u);
+        UserInfo userInfo = new UserInfo("testUser", "01234567890", "pic1");
+        given(adminService.searchByUsername(adminId, username)).willReturn(userInfo);
         MvcResult result = mockMvc.perform(get("/admin/searchUser/{adminId}/{username}", adminId, username))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -122,7 +122,7 @@ public class AdminControllerTest {
         given(adminService.searchByUsername(adminId, username)).willThrow(new UserException("User not found"));
 
         MvcResult result = mockMvc.perform(get("/admin/searchUser/{adminId}/{username}", adminId, username))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isOk())
                 .andReturn();
 
         assertEquals(result.getResponse().getContentAsString(), "");
