@@ -32,7 +32,7 @@ public interface UserService {
 
     LoginStatus checkUser(String userName, String password);
 
-    boolean isAdmin(User user);
+    boolean isAdmin(int adminId);
 
     enum LoginStatus {
         USER_FOUND_CORRECT_PASSWORD,

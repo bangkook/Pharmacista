@@ -16,7 +16,7 @@ public class AdminServiceImpl extends UserServiceImpl implements AdminService {
     }
 
     @Override
-    public boolean promoteUser(int userId) {
+    public boolean promoteUser(int adminId ,int userId) {
         return false;
     }
 

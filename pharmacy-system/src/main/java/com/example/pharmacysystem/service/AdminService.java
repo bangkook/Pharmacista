@@ -9,7 +9,7 @@ public interface AdminService {
 
     List<User> viewAdmins();
 
-    boolean promoteUser(int userId);
+    boolean promoteUser(int adminId, int userId);
 
     boolean addProduct(String SerialNumber);
 

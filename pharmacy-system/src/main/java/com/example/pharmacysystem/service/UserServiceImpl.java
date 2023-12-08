@@ -195,8 +195,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isAdmin(User user) {
-        return user.getRole() == User.Role.ADMIN;
+    public boolean isAdmin(int adminId) {
+        User admin = userRepository.findById(adminId).orElse(null);
+        return admin.getRole() == User.Role.ADMIN;
     }
 
 }
