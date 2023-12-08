@@ -5,14 +5,14 @@ import java.util.Objects;
 
 public class OrderDetailId implements Serializable {
     private int orderId;
-    private int productId;
+    private String productSN;
 
     public OrderDetailId() {
     }
 
-    public OrderDetailId(int orderId, int productId) {
+    public OrderDetailId(int orderId, String productSN) {
         this.orderId = orderId;
-        this.productId = productId;
+        this.productSN = productSN;
     }
 
     @Override
@@ -20,11 +20,11 @@ public class OrderDetailId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDetailId that = (OrderDetailId) o;
-        return orderId == that.orderId && productId == that.productId;
+        return orderId == that.orderId && productSN.equals(that.productSN);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, productId);
+        return Objects.hash(orderId, productSN);
     }
 }
