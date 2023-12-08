@@ -4,9 +4,11 @@ import com.example.pharmacysystem.model.OrderDetail;
 import com.example.pharmacysystem.repository.OrderDetailRepository;
 import com.example.pharmacysystem.service.OrderDetailService;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,12 +18,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.*;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderDetailServiceTest {
 
     @Autowired
     private OrderDetailService orderDetailService;
-    
+
     @MockBean
     private OrderDetailRepository orderDetailRepository;
 
@@ -59,10 +62,10 @@ public class OrderDetailServiceTest {
         // Mocking the repository behavior
         when(orderDetailRepository.findByOrderId(1)).thenReturn(Collections.emptyList());
 
-        // Verifying that the repository method was called
-        verify(orderDetailRepository, times(1)).findByOrderId(nonExistingOrderId);
-
         // Asserting the result
         assertThrows(RuntimeException.class, () -> orderDetailService.getOrderDetailsByOrderId(nonExistingOrderId));
+        
+        // Verifying that the repository method was called
+        verify(orderDetailRepository, times(1)).findByOrderId(nonExistingOrderId);
     }
 }
