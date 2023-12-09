@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 public class PasswordEncoder {
+    
     public String encryptPass(String password) {
         try {
             //retrieve instance of the encryptor of SHA-256
