@@ -1,6 +1,5 @@
 package com.example.pharmacysystem.service;
 
-
 import com.example.pharmacysystem.exceptions.UserRegistrationException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserBuilder;
@@ -40,9 +39,8 @@ public class UserServiceImpl implements UserService {
             throw new UserRegistrationException("Invalid phone number. Please follow the specified constraints.");
         }
         try {
-            String newPass = passwordEncoder.encryptPass(user.getPassword());
-            user.setPassword(newPass);
-//            System.out.println(newPass);
+            String encryptedPass = passwordEncoder.encryptPass(user.getPassword());
+            user.setPassword(encryptedPass);
             return userRepository.save(user);
         } catch (Exception e) {
             throw new UserRegistrationException("An error occurred while saving the user.");
