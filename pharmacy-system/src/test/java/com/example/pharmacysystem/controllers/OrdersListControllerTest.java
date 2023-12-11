@@ -212,4 +212,20 @@ public class OrdersListControllerTest {
         // Asserting the result
         assertTrue(resultOrders.isEmpty());
     }
+
+    @Test
+    public void getOrderDetailsByOrderId_OrderIdNotExists() throws Exception {
+        int nonExistingOrderId = 1;
+
+        when(orderDetailService.getOrderDetailsByOrderId(nonExistingOrderId))
+                .thenThrow(new RuntimeException());
+
+        // Performing the request
+        mockMvc.perform(get("/orders/{orderId}/details", nonExistingOrderId))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        // Verifying that the service method was called
+        verify(orderDetailService, times(1)).getOrderDetailsByOrderId(nonExistingOrderId);
+    }
 }
