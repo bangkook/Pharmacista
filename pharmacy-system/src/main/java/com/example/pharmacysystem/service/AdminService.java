@@ -1,20 +1,18 @@
 package com.example.pharmacysystem.service;
 
-import com.example.pharmacysystem.model.User;
+import com.example.pharmacysystem.model.UserInfo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface AdminService {
-    List<User> viewUsers();
 
-    List<User> viewAdmins();
+    List<UserInfo> viewUsers(int adminId);
+
+    List<UserInfo> viewAdmins(int adminId);
 
     boolean promoteUser(int adminId, int userId);
 
-    boolean addProduct(String SerialNumber);
-
-    boolean updateProduct(String SerialNumber);
-
-    boolean deleteProduct(String SerialNumber);
-
+    UserInfo searchByUsername(int adminId, String username);
 }
