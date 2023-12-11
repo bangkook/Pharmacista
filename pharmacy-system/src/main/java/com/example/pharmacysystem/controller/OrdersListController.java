@@ -5,15 +5,15 @@ import com.example.pharmacysystem.model.OrderDetail;
 import com.example.pharmacysystem.service.OrderDetailService;
 import com.example.pharmacysystem.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/orders")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class OrdersListController {
 
     @Autowired
@@ -22,6 +22,7 @@ public class OrdersListController {
     @Autowired
     OrderDetailService orderDetailService;
 
+    // TODO : return OrderDTO with username added
     @GetMapping("/all")
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
@@ -34,8 +35,13 @@ public class OrdersListController {
     }
 
     @GetMapping("/{orderId}/details")
-    public List<OrderDetail> getOrderDetailsByOrderId(@PathVariable("orderId") int orderId) {
-        return orderDetailService.getOrderDetailsByOrderId(orderId);
+    public ResponseEntity<List<OrderDetail>> getOrderDetailsByOrderId(@PathVariable("orderId") int orderId) {
+        try {
+            List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrderId(orderId);
+            return new ResponseEntity<>(orderDetails, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
 }
