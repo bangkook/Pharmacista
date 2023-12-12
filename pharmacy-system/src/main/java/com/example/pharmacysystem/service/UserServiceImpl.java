@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder = new PasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
     @Override
     public User saveUser(User user) {
@@ -115,8 +115,9 @@ public class UserServiceImpl implements UserService {
         // Return if the username matched the Regex
         return m.matches();
     }
+
     public boolean isValidPhone(String phone) {
-        return phone == null || phone == "" || Pattern.matches("^\\d{11}$", phone) || phone.equals("");
+        return phone == null || phone.equals("") || Pattern.matches("^\\d{11}$", phone);
     }
 
     public static boolean isValidPassword(String pass) {
@@ -124,7 +125,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public static boolean isValidZip(String zip) {
-        return zip == null || zip == "" || Pattern.matches("^\\d{3,5}$", zip) || zip.equals("");
+        return zip == null || zip.equals("") || Pattern.matches("^\\d{3,5}$", zip);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = optionalUser.get();
-        if (!(currentPassword.equals(user.getPassword())))
+        if (!(passwordEncoder.isEqual(currentPassword, user.getPassword())))
             return false;
 
         // Update user data
@@ -184,7 +185,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginStatus  checkUser(String userName, String password) {
+    public LoginStatus checkUser(String userName, String password) {
         List<User> Users = userRepository.findAll();
         if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
