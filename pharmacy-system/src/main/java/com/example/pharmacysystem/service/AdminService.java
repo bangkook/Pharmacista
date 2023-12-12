@@ -5,12 +5,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface AdminService {
 
-    List<UserInfo> viewUsers(int adminId);
+    List<UserInfo> manageUsers(int adminId);
 
-    List<UserInfo> viewAdmins(int adminId);
+    List<UserInfo> getAdmins(int adminId);
 
     boolean promoteUser(int adminId, int userId);
 

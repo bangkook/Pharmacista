@@ -45,7 +45,7 @@ public class AdminServiceTest {
         );
 
         // Act
-        List<UserInfo> userInfos = adminService.viewUsers(1);
+        List<UserInfo> userInfos = adminService.manageUsers(1);
 
         // Assert
         assertEquals(2, userInfos.size());
@@ -66,7 +66,7 @@ public class AdminServiceTest {
         );
 
         // Act & Assert
-        assertThrows(AdminException.class, () -> adminService.viewUsers(1));
+        assertThrows(AdminException.class, () -> adminService.manageUsers(1));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class AdminServiceTest {
         );
 
         // Act
-        List<UserInfo> adminInfos = adminService.viewAdmins(1);
+        List<UserInfo> adminInfos = adminService.getAdmins(1);
 
         // Assert
         assertEquals(2, adminInfos.size());
@@ -107,7 +107,7 @@ public class AdminServiceTest {
         );
 
         // Act & Assert
-        assertThrows(AdminException.class, () -> adminService.viewAdmins(1));
+        assertThrows(AdminException.class, () -> adminService.getAdmins(1));
     }
 
     @Test
