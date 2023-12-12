@@ -1,10 +1,10 @@
 package com.example.pharmacysystem.service;
 
-import com.example.pharmacysystem.model.OrderDetail;
+import com.example.pharmacysystem.dto.OrderDetailDTO;
 
 import java.util.List;
 
 public interface OrderDetailService {
 
-    List<OrderDetail> getOrderDetailsByOrderId(int orderId);
+    List<OrderDetailDTO> getOrderDetailsByOrderId(int orderId);
 }

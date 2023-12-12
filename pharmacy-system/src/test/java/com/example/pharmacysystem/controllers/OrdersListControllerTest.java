@@ -1,7 +1,8 @@
 package com.example.pharmacysystem.controllers;
 
+import com.example.pharmacysystem.dto.OrderDetailDTO;
 import com.example.pharmacysystem.model.Order;
-import com.example.pharmacysystem.model.OrderDetail;
+import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.service.OrderDetailService;
 import com.example.pharmacysystem.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -158,12 +159,17 @@ public class OrdersListControllerTest {
     public void getOrderDetailsByOrderId_Exist() throws Exception {
         int orderId = 1;
 
-        // Mocking the service behavior
-        List<OrderDetail> orderDetails = Arrays.asList(
-                new OrderDetail(orderId, "111aaa", 1),
-                new OrderDetail(orderId, "222bbb", 3));
+        Product product1 = new Product("1", 20F, Date.valueOf("2022-02-02"), Date.valueOf("2025-02-02"),
+                "description", 10, "product1", "photo1");
+        Product product2 = new Product("5", 10F, Date.valueOf("2021-01-01"), Date.valueOf("2024-01-01"),
+                "description", 5, "product2", "photo2");
 
-        when(orderDetailService.getOrderDetailsByOrderId(orderId)).thenReturn(orderDetails);
+        // Mocking the service behavior
+        List<OrderDetailDTO> orderDetailsDTO = Arrays.asList(
+                new OrderDetailDTO(orderId, product1, 1),
+                new OrderDetailDTO(orderId, product2, 3));
+
+        when(orderDetailService.getOrderDetailsByOrderId(orderId)).thenReturn(orderDetailsDTO);
 
         // Performing the request
         MvcResult result = mockMvc.perform(get("/orders/{orderId}/details", orderId))
@@ -172,22 +178,22 @@ public class OrdersListControllerTest {
 
         // Verifying the response
         MockHttpServletResponse response = result.getResponse();
-        List<OrderDetail> resultOrders = Arrays.asList(
-                objectMapper.readValue(response.getContentAsString(), OrderDetail[].class));
+        List<OrderDetailDTO> resultOrders = Arrays.asList(
+                objectMapper.readValue(response.getContentAsString(), OrderDetailDTO[].class));
 
         // Verifying that the service method was called
         verify(orderDetailService, times(1)).getOrderDetailsByOrderId(orderId);
 
         // Asserting the result
-        assertEquals(orderDetails.size(), resultOrders.size());
+        assertEquals(orderDetailsDTO.size(), resultOrders.size());
 
         // Assert for each item
         assertEquals(orderId, resultOrders.get(0).getOrderId());
-        assertEquals("111aaa", resultOrders.get(0).getProductSN());
+        assertEquals(product1.toString(), resultOrders.get(0).getProduct().toString());
         assertEquals(1, resultOrders.get(0).getQuantity());
 
         assertEquals(orderId, resultOrders.get(1).getOrderId());
-        assertEquals("222bbb", resultOrders.get(1).getProductSN());
+        assertEquals(product2.toString(), resultOrders.get(1).getProduct().toString());
         assertEquals(3, resultOrders.get(1).getQuantity());
     }
 
@@ -204,7 +210,8 @@ public class OrdersListControllerTest {
 
         // Verifying the response
         MockHttpServletResponse response = result.getResponse();
-        List<Order> resultOrders = Arrays.asList(objectMapper.readValue(response.getContentAsString(), Order[].class));
+        List<OrderDetailDTO> resultOrders = Arrays.asList(objectMapper.readValue(
+                response.getContentAsString(), OrderDetailDTO[].class));
 
         // Verifying that the service method was called
         verify(orderDetailService, times(1)).getOrderDetailsByOrderId(orderId);

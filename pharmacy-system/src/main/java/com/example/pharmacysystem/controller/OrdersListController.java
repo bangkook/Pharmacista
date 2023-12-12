@@ -1,7 +1,7 @@
 package com.example.pharmacysystem.controller;
 
+import com.example.pharmacysystem.dto.OrderDetailDTO;
 import com.example.pharmacysystem.model.Order;
-import com.example.pharmacysystem.model.OrderDetail;
 import com.example.pharmacysystem.service.OrderDetailService;
 import com.example.pharmacysystem.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ public class OrdersListController {
     @Autowired
     OrderDetailService orderDetailService;
 
-    // TODO : return OrderDTO with username added
     @GetMapping("/all")
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
@@ -35,13 +34,12 @@ public class OrdersListController {
     }
 
     @GetMapping("/{orderId}/details")
-    public ResponseEntity<List<OrderDetail>> getOrderDetailsByOrderId(@PathVariable("orderId") int orderId) {
+    public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderId(@PathVariable("orderId") int orderId) {
         try {
-            List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrderId(orderId);
-            return new ResponseEntity<>(orderDetails, HttpStatus.OK);
+            List<OrderDetailDTO> orderDetailDTOs = orderDetailService.getOrderDetailsByOrderId(orderId);
+            return new ResponseEntity<>(orderDetailDTOs, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
-
 }
