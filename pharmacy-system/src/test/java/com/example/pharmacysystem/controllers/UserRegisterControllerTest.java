@@ -56,7 +56,7 @@ public class UserRegisterControllerTest {
 
         String resultContent = res.getResponse().getContentAsString();
         String expectedResponse = "New User is added successfully";
-        Assert.assertEquals(resultContent.equals(expectedResponse), true);
+        Assert.assertEquals(resultContent, expectedResponse);
     }
 
     @Test
@@ -89,6 +89,6 @@ public class UserRegisterControllerTest {
                 .andReturn();
 
         String resultContent = res.getResponse().getContentAsString();
-        Assert.assertEquals(resultContent.equals(errorMessage), true);
+        Assert.assertEquals(resultContent, errorMessage);
     }
 }
