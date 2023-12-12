@@ -1,14 +1,11 @@
 package com.example.pharmacysystem.service;
 
-
 import com.example.pharmacysystem.exceptions.AdminException;
-import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserInfo;
 import com.example.pharmacysystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
