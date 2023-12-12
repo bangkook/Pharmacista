@@ -2,32 +2,35 @@ package com.example.pharmacysystem.repositories;
 
 import com.example.pharmacysystem.model.OrderDetail;
 import com.example.pharmacysystem.repository.OrderDetailRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class OrderDetailRepositoryTests {
+
+@DataJpaTest
+class OrderDetailRepositoryTests {
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Autowired
     OrderDetailRepository orderDetailRepository;
 
     @Test
-    public void findByOrderIdTest() {
+    void findByOrderIdTest() {
         OrderDetail orderDetail1 = new OrderDetail(1, "1", 4);
         OrderDetail orderDetail2 = new OrderDetail(1, "5", 2);
         OrderDetail orderDetail3 = new OrderDetail(2, "1", 1);
 
-        orderDetailRepository.save(orderDetail1);
-        orderDetailRepository.save(orderDetail2);
-        orderDetailRepository.save(orderDetail3);
+        entityManager.persist(orderDetail1);
+        entityManager.persist(orderDetail2);
+        entityManager.persist(orderDetail3);
+        entityManager.flush();
 
         List<OrderDetail> result1 = orderDetailRepository.findByOrderId(1);
 
@@ -51,14 +54,10 @@ public class OrderDetailRepositoryTests {
         assertEquals(2, result2.get(0).getOrderId());
         assertEquals("1", result2.get(0).getProductSN());
         assertEquals(1, result2.get(0).getQuantity());
-
-        orderDetailRepository.delete(orderDetail1);
-        orderDetailRepository.delete(orderDetail2);
-        orderDetailRepository.delete(orderDetail3);
     }
 
     @Test
-    public void findByOrderIdTest_Empty() {
+    void findByOrderIdTest_Empty() {
         int orderId = 10;
 
         List<OrderDetail> result = orderDetailRepository.findByOrderId(orderId);
