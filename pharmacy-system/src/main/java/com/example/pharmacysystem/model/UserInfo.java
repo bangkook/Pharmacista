@@ -2,6 +2,7 @@ package com.example.pharmacysystem.model;
 
 public class UserInfo {
 
+    private int userId;
     private String username;
     private String phoneNumber;
     private String profilePicture;
@@ -9,10 +10,19 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String username, String phoneNumber, String profilePicture) {
+    public UserInfo(int userId, String username, String phoneNumber, String profilePicture) {
+        this.userId = userId;
         this.username = username;
         this.phoneNumber = phoneNumber;
         this.profilePicture = profilePicture;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -37,5 +47,15 @@ public class UserInfo {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                '}';
     }
 }

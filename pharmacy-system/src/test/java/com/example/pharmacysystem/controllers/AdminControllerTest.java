@@ -1,7 +1,6 @@
 package com.example.pharmacysystem.controllers;
 
 import com.example.pharmacysystem.exceptions.UserException;
-import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserInfo;
 import com.example.pharmacysystem.service.AdminService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,16 +10,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -71,15 +66,16 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void getUsers_Success() throws Exception {
+    public void manageUsers_Success() throws Exception {
         int adminId = 1;
 
-        UserInfo firstUser = new UserInfo("Mary_Alfred", "01234567890", "pic1");
-        UserInfo secondUser = new UserInfo("John_Doe", "01237894560", "pic2");
+        UserInfo firstUser = new UserInfo(2, "Mary_Alfred", "01234567890", "pic1");
+        UserInfo secondUser = new UserInfo(3, "John_Doe", "01237894560", "pic2");
         List<UserInfo> userInfoList = List.of(firstUser, secondUser);
 
-        given(adminService.viewUsers(adminId)).willReturn(userInfoList);
-        MvcResult result = mockMvc.perform(get("/admin/{adminId}/findUsers", adminId))
+        given(adminService.manageUsers(adminId)).willReturn(userInfoList);
+
+        MvcResult result = mockMvc.perform(get("/admin/{adminId}/manageUsers", adminId))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -90,12 +86,12 @@ public class AdminControllerTest {
     public void getAdmins_Success() throws Exception {
         int adminId = 1;
 
-        UserInfo firstUser = new UserInfo("Mary_Alfred", "01234567890", "pic1");
-        UserInfo secondUser = new UserInfo("John_Doe", "01237894560", "pic2");
+        UserInfo firstUser = new UserInfo(2, "Mary_Alfred", "01234567890", "pic1");
+        UserInfo secondUser = new UserInfo(3, "John_Doe", "01237894560", "pic2");
         List<UserInfo> adminInfoList = List.of(firstUser, secondUser);
 
-        given(adminService.viewAdmins(adminId)).willReturn(adminInfoList);
-        MvcResult result = mockMvc.perform(get("/admin/{adminId}/findAdmins", adminId))
+        given(adminService.getAdmins(adminId)).willReturn(adminInfoList);
+        MvcResult result = mockMvc.perform(get("/admin/{adminId}/getAdmins", adminId))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -107,12 +103,12 @@ public class AdminControllerTest {
         int adminId = 1;
         String username = "testUser";
 
-        UserInfo userInfo = new UserInfo("testUser", "01234567890", "pic1");
+        UserInfo userInfo = new UserInfo(2, "testUser", "01234567890", "pic1");
         given(adminService.searchByUsername(adminId, username)).willReturn(userInfo);
         MvcResult result = mockMvc.perform(get("/admin/searchUser/{adminId}/{username}", adminId, username))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertEquals(objectMapper.writeValueAsString(u), result.getResponse().getContentAsString());
+        assertEquals(objectMapper.writeValueAsString(userInfo), result.getResponse().getContentAsString());
     }
 
     @Test

@@ -1,14 +1,12 @@
 package com.example.pharmacysystem.controller;
 
 import com.example.pharmacysystem.exceptions.UserException;
-import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserInfo;
 import com.example.pharmacysystem.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -30,20 +28,25 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/{adminId}/findUsers")
+    @GetMapping("/{adminId}/manageUsers")
     public List<UserInfo> getAllUsers(@PathVariable int adminId) {
-        return adminService.viewUsers(adminId);
+        return adminService.manageUsers(adminId);
     }
 
-    @GetMapping("/{adminId}/findAdmins")
+    @GetMapping("/{adminId}/getAdmins")
     public List<UserInfo> getAllAdmins(@PathVariable int adminId) {
-        return adminService.viewAdmins(adminId);
+        return adminService.getAdmins(adminId);
     }
 
     @GetMapping("/searchUser/{adminId}/{username}")
     public ResponseEntity<UserInfo> searchByUsername(@PathVariable int adminId, @PathVariable String username) {
         try {
             UserInfo userInfo = adminService.searchByUsername(adminId, username);
+
+            if(userInfo == null) { // Username is not found
+                return new ResponseEntity<> (null, HttpStatus.OK);
+            }
+            System.out.println("userInfo = " + userInfo.toString());
             return new ResponseEntity<>(userInfo, HttpStatus.OK);
         }  catch (UserException e) {
             return new ResponseEntity<> (null, HttpStatus.OK);
