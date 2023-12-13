@@ -15,10 +15,25 @@ public class CartItemServiceImpl implements CartItemService{
     private CartItemRepository cartItemRepository;
 
 
+
+
     @Override
     public boolean saveCartItem(CartItem item) {
         try {
-            cartItemRepository.save(item);
+            CartItem result= cartItemRepository.save(item);
+            if(result !=null) return true;
+            else return false;
+//            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteCartItem(CartItemId cartItemId) {
+        try {
+            cartItemRepository.deleteById(cartItemId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,4 +41,14 @@ public class CartItemServiceImpl implements CartItemService{
         }
     }
 
+    @Override
+    public List<CartItem> getCartItemsByUserId(int userId) {
+        try {
+            return cartItemRepository.getCartItemsByUserId(userId);
+        } catch (Exception e) {
+            // Log the exception or handle it accordingly
+            e.printStackTrace(); // Log or handle the exception as needed
+            throw new RuntimeException("Error retrieving cart items for user ID: " + userId, e);
+        }
+    }
 }
