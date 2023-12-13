@@ -1,12 +1,9 @@
-
 package com.example.pharmacysystem.service;
 
 import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.model.ProductBuilder;
 import com.example.pharmacysystem.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,35 +38,24 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(String serialNumber, Product updatedProduct) {
         // Check if the product with the given serial number exists
         Optional<Product> existingProductOptional = getProductBySerialNumber(serialNumber);
+        Product existingProduct = existingProductOptional.get();
 
-        if (existingProductOptional.isPresent()) {
-            // Get the existing product
-            Product existingProduct = existingProductOptional.get();
+        // Use the builder to update the existing product
+        Product updatedExistingProduct = new ProductBuilder(existingProduct)
+                .buildName(updatedProduct.getName())
+                .buildQuantity(updatedProduct.getQuantity())
+                .buildPrice(updatedProduct.getPrice())
+                .buildProductionDate(updatedProduct.getProductionDate())
+                .buildExpiryDate(updatedProduct.getExpiryDate())
+                .buildDescription(updatedProduct.getDescription())
+                .buildPhoto(updatedProduct.getPhoto())
+                .build();
 
-            // Use the builder to update the existing product
-            Product updatedExistingProduct = new ProductBuilder(existingProduct)
-                    .buildName(updatedProduct.getName())
-                    .buildQuantity(updatedProduct.getQuantity())
-                    .buildPrice(updatedProduct.getPrice())
-                    .buildProductionDate(updatedProduct.getProductionDate())
-                    .buildExpiryDate(updatedProduct.getExpiryDate())
-                    .buildDescription(updatedProduct.getDescription())
-                    .buildPhoto(updatedProduct.getPhoto())
-                    .build();
-
-            return productRepository.save(updatedExistingProduct);
-        } else {
-            return null;
-        }
+        return productRepository.save(updatedExistingProduct);
     }
-
 
     @Override
     public void deleteProduct(String serialNumber) {
-        try {
-            productRepository.deleteById(serialNumber);//Given that the Id is the serial number given
-        } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException("Product not found with serial number: " + serialNumber);
-        }
+        productRepository.deleteById(serialNumber);//Given that the Id is the serial number given
     }
 }

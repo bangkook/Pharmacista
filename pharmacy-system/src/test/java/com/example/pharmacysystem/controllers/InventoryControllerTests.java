@@ -107,6 +107,32 @@ class InventoryControllerTests {
     }
 
     @Test
+    void testAddProductInvalidSerialNumber() throws Exception {
+        // Mock the productService.getProductBySerialNumber method to return an empty optional
+        when(productService.getProductBySerialNumber(anyString())).thenReturn(Optional.empty());
+
+        // Mock the payload data with an invalid serial number (less than 18 characters)
+        Product payload = new Product(
+                "12345678901234567",  // Serial number with less than 18 characters
+                29.99F,
+                Date.valueOf(LocalDate.now()),
+                Date.valueOf(LocalDate.now().plusMonths(2)),
+                "InvalidProduct",
+                5,
+                "InvalidProduct",
+                "invalid_product.jpg"
+        );
+
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        // Perform the POST request
+        mockMvc.perform(post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(payload)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void testAddProductDuplicateSerialNumber() throws Exception {
         // Mock the productService.getProductBySerialNumber method to return a product
         when(productService.getProductBySerialNumber(anyString())).thenReturn(
@@ -184,18 +210,92 @@ class InventoryControllerTests {
     }
 
     @Test
-    void testUpdateProductInvalid() throws Exception {
-        // Mock the productService.updateProduct method to return null (indicating product not found)
+    void testUpdateProductInvalidSerialNumber() throws Exception {
+        when(productService.updateProduct(anyString(), any())).thenReturn(null);
+
+        // Mock the payload data with invalid fields
+        Product payload = new Product(
+                "1234567890123",
+                10.0F, // Invalid price
+                Date.valueOf(LocalDate.now()),
+                Date.valueOf(LocalDate.now().plusMonths(2)),
+                "UpdatedProduct",
+                10,
+                "UpdatedProduct",
+                "updated_product.jpg"
+        );
+
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        // Perform the PUT request
+        mockMvc.perform(put("/products/{serialNumber}", "123456789012345678")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(payload)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testUpdateProductInvalidPrice() throws Exception {
         when(productService.updateProduct(anyString(), any())).thenReturn(null);
 
         // Mock the payload data with invalid fields
         Product payload = new Product(
                 "123456789012345678",
                 -10.0F, // Invalid price
-                Date.valueOf(LocalDate.now().plusDays(1)), // Invalid production date
-                Date.valueOf(LocalDate.now().minusDays(1)), // Invalid expiry date
+                Date.valueOf(LocalDate.now()),
+                Date.valueOf(LocalDate.now().plusMonths(2)),
                 "UpdatedProduct",
-                0, // Invalid quantity
+                10,
+                "UpdatedProduct",
+                "updated_product.jpg"
+        );
+
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        // Perform the PUT request
+        mockMvc.perform(put("/products/{serialNumber}", "123456789012345678")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(payload)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testUpdateProductInvalidQuantity() throws Exception {
+        when(productService.updateProduct(anyString(), any())).thenReturn(null);
+
+        // Mock the payload data with invalid fields
+        Product payload = new Product(
+                "123456789012345678",
+                10.0F,
+                Date.valueOf(LocalDate.now()),
+                Date.valueOf(LocalDate.now().plusMonths(2)),
+                "UpdatedProduct",
+                -5, // Invalid quantity
+                "UpdatedProduct",
+                "updated_product.jpg"
+        );
+
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        // Perform the PUT request
+        mockMvc.perform(put("/products/{serialNumber}", "123456789012345678")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(payload)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testUpdateProductInvalidDate() throws Exception {
+        when(productService.updateProduct(anyString(), any())).thenReturn(null);
+
+        // Mock the payload data with invalid fields
+        Product payload = new Product(
+                "123456789012345678",
+                10.0F,
+                Date.valueOf(LocalDate.now().plusMonths(1)),
+                Date.valueOf(LocalDate.now().plusMonths(2)),
+                "UpdatedProduct",
+                5, // Invalid quantity
                 "UpdatedProduct",
                 "updated_product.jpg"
         );
@@ -223,7 +323,6 @@ class InventoryControllerTests {
         // Verify that productService.deleteProduct was called with the correct serial number
         verify(productService, times(1)).deleteProduct("123456789012345678");
     }
-
 
     // Utility method to convert an object to JSON string
     private String asJsonString(Object object) {

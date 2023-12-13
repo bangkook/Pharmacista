@@ -3,7 +3,6 @@ package com.example.pharmacysystem.controller;
 import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,21 +85,14 @@ public class InventoryController {
         }
 
         Product updated = productService.updateProduct(serialNumber, updatedProduct);
-        return updated != null
-                ? new ResponseEntity<>(updated, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return  new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     // Delete a product by serial number
     @DeleteMapping("/products/{serialNumber}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String serialNumber) {
-        try {
             productService.deleteProduct(serialNumber);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (EmptyResultDataAccessException e) {
-            // The product with the given serial number was not found
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
 }
