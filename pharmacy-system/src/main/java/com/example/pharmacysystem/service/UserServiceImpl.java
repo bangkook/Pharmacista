@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
         // Return if the username matched the Regex
         return m.matches();
     }
+
     public boolean isValidPhone(String phone) {
         return phone == null || phone == "" || Pattern.matches("^\\d{11}$", phone) || phone.equals("");
     }
@@ -184,7 +185,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginStatus  checkUser(String userName, String password) {
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUsername(userName);
+    }
+
+    @Override
+    public LoginStatus checkUser(String userName, String password) {
         List<User> Users = userRepository.findAll();
         if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {

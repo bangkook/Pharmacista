@@ -30,6 +30,8 @@ public interface UserService {
 
     User getUser(String userName, String password);
 
+    User getUserByUserName(String userName);
+
     LoginStatus checkUser(String userName, String password);
 
     enum LoginStatus {
