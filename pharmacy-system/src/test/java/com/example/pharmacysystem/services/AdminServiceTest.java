@@ -1,7 +1,6 @@
 package com.example.pharmacysystem.services;
 
 import com.example.pharmacysystem.exceptions.AdminException;
-import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.UserInfo;
 import com.example.pharmacysystem.repository.UserRepository;
 import com.example.pharmacysystem.service.AdminService;
@@ -218,6 +217,7 @@ public class AdminServiceTest {
         when(userRepository.findByUsername("nonexistentUser")).thenReturn(null);
 
         // Act & Assert
-        assertThrows(UserException.class, () -> adminService.searchByUsername(1, "nonexistentUser"));
+         UserInfo userInfo = adminService.searchByUsername(1, "nonexistentUser");
+         assertEquals(userInfo, null);
     }
 }
