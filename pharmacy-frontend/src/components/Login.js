@@ -4,7 +4,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
 
-export default function GoogleSignIn() {
+export default function GoogleSignIn({handleSuccessfulLogin}) {
   const handleGoogleLogin = async (response) => {
     try {
       const userInfoResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -28,6 +28,7 @@ export default function GoogleSignIn() {
     try {
       const serverResponse = await axios.get(`http://localhost:8088/user/login?email=${encodeURIComponent(email)}`);
       console.log('Server response:', serverResponse.data);
+      handleSuccessfulLogin(email);
     } catch (error) {
       console.error('Error sending user information to server:', error);
     }

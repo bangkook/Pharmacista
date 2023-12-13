@@ -1,5 +1,7 @@
 import { Avatar, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import React, { useMemo, useState } from "react";
+import { Link } from 'react-router-dom'
+import GoogleSignUp from './googleSignUp';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import Select from "react-select";
 import countryList from "react-select-country-list";
@@ -32,7 +34,7 @@ const selectStyle = {
 }
 
 
-function Signup() {
+function Signup({handleSuccessfulLogin}) {
     const [country, setCountry] = useState("")
     const options = useMemo(() => countryList().getData(), [])
     const countryHandler = (country) => {
@@ -70,6 +72,7 @@ function Signup() {
             
             if((await response).ok){
                 alert('Welcome to Pharmacista '+ user.username + '! Horray!!')
+                handleSuccessfulLogin(user.username)
             } else if((await response).status == 422) {
                 alert("Username is already taken. Choose another one!")
             }
@@ -150,13 +153,23 @@ function Signup() {
                                 value={city} onChange={(e) => setCity(e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        
+                        <Grid item xs={5}>
+                            <Typography> Already have an account?
+                                <Link to='/LoginBasic'>
+                                Log in
+                                </Link>
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={6}>
                             <Button type="submit" variant="contained" color="primary" onClick={handleClick}>
                                 Sign Up
                             </Button>
                         </Grid>
                     </Grid>
                 </form>
+                <GoogleSignUp/>
             </Paper>
         </Grid>
     )

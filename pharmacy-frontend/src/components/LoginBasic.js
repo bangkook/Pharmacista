@@ -1,8 +1,11 @@
-import { Grid, Paper,Avatar, TextField, Button, Typography ,Link} from "@mui/material";
+import { Grid, Paper,Avatar, TextField, Button, Typography} from "@mui/material";
 import React, { useState } from "react";
+import { Link } from 'react-router-dom'
+import signup from './signup.js';
+import GoogleSignIn from './login';
 import LockIcon from '@mui/icons-material/Lock';
 
-const LoginBasic=()=>{
+const LoginBasic=({handleSuccessfulLogin})=>{
     const BaseUri = 'http://localhost:8088/user'
     const paperStyle={padding: 20 , height:'50 vh', width:340 , margin:"150px auto" }
     const lockIconStyle={backgroundColor:'#b18fbf'}
@@ -28,6 +31,7 @@ const LoginBasic=()=>{
                 }))
                 const userData = await registeredUser.json()
                 console.log(userData)
+                handleSuccessfulLogin(userNameinput)
             } else if (data === 'USER_FOUND_INCORRECT_PASSWORD') {
                 alert("Wrong password");
             } else if (data === 'USER_NOT_FOUND') {
@@ -54,9 +58,10 @@ const LoginBasic=()=>{
                 <TextField label='Password' placeholder="Enter Password" fullWidth required  type="password" variant="standard" value={passwordInput} onChange={(e)=>setPassword(e.target.value)} />
                 </div>
                 <Button type="submit" variant="contained" style={buttoncolor} fullWidth onClick={signInButton}>Log-in</Button>
-                <Typography> Do you have an account 
-                    <Link href="#"> Sign up</Link>
+                <Typography> Don't have an account?  
+                    <Link to="/signup">Sign up</Link>
                 </Typography>
+                <GoogleSignIn/>
             </Paper>
         </Grid>
     )
