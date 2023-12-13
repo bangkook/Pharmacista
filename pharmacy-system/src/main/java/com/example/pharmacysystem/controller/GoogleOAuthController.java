@@ -3,6 +3,7 @@ package com.example.pharmacysystem.controller;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
 import com.example.pharmacysystem.utils.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +17,8 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class GoogleOAuthController {
 
-    private final UserService userService;
-
-    // Inject the UserService through constructor injection
-    public GoogleOAuthController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login/oauth2/")
     public ResponseEntity<String> createUser(@RequestBody Map<String, String> Response) {//Registration Rest API
@@ -35,7 +32,7 @@ public class GoogleOAuthController {
             return ResponseEntity.ok("Existing User " + email);
         } else {
             User newUser = new User(email, null, null, null, null, null, null, picture);
-            userService.saveUser(newUser);
+            userService.saveUserGoogle(newUser);
             return ResponseEntity.ok("New User added " + email);
         }
     }
