@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './MedicineInventory.css'; // Import your CSS file
 
 const initialFormData = {
-  medicineName: '',
+  name: '',
   quantity: '',
   serialNumber: '',
   price: '',
@@ -18,12 +18,28 @@ const MedicineInventory = () => {
   const [editingId, setEditingId] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
+  useEffect(() => {
+    fetchMedicines();
+  }, []);
+
+  const fetchMedicines = async () => {
+    try {
+      const response = await fetch('http://localhost:8088/products');
+      const data = await response.json();
+      setMedicines(data);
+    } catch (error) {
+      console.error('Error fetching medicines:', error);
+    }
+  };
+
   const openModal = () => {
     setModalOpen(true);
   };
 
   const closeModal = () => {
     setModalOpen(false);
+        console.log(formData.photo)
+
     setFormData(initialFormData);
     setEditingId(null);
   };
@@ -35,39 +51,84 @@ const MedicineInventory = () => {
     });
   };
 
-  const addMedicine = () => {
-    if (!formData.medicineName || !formData.quantity) {
-      alert('Medicine Name and Quantity are required fields.');
-      return;
+  const addMedicine = async () => {
+    if (!formData.name || !formData.quantity || !formData.serialNumber || !formData.price || !formData.productionDate || !formData.expiryDate ) {
+        alert('All fields are required.');
+        return;
     }
+  
+    try {
+        const response = await fetch('http://localhost:8088/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...formData,
+                // Convert the image to a string (data URL)
+                photo: formData.photo.toString(),
+            }),
+        });
 
-    const newMedicine = {
-      id: Date.now(),
-      ...formData,
-    };
+        if (response.ok) {
+            fetchMedicines();
+            closeModal();
+        } else {
+            const errorText = await response.text();
+            alert(`Failed to add medicine. Error: ${errorText}`);
+        }
+    } catch (error) {
+        console.error('Error adding medicine:', error);
+    }
+};
 
-    setMedicines([...medicines, newMedicine]);
-    closeModal();
-  };
+  
 
-  const deleteMedicine = (id) => {
-    setMedicines(medicines.filter((medicine) => medicine.id !== id));
+  const deleteMedicine = async (serialNumber) => {
+    try {
+      const response = await fetch(`http://localhost:8088/products/${serialNumber}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        fetchMedicines();
+      } else {
+        alert('Failed to delete medicine.');
+      }
+    } catch (error) {
+      console.error('Error deleting medicine:', error);
+    }
   };
 
   const editMedicine = (medicine) => {
-    setEditingId(medicine.id);
+    setEditingId(medicine.serialNumber);
     setFormData(medicine);
     openModal();
   };
 
-  const updateMedicine = () => {
-    const updatedMedicines = medicines.map((medicine) =>
-      medicine.id === editingId ? { ...formData, id: editingId } : medicine
-    );
+  const updateMedicine = async () => {
+    try {
+        console.log(JSON.stringify(formData))
+      const response = await fetch(`http://localhost:8088/products/${editingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    setMedicines(updatedMedicines);
-    closeModal();
-  };
+      if (response.ok) {
+        fetchMedicines();
+        closeModal();
+      } else {
+        const errorText = await response.text();
+        alert(`Failed to update medicine. Error: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error updating medicine:', error);
+    }
+};
+
 
   return (
     <div className="medicine-inventory-container">
@@ -95,8 +156,8 @@ const MedicineInventory = () => {
         </thead>
         <tbody>
           {medicines.map((medicine) => (
-            <tr key={medicine.id}>
-              <td>{medicine.medicineName}</td>
+            <tr key={medicine.serialNumber}>
+              <td>{medicine.name}</td>
               <td>{medicine.quantity}</td>
               <td>{medicine.serialNumber}</td>
               <td>{medicine.price}</td>
@@ -104,13 +165,15 @@ const MedicineInventory = () => {
               <td>{medicine.expiryDate}</td>
               <td>{medicine.description}</td>
               <td>
-                {medicine.photo && <img src={medicine.photo} alt="Medicine" style={{ width: '50px' }} />}
+                {medicine.photo && (
+                  <img src={medicine.photo} alt="Medicine" style={{ width: '50px' }} />
+                )}
               </td>
               <td>
                 <button className="edit-btn" onClick={() => editMedicine(medicine)}>
                   Edit
                 </button>
-                <button className="delete-btn" onClick={() => deleteMedicine(medicine.id)}>
+                <button className="delete-btn" onClick={() => deleteMedicine(medicine.serialNumber)}>
                   Delete
                 </button>
               </td>
@@ -134,8 +197,8 @@ const MedicineInventory = () => {
                 Medicine Name:
                 <input
                   type="text"
-                  name="medicineName"
-                  value={formData.medicineName}
+                  name="name"
+                  value={formData.name}
                   onChange={handleInputChange}
                 />
               </label>
@@ -157,6 +220,7 @@ const MedicineInventory = () => {
                   name="serialNumber"
                   value={formData.serialNumber}
                   onChange={handleInputChange}
+                  readOnly={!!editingId}
                 />
               </label>
 
@@ -191,13 +255,15 @@ const MedicineInventory = () => {
               </label>
 
               <label>
-                Description:
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                />
-              </label>
+            Description<span className="optional-text">(optional)</span>:
+            <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="(optional)"
+            />
+        </label>
+
 
               <label>
                 Photo:
@@ -213,7 +279,6 @@ const MedicineInventory = () => {
                       setFormData({
                         ...formData,
                         photo: reader.result,
-
                       });
                     };
 
