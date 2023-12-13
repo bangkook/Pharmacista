@@ -38,8 +38,6 @@ const MedicineInventory = () => {
 
   const closeModal = () => {
     setModalOpen(false);
-        console.log(formData.photo)
-
     setFormData(initialFormData);
     setEditingId(null);
   };
@@ -73,6 +71,9 @@ const MedicineInventory = () => {
         if (response.ok) {
             fetchMedicines();
             closeModal();
+            setTimeout(() => {
+              alert('Medicine added successfully.');
+            }, 100);
         } else {
             const errorText = await response.text();
             alert(`Failed to add medicine. Error: ${errorText}`);
@@ -84,7 +85,12 @@ const MedicineInventory = () => {
 
   
 
-  const deleteMedicine = async (serialNumber) => {
+const deleteMedicine = async (serialNumber) => {
+  // Display a confirmation prompt
+  const confirmDelete = window.confirm("Are you sure you want to delete this medicine?");
+  
+  // If the user confirms, proceed with deletion
+  if (confirmDelete) {
     try {
       const response = await fetch(`http://localhost:8088/products/${serialNumber}`, {
         method: 'DELETE',
@@ -92,13 +98,17 @@ const MedicineInventory = () => {
 
       if (response.ok) {
         fetchMedicines();
+        alert('Medicine deleted successfully.');
+        
       } else {
         alert('Failed to delete medicine.');
       }
     } catch (error) {
       console.error('Error deleting medicine:', error);
     }
-  };
+  }
+};
+
 
   const editMedicine = (medicine) => {
     setEditingId(medicine.serialNumber);
@@ -120,6 +130,9 @@ const MedicineInventory = () => {
       if (response.ok) {
         fetchMedicines();
         closeModal();
+        setTimeout(() => {
+          alert('Medicine Updated successfully.');
+        }, 100);
       } else {
         const errorText = await response.text();
         alert(`Failed to update medicine. Error: ${errorText}`);
