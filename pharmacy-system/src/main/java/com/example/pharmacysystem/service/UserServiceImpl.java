@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.example.pharmacysystem.utils.Constants.EMPTY_IMAGE;
+
 @Primary
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
         }
         try {
             user.setRole(User.Role.USER);
+            user.setProfilePicture(EMPTY_IMAGE);
             return userRepository.save(user);
         } catch (Exception e) {
             throw new UserException("An error occurred while saving the user.");
