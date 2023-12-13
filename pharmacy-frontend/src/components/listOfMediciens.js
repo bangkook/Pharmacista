@@ -13,9 +13,123 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { wait } from "@testing-library/user-event/dist/utils";
 
 const ListOfMediciens=()=>{
+  const userId=1
+  const BaseUri = 'http://localhost:8088'
   const [initialMedicines, setInitialMedicines] = useState([])
   const [cart, setCart] = useState([])
+  const [products, setProducts] = useState([])
 
+
+  const getListOfMediciens = async () => {
+    try {
+      const response = await fetch(`${BaseUri}/product/getAllAvailableProducts`);
+      if (response.ok) {
+        const data = await response.json();
+        setInitialMedicines(data);
+        try {
+          const responseCart = await fetch(`${BaseUri}/cartItem/ProductFromCart/${userId}`);
+          if (responseCart.ok) {
+            const dataCart = await responseCart.json();
+            setProducts(dataCart);
+          } else {
+            console.error('Failed to fetch medicines:', responseCart.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching products from cart:', error);
+        }
+      } else {
+        console.error('Failed to fetch medicines:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching medicines:', error.message);
+    }
+  };
+  
+  useEffect(() => {
+    getListOfMediciens();
+  }, []);
+  
+  // Use another useEffect to update cart when products change
+  useEffect(() => {
+    setCart([...cart, ...products]);
+  }, [products]);
+  
+
+  const addItemToCArt = async (serialNumber) => {
+    try {
+      const response = await fetch(`${BaseUri}/cartItem/addCartItem`,{                
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({userId: userId, productSN: serialNumber, quantity: 1 })
+      })
+
+      if (response.ok) {
+        const data = await response.text()
+        console.log(data)
+      } else {
+        console.error('Failed to add item:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error adding item:', error.message)
+    }
+  };
+
+  const deleteCartItem = async (serialNumber) => {
+    try {
+      const response = await fetch(`${BaseUri}/cartItem/removeCartItem/${userId}/${serialNumber}`,{
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (response.ok) {
+        const data = await response.text()
+        console.log(data)
+      } else {
+        console.error('CartItem not found or deletion failed:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Erorr deleting:', error.message)
+    }
+  };
+  
+
+ 
+  const isAvailableProducts = async (serialNumber) => {
+    try {
+      const response = await fetch(`${BaseUri}/product/isAvailableProducts/${serialNumber}`)
+      if (response.ok) {
+        const isAvailable = await response.text();
+        console.log(`Product is available: ${isAvailable}`);
+        return isAvailable;
+      } else {
+        console.error('Failed to check product availability:', response.statusText);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error fetching medicines:', error.message)
+    }
+  };
+  
+
+  const addToCart = async (medicine) => {
+    const isAlreadyInCart = cart.some((item) => item === medicine)
+    if (isAlreadyInCart) {
+      const updatedCart = cart.filter((item) => item !== medicine)
+      setCart(updatedCart)
+      deleteCartItem(medicine)
+    } else {
+      if(await isAvailableProducts(medicine)==='true'){
+        setCart([...cart, medicine])
+        addItemToCArt(medicine)
+      }else{
+        alert("out of stock")
+        setInitialMedicines([])
+        getListOfMediciens()
+      }
+    }
+  }
 
   return (
   <div>

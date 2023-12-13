@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @CrossOrigin()
 public class listOfProductsController {
+    
     @Autowired
     private ProductService productService;
 
@@ -26,6 +27,7 @@ public class listOfProductsController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/isAvailableProducts/{SN}")
     public ResponseEntity<Boolean> isAvailableProducts(@PathVariable String SN) {
         try {
