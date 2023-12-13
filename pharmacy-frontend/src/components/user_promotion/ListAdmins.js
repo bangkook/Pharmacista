@@ -54,7 +54,6 @@ class ListAdmins extends Component {
     };
 
     render() {
-        
         return (
             <Fragment>
                 <div className="user-list-container">
@@ -89,8 +88,7 @@ class ListAdmins extends Component {
                                 {this.state.admins.map((user) => (
                                     <tr key={user.userId}>
                                         <td className="profile-pic">
-                                        {/* alt={item.name} */}
-                                            <img src={user.profilePicture} style={{ Width: '248px', Height: '230px'}} />
+                                            <img src={user.profilePicture} className="profile-image"/>
                                         </td>
                                         <td>{user.username}</td>
                                         <td>{user.phoneNumber}</td>

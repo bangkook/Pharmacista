@@ -9,10 +9,10 @@ const AdminNav = () => {
       <div className="admin-nav">
         <h1>Admin Navigation Bar</h1>
         <div className="button-container">
-          <Link to="/4/findUsers" element={<ListUsers/>}>
+          <Link to="/4/manageUsers" element={<ListUsers/>}>
             <Button className="button" variant="contained">Manage Users</Button>
           </Link>
-          <Link to="/4/findAdmins" element={<ListAdmins/>}>
+          <Link to="/4/getAdmins" element={<ListAdmins/>}>
             <Button className="button" variant="contained">View Admins</Button>
           </Link>
         </div>
