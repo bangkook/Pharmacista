@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -114,13 +115,27 @@ public class AdminControllerTest {
     @Test
     public void searchByUsername_Fail() throws Exception {
         int adminId = 1;
-        String username = "nonexistentUser";
+        String username = "errorUser";
         given(adminService.searchByUsername(adminId, username)).willThrow(new UserException("User not found"));
 
         MvcResult result = mockMvc.perform(get("/admin/searchUser/{adminId}/{username}", adminId, username))
                 .andExpect(status().isOk())
+                .andExpect(content().string(""))
                 .andReturn();
 
+        assertEquals(result.getResponse().getContentAsString(), "");
+    }
+
+    @Test
+    public void searchByUsername_NotFound() throws Exception {
+        int adminId = 1;
+        String username = "notFoundUser";
+        given(adminService.searchByUsername(adminId, username)).willReturn(null);
+
+        MvcResult result = mockMvc.perform(get("/admin/searchUser/{adminId}/{username}", adminId, username))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
         assertEquals(result.getResponse().getContentAsString(), "");
     }
 
