@@ -1,7 +1,6 @@
 package com.example.pharmacysystem.service;
 
 import com.example.pharmacysystem.model.Product;
-import com.example.pharmacysystem.model.ProductBuilder;
 import com.example.pharmacysystem.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +11,8 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
-
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private ProductRepository productRepository ;
 
     @Override
     public List<Product> getAllProducts() {
@@ -38,21 +33,27 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(String serialNumber, Product updatedProduct) {
         // Check if the product with the given serial number exists
         Optional<Product> existingProductOptional = getProductBySerialNumber(serialNumber);
-        Product existingProduct = existingProductOptional.get();
 
-        // Use the builder to update the existing product
-        Product updatedExistingProduct = new ProductBuilder(existingProduct)
-                .buildName(updatedProduct.getName())
-                .buildQuantity(updatedProduct.getQuantity())
-                .buildPrice(updatedProduct.getPrice())
-                .buildProductionDate(updatedProduct.getProductionDate())
-                .buildExpiryDate(updatedProduct.getExpiryDate())
-                .buildDescription(updatedProduct.getDescription())
-                .buildPhoto(updatedProduct.getPhoto())
-                .build();
+        if (existingProductOptional.isPresent()) {
+            // Get the existing product
+            Product existingProduct = existingProductOptional.get();
 
-        return productRepository.save(updatedExistingProduct);
+            // Update the existing product using setters
+            existingProduct.setName(updatedProduct.getName());
+            existingProduct.setQuantity(updatedProduct.getQuantity());
+            existingProduct.setPrice(updatedProduct.getPrice());
+            existingProduct.setProductionDate(updatedProduct.getProductionDate());
+            existingProduct.setExpiryDate(updatedProduct.getExpiryDate());
+            existingProduct.setDescription(updatedProduct.getDescription());
+            existingProduct.setPhoto(updatedProduct.getPhoto());
+
+            // Save the updated product
+            return productRepository.save(existingProduct);
+        } else {
+            return null; // Handle the case where the product with the given serial number doesn't exist
+        }
     }
+
 
     @Override
     public void deleteProduct(String serialNumber) {
