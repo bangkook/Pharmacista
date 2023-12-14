@@ -120,6 +120,7 @@ public class UserServiceImpl implements UserService {
         // Return if the username matched the Regex
         return m.matches();
     }
+
     public boolean isValidPhone(String phone) {
         return phone == null || phone.isEmpty() || Pattern.matches("^\\d{11}$", phone);
     }
@@ -189,7 +190,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginStatus  checkUser(String userName, String password) {
+    public LoginStatus checkUser(String userName, String password) {
         List<User> Users = userRepository.findAll();
         if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
@@ -206,10 +207,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isAdmin(int adminId) {
         User admin = userRepository.findById(adminId).orElse(null);
-        if(admin == null) return false;
+        if (admin == null) return false;
         return admin.getRole() == User.Role.ADMIN;
     }
-
 }
 
 

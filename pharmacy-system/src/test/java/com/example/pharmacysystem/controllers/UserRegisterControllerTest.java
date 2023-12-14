@@ -49,14 +49,14 @@ public class UserRegisterControllerTest {
         given(userService.saveUser(user)).willReturn(user);
 
         MvcResult res = mockMvc.perform(post("/user/addUser")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String resultContent = res.getResponse().getContentAsString();
         String expectedResponse = "New User is added successfully";
-        Assert.assertTrue(resultContent.equals(expectedResponse));
+        Assert.assertEquals(resultContent, expectedResponse);
     }
 
     @Test
@@ -67,13 +67,15 @@ public class UserRegisterControllerTest {
                 .when(userService).saveUser(any(User.class));
 
         MvcResult res = mockMvc.perform(post("/user/addUser")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
 
         String resultContent = res.getResponse().getContentAsString();
-        Assert.assertEquals(errorMessage, resultContent);    }
+        Assert.assertEquals(errorMessage, resultContent);
+    }
+
     @Test
     public void addUser_Fail_InvalidUsername() throws Exception {
         String errorMessage = "Invalid username. Please follow the specified constraints.";
@@ -82,12 +84,12 @@ public class UserRegisterControllerTest {
                 .when(userService).saveUser(any(User.class));
 
         MvcResult res = mockMvc.perform(post("/user/addUser")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
 
         String resultContent = res.getResponse().getContentAsString();
-        Assert.assertTrue(resultContent.equals(errorMessage));
+        Assert.assertEquals(resultContent, errorMessage);
     }
 }

@@ -4,28 +4,25 @@ package com.example.pharmacysystem.services;
 import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.repository.ProductRepository;
 import com.example.pharmacysystem.service.ProductService;
-
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import org.junit.Test;;
-import java.util.Optional;
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
+;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -63,6 +60,7 @@ public class ProductServiceTest {
 
         Assert.assertNull(result);
     }
+
     @Test
     public void testUpdateQuantityBySerialNumber_SuccessfulUpdate() {
 
@@ -122,20 +120,19 @@ public class ProductServiceTest {
 
         List<Product> actualProducts = productService.getAllAvailableProducts();
 
-            Assert.assertEquals(expectedProducts, actualProducts);
+        Assert.assertEquals(expectedProducts, actualProducts);
     }
 
     @Test
     public void testGetAllAvailableProducts_Exception() {
         when(productRepository.findAllAvailableProducts()).thenThrow(new RuntimeException("Simulated exception"));
 
-        RuntimeException thrownException =  Assert.assertThrows(RuntimeException.class, () -> {
+        RuntimeException thrownException = Assert.assertThrows(RuntimeException.class, () -> {
             productService.getAllAvailableProducts();
         });
 
         Assert.assertTrue(thrownException.getMessage().contains("Error retrieving available products"));
     }
-
 
 
     @Test
@@ -163,7 +160,7 @@ public class ProductServiceTest {
 
         when(productRepository.findById(productSN)).thenThrow(new RuntimeException("Simulated exception"));
 
-        RuntimeException thrownException =  Assert.assertThrows(RuntimeException.class, () -> {
+        RuntimeException thrownException = Assert.assertThrows(RuntimeException.class, () -> {
             productService.isAvailable(productSN);
         });
 
@@ -240,7 +237,6 @@ public class ProductServiceTest {
 
         // Assertions
         verify(productRepository, times(1)).deleteById("123456789012345678");
-
     }
 
 }
