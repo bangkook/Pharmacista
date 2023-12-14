@@ -60,7 +60,7 @@ public class InventoryController {
 
     @PostMapping("/products")
     public ResponseEntity<Object> addProduct(@RequestBody Product product) {
-        if (productService.getProductBySerialNumber(product.getSerialNumber()).isPresent()) {
+        if (productService.getProductBySerialNumber(product.getSerialNumber())!=null) {
             return new ResponseEntity<>("Serial number must be unique.", HttpStatus.CONFLICT);
         }
 

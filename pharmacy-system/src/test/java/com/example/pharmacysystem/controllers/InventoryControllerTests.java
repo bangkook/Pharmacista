@@ -67,7 +67,7 @@ class InventoryControllerTests {
     @Test
     void testAddProductValid() throws Exception {
         // Mock the productService.getProductBySerialNumber method
-        when(productService.getProductBySerialNumber(anyString())).thenReturn(Optional.empty());
+        when(productService.getProductBySerialNumber(anyString())).thenReturn(null);
 
         // Mock the productService.addProduct method
         when(productService.addProduct(any())).thenReturn(
@@ -109,7 +109,7 @@ class InventoryControllerTests {
     @Test
     void testAddProductInvalidSerialNumber() throws Exception {
         // Mock the productService.getProductBySerialNumber method to return an empty optional
-        when(productService.getProductBySerialNumber(anyString())).thenReturn(Optional.empty());
+        when(productService.getProductBySerialNumber(anyString())).thenReturn(null);
 
         // Mock the payload data with an invalid serial number (less than 18 characters)
         Product payload = new Product(
@@ -136,7 +136,7 @@ class InventoryControllerTests {
     void testAddProductDuplicateSerialNumber() throws Exception {
         // Mock the productService.getProductBySerialNumber method to return a product
         when(productService.getProductBySerialNumber(anyString())).thenReturn(
-                Optional.of(new Product(
+                new Product(
                         "123456789012345678",
                         19.99F,
                         Date.valueOf(LocalDate.now()),
@@ -145,7 +145,7 @@ class InventoryControllerTests {
                         3,
                         "ExistingProduct",
                         "existing_product.jpg"
-                ))
+                )
         );
 
         // Mock the payload data

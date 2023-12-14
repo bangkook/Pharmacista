@@ -47,7 +47,7 @@ public class ProductServiceTest {
 
         when(productRepository.getProductBySerialNumber(serialNumber)).thenReturn(expectedProduct);
 
-        Product result = productService.getProductBySerialNumberCartItem(serialNumber);
+        Product result = productService.getProductBySerialNumber(serialNumber);
 
         Assert.assertNotNull(result);
         Assert.assertEquals(expectedProduct, result);
@@ -59,7 +59,7 @@ public class ProductServiceTest {
 
         when(productRepository.getProductBySerialNumber(serialNumber)).thenReturn(null);
 
-        Product result = productService.getProductBySerialNumberCartItem(serialNumber);
+        Product result = productService.getProductBySerialNumber(serialNumber);
 
         Assert.assertNull(result);
     }
@@ -187,16 +187,15 @@ public class ProductServiceTest {
 
     @Test
     public void testGetProductBySerialNumber() {
-        // Mock data
-        Product product = new Product();
-        when(productRepository.findBySerialNumber("123456789012345678")).thenReturn(Optional.of(product));
+
+        when(productRepository.getProductBySerialNumber("123456789012345678")).thenReturn(null);
 
         // Test the service method
-        Optional<Product> result = productService.getProductBySerialNumber("123456789012345678");
+        Product result = productService.getProductBySerialNumber("123456789012345678");
 
         // Assertions
-        Assert.assertTrue(result.isPresent());
-        verify(productRepository, times(1)).findBySerialNumber("123456789012345678");
+        Assert.assertNull(result);
+        verify(productRepository, times(1)).getProductBySerialNumber("123456789012345678");
     }
 
     @Test
@@ -217,7 +216,7 @@ public class ProductServiceTest {
     public void testUpdateProduct() {
         // Mock data
         Product existingProduct = new Product();
-        when(productRepository.findBySerialNumber("123456789012345678")).thenReturn(Optional.of(existingProduct));
+        when(productRepository.getProductBySerialNumber("123456789012345678")).thenReturn(existingProduct);
         when(productRepository.save(any(Product.class))).thenReturn(existingProduct);
 
         Product updatedProduct = new Product();
@@ -227,7 +226,7 @@ public class ProductServiceTest {
 
         // Assertions
         Assert.assertNotNull(result);
-        verify(productRepository, times(1)).findBySerialNumber("123456789012345678");
+        verify(productRepository, times(1)).getProductBySerialNumber("123456789012345678");
         verify(productRepository, times(1)).save(any(Product.class));
     }
 

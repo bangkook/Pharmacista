@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
 
-    public Product getProductBySerialNumberCartItem(String serialNumber){
+    public Product getProductBySerialNumber(String serialNumber){
         return productRepository.getProductBySerialNumber(serialNumber);
     }
 
@@ -69,10 +69,10 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.findAll();
     }
 
-    @Override
-    public Optional<Product> getProductBySerialNumber(String serialNumber) {
-        return productRepository.findBySerialNumber(serialNumber);
-    }
+//    @Override
+//    public Optional<Product> getProductBySerialNumber(String serialNumber) {
+//        return productRepository.findBySerialNumber(serialNumber);
+//    }
 
     @Override
     public Product addProduct(Product product) {
@@ -82,11 +82,10 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product updateProduct(String serialNumber, Product updatedProduct) {
         // Check if the product with the given serial number exists
-        Optional<Product> existingProductOptional = getProductBySerialNumber(serialNumber);
+        Product existingProduct = getProductBySerialNumber(serialNumber);
 
-        if (existingProductOptional.isPresent()) {
+        if (existingProduct != null) {
             // Get the existing product
-            Product existingProduct = existingProductOptional.get();
 
             // Update the existing product using setters
             existingProduct.setName(updatedProduct.getName());
