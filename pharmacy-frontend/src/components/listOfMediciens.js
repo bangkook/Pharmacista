@@ -55,7 +55,7 @@ const ListOfMediciens=()=>{
   }, [products]);
   
 
-  const addItemToCArt = async (serialNumber) => {
+  const addItemToCart = async (serialNumber) => {
     try {
       const response = await fetch(`${BaseUri}/cartItem/addCartItem`,{                
         method: "POST",
@@ -122,7 +122,7 @@ const ListOfMediciens=()=>{
     } else {
       if(await isAvailableProducts(medicine)==='true'){
         setCart([...cart, medicine])
-        addItemToCArt(medicine)
+        addItemToCart(medicine)
       }else{
         alert("out of stock")
         setInitialMedicines([])
