@@ -28,8 +28,7 @@ export default function GoogleSignIn({handleSuccessfulLogin}) {
     try {
       const serverResponse = await axios.get(`http://localhost:8088/user/login?email=${encodeURIComponent(email)}`);
       console.log('Server response:', serverResponse.data);
-      //handleSuccessfulLogin(email);
-      navigate("/home")
+      handleSuccessfulLogin(email);
     } catch (error) {
       console.error('Error sending user information to server:', error);
     }

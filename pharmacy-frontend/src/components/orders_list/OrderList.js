@@ -6,7 +6,7 @@ import 'reactjs-popup/dist/index.css';
 
 const BaseUri = 'http://localhost:8088'
 
-const OrderList = ({userId, onSelectOrder, admin = true}) => {
+const OrderList = ({userId, onSelectOrder, admin}) => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const OrderDetails = ({ orderId, total = 299}) => {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {orderDetails.map(details => (
             <li
-              key={details.product.productSN} // Assuming productSN is a unique identifier
+              key={[orderId, details.product.productSN]} // Assuming productSN is a unique identifier
               style={{ marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px', display: 'flex', alignItems: 'center' }}
             >
               <div>
@@ -104,7 +104,7 @@ const OrderDetails = ({ orderId, total = 299}) => {
     )
   }
 
-  const Orders = ({userId = 1}) => {
+  const Orders = ({userId = 1, admin = true}) => {
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [popup, setPopup] = useState(false)
     const [totalPrice, setTotalPrice] = useState(0)
@@ -125,7 +125,7 @@ const OrderDetails = ({ orderId, total = 299}) => {
         heading={`Orders`}
         bannerimage = 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=1880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' 
         />
-        <OrderList userId={userId} onSelectOrder={handleSelectOrder} />
+        <OrderList userId={userId} onSelectOrder={handleSelectOrder} admin={admin}/>
         {<Popup open={popup} modal nested> 
         {close => (
           <div className='modal'>

@@ -60,7 +60,7 @@ const LoginBasic=({handleSuccessfulLogin})=>{
                 <Typography> Don't have an account?  
                     <Link to="/signup">Sign up</Link>
                 </Typography>
-                <GoogleSignIn/>
+                <GoogleSignIn handleSuccessfulLogin={handleSuccessfulLogin}/>
             </Paper>
         </Grid>
     )

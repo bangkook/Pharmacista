@@ -6,13 +6,17 @@ import LoginBasic from './components/LoginBasic';
 import Signup from './components/signup';
 import UserProfile from './components/user_profile/UserProfile'
 import Home from './components/home';
-
-const BaseUri = 'http://localhost:8088/user'
 import ListUsers from './components/user_promotion/ListUsers';
 import ListAdmins from './components/user_promotion/ListAdmins';
 import AdminNav from './components/AdminNav';
+import ShoppingCart from './components/cart';
+import Orders from './components/orders_list/OrderList';
+import MedicineInventory from './components/Inventory/Inventory'
+
+const BaseUri = 'http://localhost:8088/user'
 
 function App() {
+  const [username, setUserName] = useState('')
   const [currentUser, setCurrrentUser] = useState(null);
   const navigate = useNavigate();
 
@@ -20,12 +24,12 @@ function App() {
       console.log(username)
       try {
         const response = await fetch(`${BaseUri}/get-user-by-username/${username}`)
-      const userData = await response.json()
-      console.log(userData)
+        const userData = await response.json()
+        console.log(userData)
 
       if (response.ok) {
         setCurrrentUser(userData)
-        navigate("/userProfile")
+        navigate("/home")
         alert('User data retrieved successfully');
       } else {
         alert('Error: Failed to retrieve user');
@@ -45,9 +49,13 @@ function App() {
           <Route path='/LoginBasic' element={<LoginBasic handleSuccessfulLogin={handleSuccessfulLogin}/>} />
           <Route path='/signup' element={<Signup handleSuccessfulLogin={handleSuccessfulLogin}/>} />
           {currentUser && <Route path='/userProfile' element={<UserProfile userId={currentUser.id}/>} />}
-          <Route path="/admin" element={<AdminNav />} />
-          <Route path="/4/findUsers" element={<ListUsers />} />
-          <Route path="/4/findAdmins" element={<ListAdmins />} />
+          {currentUser && <Route path="/admin" element={<AdminNav adminId={currentUser.id} />} />}
+          {currentUser && <Route path="/getUsers" element={<ListUsers />} />}
+          {currentUser && <Route path="/getAdmins" element={<ListAdmins />} />}
+          {currentUser && <Route path='/home' element={<Home isAdmin={currentUser.role === "ADMIN"}/>}></Route>}
+          {currentUser && <Route path="/cart" element={<ShoppingCart userId={currentUser.id}/>}></Route>}
+          {currentUser && <Route path="/orders" element={<Orders userId={currentUser.id} admin={currentUser.role === "ADMIN"}/>}></Route>}
+          <Route path="inventory" element={<MedicineInventory/>}></Route>
         </Routes>
       </div>
   );

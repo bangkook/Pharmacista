@@ -1,10 +1,11 @@
 import { Avatar, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import GoogleSignUp from './googleSignUp';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import handleSuccessfulLogin from "../App"
 
 const BaseUri = 'http://localhost:8088/user'
 
@@ -169,7 +170,7 @@ function Signup({handleSuccessfulLogin}) {
                         </Grid>
                     </Grid>
                 </form>
-                <GoogleSignUp/>
+                <GoogleSignUp handleSuccessfulLogin={handleSuccessfulLogin}/>
             </Paper>
         </Grid>
     )

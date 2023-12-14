@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function ShoppingCart() {
-  const userId = 1
+export default function ShoppingCart({userId = 1}) {
   //const serialNumbers = [1, 2, 3];
   const [medicines, setMedicines] = useState([]);
   const [cart, setCart] = useState([]);

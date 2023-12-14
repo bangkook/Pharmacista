@@ -137,7 +137,7 @@ const ListOfMediciens=()=>{
       <AppBar position="static" sx={{ backgroundColor: '#2e2d88' }}>
       <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Medicied
+          Medicines
           </Typography>
           <IconButton size="medium" edge="start" color="inherit" aria-label="menu" sx={{ mr: 1 }}>
           <ShoppingCartIcon />
