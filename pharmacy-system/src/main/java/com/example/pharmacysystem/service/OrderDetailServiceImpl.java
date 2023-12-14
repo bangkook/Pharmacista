@@ -29,7 +29,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return orderDetails.stream()
                 .map(orderDetail ->
                         new OrderDetailDTO(orderDetail.getOrderId(),
-                                productRepository.getReferenceById(orderDetail.getProductSN()),
+                                productRepository.findById(orderDetail.getProductSN()).get(),
                                 orderDetail.getQuantity())
                 )
                 .collect(Collectors.toList());

@@ -48,15 +48,15 @@ public class OrderDetailServiceTest {
         // Mocking the repository behavior
         when(orderDetailRepository.findByOrderId(1)).thenReturn(
                 Arrays.asList(orderDetail1, orderDetail2));
-        when(productRepository.getReferenceById("1")).thenReturn(product1);
-        when(productRepository.getReferenceById("5")).thenReturn(product2);
+        when(productRepository.findById("1")).thenReturn(java.util.Optional.of(product1));
+        when(productRepository.findById("5")).thenReturn(java.util.Optional.of(product2));
 
         List<OrderDetailDTO> result = orderDetailService.getOrderDetailsByOrderId(1);
 
         // Verifying that the repository method was called
         verify(orderDetailRepository, times(1)).findByOrderId(1);
-        verify(productRepository, times(1)).getReferenceById("1");
-        verify(productRepository, times(1)).getReferenceById("5");
+        verify(productRepository, times(1)).findById("1");
+        verify(productRepository, times(1)).findById("5");
 
         // Asserting the result
         assertEquals(2, result.size());
