@@ -20,6 +20,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -82,5 +84,29 @@ public class OrderDetailServiceTest {
 
         // Verifying that the repository method was called
         verify(orderDetailRepository, times(1)).findByOrderId(nonExistingOrderId);
+    }
+
+    @Test
+    public void testCreateOrderDetails_SuccessfulCreation() {
+
+        OrderDetail orderDetail = new OrderDetail();
+
+        when(orderDetailRepository.save(orderDetail)).thenReturn(orderDetail);
+
+        boolean result = orderDetailService.createOrderDetails(orderDetail);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testCreateOrderDetails_FailedCreation() {
+
+        OrderDetail orderDetail = new OrderDetail();
+
+        when(orderDetailRepository.save(orderDetail)).thenThrow(new RuntimeException("Creation failed"));
+
+        boolean result = orderDetailService.createOrderDetails(orderDetail);
+
+        assertFalse(result);
     }
 }

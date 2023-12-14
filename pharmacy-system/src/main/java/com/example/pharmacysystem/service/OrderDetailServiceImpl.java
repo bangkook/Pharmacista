@@ -19,6 +19,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     ProductRepository productRepository;
 
+    @Override
     public List<OrderDetailDTO> getOrderDetailsByOrderId(int orderId) {
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderId);
 
@@ -33,5 +34,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                                 orderDetail.getQuantity())
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean createOrderDetails(OrderDetail orderDetail) {
+        try {
+            orderDetailRepository.save(orderDetail);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

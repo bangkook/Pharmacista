@@ -13,12 +13,24 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
 
+    @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAllByOrderByDateCreatedDesc();
     }
 
+    @Override
     public List<Order> getOrdersForUser(int userId) {
         return orderRepository.findByUserId(userId);
     }
 
+    @Override
+    public boolean createOrder(Order order) {
+        try {
+            orderRepository.save(order);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

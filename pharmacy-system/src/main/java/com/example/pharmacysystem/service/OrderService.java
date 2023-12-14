@@ -10,4 +10,5 @@ public interface OrderService {
 
     List<Order> getOrdersForUser(int userId);
 
+    boolean createOrder(Order order);
 }

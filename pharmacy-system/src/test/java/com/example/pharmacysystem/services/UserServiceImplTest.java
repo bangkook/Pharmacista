@@ -1,6 +1,6 @@
 package com.example.pharmacysystem.services;
 
-import com.example.pharmacysystem.exceptions.UserRegistrationException;
+import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
 import com.example.pharmacysystem.service.UserService;
@@ -47,7 +47,7 @@ class UserServiceImplTest {
 
         try {
             userService.saveUser(newUser);
-        } catch (UserRegistrationException e) {
+        } catch (UserException e) {
             // Assert specific details about the exception if needed
             assertEquals("Username is already taken. Choose another one!", e.getMessage());
         }
@@ -61,7 +61,7 @@ class UserServiceImplTest {
         Mockito.when(userRepository.findByUsername(newUser.getUsername())).thenReturn(null);
         try {
             userService.saveUser(newUser);
-        } catch (UserRegistrationException e) {
+        } catch (UserException e) {
             // Assert specific details about the exception if needed
             assertEquals("Invalid username. Please follow the specified constraints.", e.getMessage());
         }

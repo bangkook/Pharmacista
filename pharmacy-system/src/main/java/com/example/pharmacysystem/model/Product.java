@@ -1,7 +1,9 @@
 package com.example.pharmacysystem.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.sql.Date;
@@ -17,6 +19,8 @@ public class Product {
     private String description;
     private int quantity;
     private String name;
+    @Lob
+    @Column(length = 1000000) // Adjust the size as needed
     private String photo;
 
     public Product(String serialNumber, float price, Date productionDate, Date expiryDate, String description, int quantity, String name, String photo) {
@@ -33,12 +37,13 @@ public class Product {
     public Product() {
     }
 
+
     @ReadOnlyProperty
     public String getSerialNumber() {
         return serialNumber;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 

@@ -16,7 +16,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -85,5 +88,29 @@ public class OrderServiceTest {
 
         // Asserting the result is empty
         assertEquals(0, result.size());
+    }
+
+    @Test
+    public void testCreateOrder_SuccessfulCreation() {
+
+        Order order = new Order();
+
+        when(orderRepository.save(order)).thenReturn(order);
+
+        boolean result = orderService.createOrder(order);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testCreateOrder_FailedCreation() {
+
+        Order order = new Order();
+
+        when(orderRepository.save(order)).thenThrow(new RuntimeException("Creation failed"));
+
+        boolean result = orderService.createOrder(order);
+
+        assertFalse(result);
     }
 }
