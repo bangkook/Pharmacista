@@ -375,7 +375,7 @@ const ProfilePictureUploader = ({userId}) => {
       <input type="file" onChange={handleUpload} ref={fileInputRef}
         style={{ display: 'none' }} />
 
-      <img for="photo-upload" src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
+      <img src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
       alt="Profile" onClick={handleImageClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
