@@ -46,7 +46,6 @@ public class AdminController {
             if(userInfo == null) { // Username is not found
                 return new ResponseEntity<> (null, HttpStatus.OK);
             }
-            System.out.println("userInfo = " + userInfo.toString());
             return new ResponseEntity<>(userInfo, HttpStatus.OK);
         }  catch (UserException e) {
             return new ResponseEntity<> (null, HttpStatus.OK);
