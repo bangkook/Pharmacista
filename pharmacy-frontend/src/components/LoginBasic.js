@@ -36,7 +36,6 @@ const LoginBasic=()=>{
                 alert("Invalid input");
             }
         }
-        
     }
 
     return(
