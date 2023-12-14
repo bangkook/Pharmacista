@@ -1,11 +1,12 @@
 package com.example.pharmacysystem.service;
 
 
-import com.example.pharmacysystem.exceptions.UserRegistrationException;
+import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserBuilder;
 import com.example.pharmacysystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-
+@Primary
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -25,21 +26,27 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         boolean found = isUsernameFound(user.getUsername());
         if (found) {
-            throw new UserRegistrationException("Username is already taken. Choose another one!");
+            throw new UserException("Username is already taken. Choose another one!");
         }
         if (!isValidUsername(user.getUsername())) {
-            throw new UserRegistrationException("Invalid username. Please follow the specified constraints.");
+            throw new UserException("Invalid username. Please follow the specified constraints.");
         } else if (!isValidPassword(user.getPassword())) {
-            throw new UserRegistrationException("Invalid password. Please follow the specified constraints.");
+            throw new UserException("Invalid password. Please follow the specified constraints.");
         } else if (!isValidZip(user.getZipCode())) {
-            throw new UserRegistrationException("Invalid zipcode. Please follow the specified constraints.");
+            throw new UserException("Invalid zipcode. Please follow the specified constraints.");
         } else if (!isValidPhone(user.getPhoneNumber())) {
-            throw new UserRegistrationException("Invalid phone number. Please follow the specified constraints.");
+            throw new UserException("Invalid phone number. Please follow the specified constraints.");
         }
+        // Set the role explicitly
+        user.setRole(User.Role.USER);
         try {
+            System.out.println("===================================");
+            System.out.println(user.getRole());
+            System.out.println("===================================");
+
             return userRepository.save(user);
         } catch (Exception e) {
-            throw new UserRegistrationException("An error occurred while saving the user.");
+            throw new UserException("An error occurred while saving the user.");
         }
     }
 
