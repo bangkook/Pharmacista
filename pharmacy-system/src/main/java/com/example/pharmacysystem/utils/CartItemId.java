@@ -5,15 +5,17 @@ import java.util.Objects;
 
 public class CartItemId implements Serializable {
 
-    private  int userId;
+    private int userId;
     private String productSN;
 
     public CartItemId() {
     }
+
     public CartItemId(int userId, String productSN) {
         this.userId = userId;
         this.productSN = productSN;
     }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -24,6 +26,6 @@ public class CartItemId implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId,productSN);
+        return Objects.hash(userId, productSN);
     }
 }

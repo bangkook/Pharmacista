@@ -63,17 +63,17 @@ function Signup() {
             user = {"username":username, "password": pass, "streetAddress": stAdd, "country": countryName, "zipCode": zip, "phoneNumber":phone };
             console.log(user);
 
-            const response = fetch(`${BaseUri}/addUser`, {                method: "POST",
+            const response = fetch(`${BaseUri}/addUser`, {                
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(user)
             })
-            
+
             if((await response).ok){
                 alert('Welcome to Pharmacista '+ user.username + '! Horray!!')
             } else if((await response).status == 422) {
                 alert("Username is already taken. Choose another one!")
             }
-
         } 
         else if (!validUsername) {
             alert("Username is at least 6 and at most 30 characters (letters or numbers) with _ only as special character. Spaces are not allowed. Start with an alphabet!");        } 

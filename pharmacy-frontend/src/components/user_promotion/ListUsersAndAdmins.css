@@ -1,0 +1,65 @@
+.user-list-container, .admin-list-container {
+    margin: 20px;
+    /* display: flex; */
+    justify-content: space-between;
+}
+
+.table {
+    width: 100%;
+    /* border-collapse: collapse;  */
+    margin-top: 20px;
+    border: 10px #9c390e; 
+    border-radius: 10px; 
+    overflow: hidden;
+
+}
+
+.text-center{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    /* font-style: italic; */
+    color: rgb(179, 3, 44);
+}
+  
+.table th, .table td {
+    border: 2px solid #8B4513;
+    padding: 8px;
+}
+.profile-pic {
+    max-width: 24px; 
+}
+
+.user-profile-box {
+    max-width: 39px; 
+}
+
+.search-container {
+    align-items: center;
+    margin: 20px;
+    justify-content: flex-end;
+    display: flex;
+
+}
+.search-bar-container {
+    width: 15%;
+    float: left;
+    margin-right: 10px;
+}
+
+.search-bar {
+    
+    /* margin: auto; */
+    margin-right: 10px;
+}
+
+.search-button {
+    /* margin-left: auto; */
+    float: right;
+}
+
+.profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
