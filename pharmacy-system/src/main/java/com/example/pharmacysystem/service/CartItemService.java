@@ -9,10 +9,16 @@ import java.util.List;
 @Service
 public interface CartItemService {
 
-    boolean saveCartItem(CartItem item);
+
+    void updateQuantityByUserNameAndSerialNumber(int userId, String productSN, int quantity);
+
+    List<CartItem> getCartItemsByUserId(int userId);
 
     boolean deleteCartItem(CartItemId cartItemId);
-    List<CartItem> getCartItemsByUserId(int userId);
+
+    boolean deleteCartItemByproductSN(String SerialNumber);
+
+    boolean saveCartItem(CartItem item);
 
 
 }
