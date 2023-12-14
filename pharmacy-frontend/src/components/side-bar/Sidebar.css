@@ -1,0 +1,50 @@
+.usersidebar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.usersidebar .s1 , .usersidebar .s2{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.usersidebar .s1 svg {
+    width: 30px;
+    height: 30px;
+    color: gray;
+}
+
+.usersidebar .s2 svg {
+    width: 30px;
+    height: 30px;
+    color: rgb(255, 255, 255);
+}
+
+.usersidebar .s1:hover{
+    background-color: rgb(246, 246, 246);
+    border-radius: 5px;
+    cursor: pointer;
+    color: grey;
+}
+
+
+.usersidebar .s2{
+    background-color: var(--col1);
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+
+.img-wrap{
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+}

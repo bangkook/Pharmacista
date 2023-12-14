@@ -3,7 +3,7 @@ import React,{ useState, useRef, useEffect, useMemo} from 'react';
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
 
-const BaseUri = 'http://localhost:8081/api/user'
+const BaseUri = 'http://localhost:8088/user'
 const AccountSettings = ({userId}) => {
   const [country, setCountry] = useState('')
   const options = useMemo(() => countryList().getData(), [])

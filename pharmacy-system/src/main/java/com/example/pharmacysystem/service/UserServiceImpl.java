@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User saveUserGoogle(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public User getUserById(int id) {
         return userRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
@@ -100,7 +105,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return true;
     }
-
 
     @Override
     public boolean isUsernameFound(String username) {
@@ -187,6 +191,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         return user;
+    }
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUsername(userName);
     }
 
     @Override
