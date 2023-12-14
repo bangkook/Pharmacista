@@ -20,7 +20,7 @@ const OrderList = ({userId, onSelectOrder, admin = true}) => {
       .then(response => response.json())
       .then(data => setOrders(data))
       .catch(error => console.error("Error fetching user orders:", error));
-  }, []);
+  }, [userId, admin]);
 
   return (
     <div className='yourorders'>        
@@ -43,7 +43,7 @@ const OrderList = ({userId, onSelectOrder, admin = true}) => {
                   <td data-label='OrderDate'>{order.dateCreated}</td>
                   <td data-label='Total'>${order.totalPrice}</td>
                   <td data-label='Invoice'>
-                      <button className='mainbutton1' onClick={() => onSelectOrder(order.id)}>View</button>
+                      <button className='mainbutton1' onClick={() => onSelectOrder(order.id, order.totalPrice)}>View</button>
                   </td>
               </tr>
             ))}
@@ -53,7 +53,7 @@ const OrderList = ({userId, onSelectOrder, admin = true}) => {
   );
 };
 
-const OrderDetails = ({ orderId }) => {
+const OrderDetails = ({ orderId, total = 299}) => {
     const [orderDetails, setOrderDetails] = useState([]);
   
     useEffect(() => {
@@ -65,35 +65,30 @@ const OrderDetails = ({ orderId }) => {
     }, [orderId]);
   
     return (
-      <div className='c3'>
-        <table>
-            <thead>
-                <tr>
-                    <th scope='col'>Sno.</th>
-                    <th scope='col'>Product</th>
-                    <th scope='col'>Price</th>
-                    <th scope='col'>Quantity</th>
-                    <th scope='col'>Total Price</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                
-              {orderDetails.map(details => ( 
-                <tr key={details.productSN}>
-                    <td>
-                        {details.productSN}
-                    </td>
-                    <td>{details.productName}</td>
-                    <td>${details.productPrice}</td>
-                    <td>{details.quantity}</td>
-                    <td>${details.productPrice} * {details.quantity}</td>
-                </tr>
-              ))}
-                
-            </tbody>
-        </table>
+      <div style={{ fontFamily: 'Arial, sans-serif', textAlign: 'center', maxWidth: '800px', margin: 'auto' }}>
+      <div style={{ overflowY: 'scroll', maxHeight: '400px', border: '1px solid #ddd', borderRadius: '8px', padding: '20px' }}>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {orderDetails.map(details => (
+            <li
+              key={details.product.productSN} // Assuming productSN is a unique identifier
+              style={{ marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px', display: 'flex', alignItems: 'center' }}
+            >
+              <div>
+                <img src={details.product.photo} alt={"Product Photo"} style={{ maxWidth: '150px', maxHeight: '150px', marginRight: '20px', borderRadius: '8px' }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <p>{details.product.serialNumber}</p>
+                <p>Name: {details.product.name}</p>
+                <p>Price: ${details.product.price}</p>
+                <p>Quantity: {details.quantity}</p>
+                <p style={{ marginTop: '10px' }}>Total Price: ${details.product.price * details.quantity}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
+      <p style={{ marginTop: '10px' }}>Total: ${total}</p>
+      </div>      
     );
   };
 
@@ -112,9 +107,11 @@ const OrderDetails = ({ orderId }) => {
   const Orders = ({userId = 1}) => {
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [popup, setPopup] = useState(false)
+    const [totalPrice, setTotalPrice] = useState(0)
 
-    const handleSelectOrder = (orderId) => {
+    const handleSelectOrder = (orderId, total) => {
       setSelectedOrderId(orderId);
+      setTotalPrice(total)
       setPopup(true);
     };
     
@@ -136,7 +133,7 @@ const OrderDetails = ({ orderId }) => {
             &times;
           </button>
           <div className="header"> Order Details </div>
-          <OrderDetails orderId={selectedOrderId} className="content"/>
+          <OrderDetails orderId={selectedOrderId} total={totalPrice} className="content"/>
           <div className='actions'>
             <button
             className="mainbutton1"
