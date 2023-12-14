@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom';
 import GoogleSignIn from './components/login';
 import GoogleSignUp from './components/googleSignUp';
 import LoginBasic from './components/LoginBasic';
@@ -8,6 +8,9 @@ import UserProfile from './components/user_profile/UserProfile'
 import Home from './components/home';
 
 const BaseUri = 'http://localhost:8088/user'
+import ListUsers from './components/user_promotion/ListUsers';
+import ListAdmins from './components/user_promotion/ListAdmins';
+import AdminNav from './components/AdminNav';
 
 function App() {
   const [currentUser, setCurrrentUser] = useState(null);
@@ -22,8 +25,8 @@ function App() {
 
       if (response.ok) {
         setCurrrentUser(userData)
-        alert('User data retrieved successfully');
         navigate("/userProfile")
+        alert('User data retrieved successfully');
       } else {
         alert('Error: Failed to retrieve user');
       }
@@ -41,11 +44,10 @@ function App() {
           <Route path='/googleSignUp' element={<GoogleSignUp handleSuccessfulLogin={handleSuccessfulLogin}/>} />
           <Route path='/LoginBasic' element={<LoginBasic handleSuccessfulLogin={handleSuccessfulLogin}/>} />
           <Route path='/signup' element={<Signup handleSuccessfulLogin={handleSuccessfulLogin}/>} />
-          <Route path='/home' element={<Home/>} />
+          {currentUser && <Route path='/userProfile' element={<UserProfile userId={currentUser.id}/>} />}
           <Route path="/admin" element={<AdminNav />} />
           <Route path="/4/findUsers" element={<ListUsers />} />
           <Route path="/4/findAdmins" element={<ListAdmins />} />
-          {1 && <Route path='/userProfile' element={<UserProfile userId={1}/>} />}
         </Routes>
       </div>
   );

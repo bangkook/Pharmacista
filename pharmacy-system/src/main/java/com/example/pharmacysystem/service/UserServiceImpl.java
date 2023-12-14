@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder = new PasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
     @Override
     public User saveUser(User user) {
@@ -50,6 +50,11 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new UserException("An error occurred while saving the user.");
         }
+    }
+
+    @Override
+    public User saveUserGoogle(User user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -101,7 +106,6 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-
     @Override
     public boolean isUsernameFound(String username) {
         // Check if the username already exists in the database
@@ -120,6 +124,7 @@ public class UserServiceImpl implements UserService {
         // Return if the username matched the Regex
         return m.matches();
     }
+
     public boolean isValidPhone(String phone) {
         return phone == null || phone.isEmpty() || Pattern.matches("^\\d{11}$", phone);
     }
@@ -141,7 +146,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = optionalUser.get();
-        if (!(currentPassword.equals(user.getPassword())))
+        if (!(passwordEncoder.isEqual(currentPassword, user.getPassword())))
             return false;
 
         // Update user data
@@ -180,7 +185,7 @@ public class UserServiceImpl implements UserService {
         if (userName == null || password == null) return null;
         User user = null;
         for (User u : Users) {
-            if (u.getUsername().equals(userName) && u.getPassword().equals(password)) {
+            if (u.getUsername().equals(userName) && u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                 user = u;
                 break;
             }
@@ -189,12 +194,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginStatus  checkUser(String userName, String password) {
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUsername(userName);
+    }
+
+    @Override
+    public LoginStatus checkUser(String userName, String password) {
         List<User> Users = userRepository.findAll();
         if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
             if (u.getUsername().equals(userName)) {
-                if (u.getPassword().equals(password)) {
+                if (u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                     return LoginStatus.USER_FOUND_CORRECT_PASSWORD;
                 }
                 return LoginStatus.USER_FOUND_INCORRECT_PASSWORD;
@@ -206,10 +216,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isAdmin(int adminId) {
         User admin = userRepository.findById(adminId).orElse(null);
-        if(admin == null) return false;
+        if (admin == null) return false;
         return admin.getRole() == User.Role.ADMIN;
     }
-
 }
 
 

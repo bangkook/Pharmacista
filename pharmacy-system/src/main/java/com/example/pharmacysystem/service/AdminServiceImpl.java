@@ -6,6 +6,7 @@ import com.example.pharmacysystem.model.UserInfo;
 import com.example.pharmacysystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class AdminServiceImpl extends UserServiceImpl implements AdminService {
             throw new AdminException("User is not authorized to perform this action");
 
         User user = userRepository.findById(userId).orElse(null);
-        if (user == null)  return false;
+        if (user == null) return false;
 
         if (user.getRole() == User.Role.ADMIN) {
             throw new AdminException("User is already an admin");

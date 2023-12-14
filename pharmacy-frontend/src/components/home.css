@@ -1,0 +1,26 @@
+.home {
+    display: flex;
+    flex-direction: column;
+}
+
+.homein {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10vh;
+    gap: 20px;
+}
+
+.home .homein .left {
+    width: 20%;
+    /* background-color: aqua; */
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 5px;
+    height: 100vh;
+}
+
+.home .homein .right {
+    width: 80%;
+    /* background-color: aqua; */
+    height: 100vh;
+}

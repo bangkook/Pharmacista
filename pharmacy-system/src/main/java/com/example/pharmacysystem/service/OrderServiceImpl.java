@@ -5,16 +5,26 @@ import com.example.pharmacysystem.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.List;
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    OrderRepository orderRepository;
 
     @Override
-    public boolean createOrder(Order order){
+    public List<Order> getAllOrders() {
+        return orderRepository.findAllByOrderByDateCreatedDesc();
+    }
+
+    @Override
+    public List<Order> getOrdersForUser(int userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+    @Override
+    public boolean createOrder(Order order) {
         try {
             orderRepository.save(order);
             return true;

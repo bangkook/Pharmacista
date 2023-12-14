@@ -9,7 +9,6 @@ import java.util.List;
 @Service
 public interface CartItemService {
 
-
     void updateQuantityByUserNameAndSerialNumber(int userId, String productSN, int quantity);
 
     List<CartItem> getCartItemsByUserId(int userId);
@@ -19,6 +18,4 @@ public interface CartItemService {
     boolean deleteCartItemByproductSN(String SerialNumber);
 
     boolean saveCartItem(CartItem item);
-
-
 }

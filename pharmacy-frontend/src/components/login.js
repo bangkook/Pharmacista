@@ -4,8 +4,8 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
+
 export default function GoogleSignIn({handleSuccessfulLogin}) {
-  const navigate = useNavigate()
   const handleGoogleLogin = async (response) => {
     try {
       const userInfoResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
