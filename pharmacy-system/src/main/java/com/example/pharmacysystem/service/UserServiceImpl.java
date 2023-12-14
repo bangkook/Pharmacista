@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
         if (userName == null || password == null) return null;
         User user = null;
         for (User u : Users) {
-            if (u.getUsername().equals(userName) && u.getPassword().equals(password)) {
+            if (u.getUsername().equals(userName) && u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                 user = u;
                 break;
             }
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
         if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
             if (u.getUsername().equals(userName)) {
-                if (u.getPassword().equals(password)) {
+                if (u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                     return LoginStatus.USER_FOUND_CORRECT_PASSWORD;
                 }
                 return LoginStatus.USER_FOUND_INCORRECT_PASSWORD;
@@ -198,7 +198,6 @@ public class UserServiceImpl implements UserService {
         }
         return LoginStatus.USER_NOT_FOUND;
     }
-
 }
 
 
