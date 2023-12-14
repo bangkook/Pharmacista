@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.pharmacysystem.utils.Constants.*;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // Replace with your frontend URL
 public class CartController {
@@ -54,16 +56,16 @@ public class CartController {
 
         for (CartItem cartItem : cartItems) {
             Map<String, Object> productInfo = new HashMap<>();
-            productInfo.put("productSN", cartItem.getProductSN());
-            productInfo.put("quantity", cartItem.getQuantity());
-            
+            productInfo.put(PRODUCT_SN, cartItem.getProductSN());
+            productInfo.put(QUANTITY, cartItem.getQuantity());
+
             Product product = productService.getProductBySerialNumber(cartItem.getProductSN());
 
             if (product != null && product.getQuantity() > 0) {
-                productInfo.put("productName", product.getName());
-                productInfo.put("price", product.getPrice());
-                productInfo.put("photo", product.getPhoto());
-                productInfo.put("amount", product.getQuantity());
+                productInfo.put(PRODUCT_NAME, product.getName());
+                productInfo.put(PRICE, product.getPrice());
+                productInfo.put(PHOTO, product.getPhoto());
+                productInfo.put(AMOUNT, product.getQuantity());
                 result.add(productInfo);
                 // Add more product information as needed
             }else if (product == null){ //The product is deleted from the inventory
@@ -77,9 +79,9 @@ public class CartController {
     @PutMapping("Update-Quantity")
     @ResponseBody
     public void updateQuantity(@RequestBody Map<String, Object> payload) {
-        int userId = (int) payload.get("userId");
-        String productSN = (String) payload.get("productSN");
-        int quantity = (int) payload.get("quantity");
+        int userId = (int) payload.get(USER_ID);
+        String productSN = (String) payload.get(PRODUCT_SN);
+        int quantity = (int) payload.get(QUANTITY);
         cartItemService.updateQuantityByUserNameAndSerialNumber(userId, productSN, quantity);
         System.out.println("quantity: " + quantity);
     }
@@ -117,12 +119,12 @@ public class CartController {
     @PutMapping("UpdateOrderdProducts")
     @ResponseBody
     public ResponseEntity<String> UpdateOrderdProducts(@RequestBody Map<String, Object> request) {
-        String serialNumber = (String) request.get("serialNumber");
-        int quantity = (int) request.get("quantity");
+        String serialNumber = (String) request.get(SERIAL_NUMBER);
+        int quantity = (int) request.get(QUANTITY);
         String response = productService.updateQuantityBySerialNumber(serialNumber, quantity);
-        if (response == "Success") {
+        if (response == SUCCESS_PURCHASE) {
             return new ResponseEntity<>("Successfully ordered", HttpStatus.OK);
-        } else if(response == "empty"){
+        } else if(response == ZERO_QUANTITY){
             return new ResponseEntity<>("empty", HttpStatus.OK);
         }else{
             return new ResponseEntity<>("outOfStock", HttpStatus.OK);
