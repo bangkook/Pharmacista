@@ -9,10 +9,33 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService {
-
+public class ProductServiceImpl implements ProductService{
+  
     @Autowired
-    private ProductRepository productRepository ;
+    private ProductRepository productRepository;
+
+    @Override
+    public List<Product> getAllAvailableProducts() {
+        try {
+            return productRepository.findAllAvailableProducts();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving available products", e);
+        }
+    }
+
+
+    @Override
+    public boolean isAvailable(String SN) {
+        try {
+            Optional<Product> p = productRepository.findById(SN);
+            return p.map(product -> product.getQuantity() > 0).orElse(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error checking product availability", e);
+        }
+    }
+
 
     @Override
     public List<Product> getAllProducts() {
@@ -59,4 +82,5 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(String serialNumber) {
         productRepository.deleteById(serialNumber);//Given that the Id is the serial number given
     }
+
 }
