@@ -5,6 +5,7 @@ import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.repository.ProductRepository;
 import com.example.pharmacysystem.service.ProductService;
 
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,22 +19,11 @@ import java.sql.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
-import com.example.pharmacysystem.service.ProductServiceImpl;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 import static org.mockito.Mockito.when;
 
@@ -57,10 +47,10 @@ public class ProductServiceTest {
 
         when(productRepository.getProductBySerialNumber(serialNumber)).thenReturn(expectedProduct);
 
-        Product result = productService.getProductBySerialNumber(serialNumber);
+        Product result = productService.getProductBySerialNumberCartItem(serialNumber);
 
-        assertNotNull(result);
-        assertEquals(expectedProduct, result);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(expectedProduct, result);
     }
 
     @Test
@@ -69,9 +59,9 @@ public class ProductServiceTest {
 
         when(productRepository.getProductBySerialNumber(serialNumber)).thenReturn(null);
 
-        Product result = productService.getProductBySerialNumber(serialNumber);
+        Product result = productService.getProductBySerialNumberCartItem(serialNumber);
 
-        assertNull(result);
+        Assert.assertNull(result);
     }
     @Test
     public void testUpdateQuantityBySerialNumber_SuccessfulUpdate() {
@@ -87,7 +77,7 @@ public class ProductServiceTest {
 
         String result = productService.updateQuantityBySerialNumber(productSN, quantityToUpdate);
 
-        assertEquals("Success", result);
+        Assert.assertEquals("Success", result);
         assertEquals(2, existingProduct.getQuantity());
     }
 
@@ -104,8 +94,8 @@ public class ProductServiceTest {
 
         String result = productService.updateQuantityBySerialNumber(productSN, quantityToUpdate);
 
-        assertEquals("empty", result);
-        assertEquals(5, existingProduct.getQuantity());
+        Assert.assertEquals("empty", result);
+        Assert.assertEquals(5, existingProduct.getQuantity());
     }
 
     @Test
@@ -117,9 +107,9 @@ public class ProductServiceTest {
 
         String result = productService.updateQuantityBySerialNumber(productSN, 3);
 
-        assertEquals("outOfStock", result);
+        Assert.assertEquals("outOfStock", result);
+    }
 
-   
 
     @Test
     public void testGetAllAvailableProducts_Success() {
@@ -132,18 +122,18 @@ public class ProductServiceTest {
 
         List<Product> actualProducts = productService.getAllAvailableProducts();
 
-        assertEquals(expectedProducts, actualProducts);
+            Assert.assertEquals(expectedProducts, actualProducts);
     }
 
     @Test
     public void testGetAllAvailableProducts_Exception() {
         when(productRepository.findAllAvailableProducts()).thenThrow(new RuntimeException("Simulated exception"));
 
-        RuntimeException thrownException = assertThrows(RuntimeException.class, () -> {
+        RuntimeException thrownException =  Assert.assertThrows(RuntimeException.class, () -> {
             productService.getAllAvailableProducts();
         });
 
-        assertTrue(thrownException.getMessage().contains("Error retrieving available products"));
+        Assert.assertTrue(thrownException.getMessage().contains("Error retrieving available products"));
     }
 
 
@@ -155,7 +145,7 @@ public class ProductServiceTest {
 
         when(productRepository.findById(productSN)).thenReturn(Optional.of(availableProduct));
 
-        assertTrue(productService.isAvailable(productSN));
+        Assert.assertTrue(productService.isAvailable(productSN));
     }
 
     @Test
@@ -164,7 +154,7 @@ public class ProductServiceTest {
 
         when(productRepository.findById(productSN)).thenReturn(Optional.empty());
 
-        assertFalse(productService.isAvailable(productSN));
+        Assert.assertFalse(productService.isAvailable(productSN));
     }
 
     @Test
@@ -173,15 +163,15 @@ public class ProductServiceTest {
 
         when(productRepository.findById(productSN)).thenThrow(new RuntimeException("Simulated exception"));
 
-        RuntimeException thrownException = assertThrows(RuntimeException.class, () -> {
+        RuntimeException thrownException =  Assert.assertThrows(RuntimeException.class, () -> {
             productService.isAvailable(productSN);
         });
 
-        assertTrue(thrownException.getMessage().contains("Error checking product availability"));
+        Assert.assertTrue(thrownException.getMessage().contains("Error checking product availability"));
     }
 
     @Test
-    void testGetAllProducts() {
+    public void testGetAllProducts() {
         // Mock data
         Product product1 = new Product();
         Product product2 = new Product();
@@ -191,12 +181,12 @@ public class ProductServiceTest {
         List<Product> result = productService.getAllProducts();
 
         // Assertions
-        assertEquals(2, result.size());
+        Assert.assertEquals(2, result.size());
         verify(productRepository, times(1)).findAll();
     }
 
     @Test
-    void testGetProductBySerialNumber() {
+    public void testGetProductBySerialNumber() {
         // Mock data
         Product product = new Product();
         when(productRepository.findBySerialNumber("123456789012345678")).thenReturn(Optional.of(product));
@@ -205,12 +195,12 @@ public class ProductServiceTest {
         Optional<Product> result = productService.getProductBySerialNumber("123456789012345678");
 
         // Assertions
-        assertTrue(result.isPresent());
+        Assert.assertTrue(result.isPresent());
         verify(productRepository, times(1)).findBySerialNumber("123456789012345678");
     }
 
     @Test
-    void testAddProduct() {
+    public void testAddProduct() {
         // Mock data
         Product product = new Product();
         when(productRepository.save(any(Product.class))).thenReturn(product);
@@ -219,12 +209,12 @@ public class ProductServiceTest {
         Product result = productService.addProduct(product);
 
         // Assertions
-        assertNotNull(result);
+        Assert.assertNotNull(result);
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
-    void testUpdateProduct() {
+    public void testUpdateProduct() {
         // Mock data
         Product existingProduct = new Product();
         when(productRepository.findBySerialNumber("123456789012345678")).thenReturn(Optional.of(existingProduct));
@@ -236,13 +226,13 @@ public class ProductServiceTest {
         Product result = productService.updateProduct("123456789012345678", updatedProduct);
 
         // Assertions
-        assertNotNull(result);
+        Assert.assertNotNull(result);
         verify(productRepository, times(1)).findBySerialNumber("123456789012345678");
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
-    void testDeleteProduct() {
+    public void testDeleteProduct() {
         // Mock data
         doNothing().when(productRepository).deleteById("123456789012345678");
 

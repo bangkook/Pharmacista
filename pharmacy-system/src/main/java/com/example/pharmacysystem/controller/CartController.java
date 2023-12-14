@@ -39,7 +39,7 @@ public class CartController {
     @GetMapping("get-max-amount")
     @ResponseBody
     public ResponseEntity<Integer> getProductQuantity(@RequestParam("serialNumber") String serialNumber) {
-        Product product = productService.getProductBySerialNumber(serialNumber);
+        Product product = productService.getProductBySerialNumberCartItem(serialNumber);
         if (product != null && product.getQuantity() > 0) {
             return new ResponseEntity<>(product.getQuantity(), HttpStatus.OK);
         } else
@@ -59,7 +59,7 @@ public class CartController {
             productInfo.put(PRODUCT_SN, cartItem.getProductSN());
             productInfo.put(QUANTITY, cartItem.getQuantity());
 
-            Product product = productService.getProductBySerialNumber(cartItem.getProductSN());
+            Product product = productService.getProductBySerialNumberCartItem(cartItem.getProductSN());
 
             if (product != null && product.getQuantity() > 0) {
                 productInfo.put(PRODUCT_NAME, product.getName());

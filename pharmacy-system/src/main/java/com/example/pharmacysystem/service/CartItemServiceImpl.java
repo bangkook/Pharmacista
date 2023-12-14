@@ -35,53 +35,6 @@ public class CartItemServiceImpl implements CartItemService{
     }
 
     @Override
-    public List<CartItem> getCartItemsByUserId(int userId){
-        return cartItemRepository.getCartItemsByUserId(userId);
-    }
-
-    @Override
-    public boolean deleteCartItem(CartItemId cartItemId) {
-        try {
-
-            cartItemRepository.deleteById(cartItemId);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-
-    @Override
-    @Transactional
-    public boolean deleteCartItemByproductSN(String SerialNumber){
-        try {
-
-            cartItemRepository.deleteCartItemByproductSN(SerialNumber);
-
-            CartItem result= cartItemRepository.save(item);
-            return result != null;
-//            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean deleteCartItem(CartItemId cartItemId) {
-        try {
-            cartItemRepository.deleteById(cartItemId);
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
     public List<CartItem> getCartItemsByUserId(int userId) {
         try {
             return cartItemRepository.getCartItemsByUserId(userId);
@@ -91,4 +44,39 @@ public class CartItemServiceImpl implements CartItemService{
             throw new RuntimeException("Error retrieving cart items for user ID: " + userId, e);
         }
     }
+
+    @Transactional
+    public boolean deleteCartItemByproductSN(String SerialNumber){
+        try {
+            cartItemRepository.deleteCartItemByproductSN(SerialNumber);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteCartItem(CartItemId cartItemId) {
+        try {
+            cartItemRepository.deleteById(cartItemId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean saveCartItem(CartItem item) {
+        try {
+            CartItem result= cartItemRepository.save(item);
+            return result != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }

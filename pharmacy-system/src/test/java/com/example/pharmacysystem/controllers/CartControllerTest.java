@@ -57,7 +57,7 @@ public class CartControllerTest {
         // Mock data
         int userId = 1;
         CartItem cartItem = new CartItem(1, "1", 1);
-        Product product = new Product("1", 2, new Date(2), new Date(2), "Test Product", 5, "Test Product", "Photo");
+        Product product = new Product("1", 2f, new Date(2), new Date(2), "Test Product", 5, "Test Product", "Photo");
 
 
         // Mock the cartItemService.getCartItemsByUserId method
@@ -65,7 +65,7 @@ public class CartControllerTest {
                 .thenReturn(Arrays.asList(cartItem));
 
         // Mock the productService.getProductBySerialNumber method
-        when(productService.getProductBySerialNumber(cartItem.getProductSN()))
+        when(productService.getProductBySerialNumberCartItem(cartItem.getProductSN()))
                 .thenReturn(product);
         // Test
         List<Map<String, Object>> response = cartController.getProductsAndQuantities(userId);
@@ -76,7 +76,7 @@ public class CartControllerTest {
         assertEquals("1", productInfo.get("productSN"));
         assertEquals(1, productInfo.get("quantity"));
         assertEquals("Test Product", productInfo.get("productName"));
-        assertEquals(2.0, productInfo.get("price"));
+        assertEquals(2.0f, productInfo.get("price"));
         assertEquals("Photo", productInfo.get("photo"));
         assertEquals(5, productInfo.get("amount"));
 
@@ -103,7 +103,7 @@ public class CartControllerTest {
 
         // Mock the productService.getProductBySerialNumber method for each product
         for (CartItem cartItem : cartItems) {
-            when(productService.getProductBySerialNumber(cartItem.getProductSN()))
+            when(productService.getProductBySerialNumberCartItem(cartItem.getProductSN()))
                     .thenReturn(products.stream()
                             .filter(p -> p.getSerialNumber().equals(cartItem.getProductSN()))
                             .findFirst()
@@ -154,7 +154,7 @@ public class CartControllerTest {
 
         // Mock the productService.getProductBySerialNumber method for each product
         for (CartItem cartItem : cartItems) {
-            when(productService.getProductBySerialNumber(cartItem.getProductSN()))
+            when(productService.getProductBySerialNumberCartItem(cartItem.getProductSN()))
                     .thenReturn(products.stream()
                             .filter(p -> p.getSerialNumber().equals(cartItem.getProductSN()))
                             .findFirst()
@@ -298,7 +298,7 @@ public class CartControllerTest {
         int expectedQuantity = 5;
 
         // Mock the productService.getProductBySerialNumber method
-        when(productService.getProductBySerialNumber(serialNumber))
+        when(productService.getProductBySerialNumberCartItem(serialNumber))
                 .thenReturn(new Product("1", 2, new Date(2), new Date(2), "Test Product 1", expectedQuantity, "Test Product", "Photo1"));
 
         // Test
@@ -315,7 +315,7 @@ public class CartControllerTest {
         int expectedQuantity = 0;
 
         // Mock the productService.getProductBySerialNumber method
-        when(productService.getProductBySerialNumber(serialNumber))
+        when(productService.getProductBySerialNumberCartItem(serialNumber))
                 .thenReturn(new Product("1", 2, new Date(2), new Date(2), "Test Product 1", expectedQuantity, "Test Product", "Photo1"));
 
         // Test
@@ -332,7 +332,7 @@ public class CartControllerTest {
         int expectedQuantity = 0;
 
         // Mock the productService.getProductBySerialNumber method
-        when(productService.getProductBySerialNumber(serialNumber))
+        when(productService.getProductBySerialNumberCartItem(serialNumber))
                 .thenReturn(new Product("2", 2, new Date(2), new Date(2), "Test Product 1", expectedQuantity, "Test Product", "Photo1"));
 
         // Test

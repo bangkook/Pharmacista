@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
 
-    public Product getProductBySerialNumber(String serialNumber){
+    public Product getProductBySerialNumberCartItem(String serialNumber){
         return productRepository.getProductBySerialNumber(serialNumber);
     }
 

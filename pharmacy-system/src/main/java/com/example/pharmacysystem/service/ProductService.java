@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public interface ProductService {
   
-    Product getProductBySerialNumber(String serialNumbers);
+    Product getProductBySerialNumberCartItem(String serialNumbers);
   
     List<Product> getAllAvailableProducts();
   
