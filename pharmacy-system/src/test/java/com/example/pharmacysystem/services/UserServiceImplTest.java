@@ -1,6 +1,6 @@
 package com.example.pharmacysystem.services;
 
-import com.example.pharmacysystem.exceptions.UserRegistrationException;
+import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
 import com.example.pharmacysystem.service.UserService;
@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -47,7 +47,7 @@ class UserServiceImplTest {
 
         try {
             userService.saveUser(newUser);
-        } catch (UserRegistrationException e) {
+        } catch (UserException e) {
             // Assert specific details about the exception if needed
             assertEquals("Username is already taken. Choose another one!", e.getMessage());
         }
@@ -61,7 +61,7 @@ class UserServiceImplTest {
         Mockito.when(userRepository.findByUsername(newUser.getUsername())).thenReturn(null);
         try {
             userService.saveUser(newUser);
-        } catch (UserRegistrationException e) {
+        } catch (UserException e) {
             // Assert specific details about the exception if needed
             assertEquals("Invalid username. Please follow the specified constraints.", e.getMessage());
         }
@@ -70,46 +70,47 @@ class UserServiceImplTest {
     @Test
     public void isValidPhone_CorrectPhone_ReturnsTrue() {
         UserServiceImpl userService = new UserServiceImpl();
-        assertEquals(true, userService.isValidPhone("01234567890"));
+        assertTrue(userService.isValidPhone("01234567890"));
     }
 
     @Test
     public void isValidPhone_InvalidPhone_ReturnsFalse() {
         UserServiceImpl userService = new UserServiceImpl();
-        assertEquals(false, userService.isValidPhone("123"));
+        assertFalse(userService.isValidPhone("123"));
     }
+
     @Test
     public void isValidPassword_ValidPassword_ReturnsTrue() {
-        assertEquals(true, UserServiceImpl.isValidPassword("pass1234"));
+        assertTrue(UserServiceImpl.isValidPassword("pass1234"));
     }
 
     @Test
     public void isValidPassword_InvalidShortPassword_ReturnsFalse() {
-        assertEquals(false, UserServiceImpl.isValidPassword("pass"));
+        assertFalse(UserServiceImpl.isValidPassword("pass"));
     }
 
     @Test
     public void isValidPassword_InvalidLongPassword_ReturnsFalse() {
-        assertEquals(false, UserServiceImpl.isValidPassword("verylongpassword123456"));
+        assertFalse(UserServiceImpl.isValidPassword("verylongpassword123456"));
     }
 
     @Test
     public void isValidZip_ValidZip_ReturnsTrue() {
-        assertEquals(true, UserServiceImpl.isValidZip("1234"));
+        assertTrue(UserServiceImpl.isValidZip("1234"));
     }
 
     @Test
     public void isValidZip_EmptyZip_ReturnsTrue() {
-        assertEquals(true, UserServiceImpl.isValidZip(""));
+        assertTrue(UserServiceImpl.isValidZip(""));
     }
 
     @Test
     public void isValidZip_InvalidShortZip_ReturnsFalse() {
-        assertEquals(false, UserServiceImpl.isValidZip("12"));
+        assertFalse(UserServiceImpl.isValidZip("12"));
     }
 
     @Test
     public void isValidZip_InvalidNonNumericZip_ReturnsFalse() {
-        assertEquals(false, UserServiceImpl.isValidZip("abcde"));
+        assertFalse(UserServiceImpl.isValidZip("abcde"));
     }
 }

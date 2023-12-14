@@ -1,5 +1,7 @@
 package com.example.pharmacysystem.model;
 
+import com.example.pharmacysystem.utils.PasswordEncoder;
+
 public class UserBuilder {
 
     private final User user;
@@ -22,7 +24,7 @@ public class UserBuilder {
     }
 
     public UserBuilder buildPassword(String password) {
-        this.user.setPassword(password);
+        this.user.setPassword(new PasswordEncoder().encryptPass(password));
         return this;
     }
 

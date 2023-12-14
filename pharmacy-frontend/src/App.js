@@ -7,6 +7,9 @@ import Signup from './components/signup';
 import UserProfile from './components/user_profile/UserProfile'
 
 const BaseUri = 'http://localhost:8088/user'
+import ListUsers from './components/user_promotion/ListUsers';
+import ListAdmins from './components/user_promotion/ListAdmins';
+import AdminNav from './components/AdminNav';
 
 function App() {
   const [currentUser, setCurrrentUser] = useState(null);
@@ -41,6 +44,9 @@ function App() {
           <Route path='/LoginBasic' element={<LoginBasic handleSuccessfulLogin={handleSuccessfulLogin}/>} />
           <Route path='/signup' element={<Signup handleSuccessfulLogin={handleSuccessfulLogin}/>} />
           {currentUser && <Route path='/userProfile' element={<UserProfile userId={currentUser.id}/>} />}
+          <Route path="/admin" element={<AdminNav />} />
+          <Route path="/4/findUsers" element={<ListUsers />} />
+          <Route path="/4/findAdmins" element={<ListAdmins />} />
         </Routes>
       </div>
   );

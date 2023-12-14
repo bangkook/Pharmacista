@@ -1,11 +1,12 @@
 package com.example.pharmacysystem.service;
 
-import com.example.pharmacysystem.exceptions.UserRegistrationException;
+import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserBuilder;
 import com.example.pharmacysystem.repository.UserRepository;
 import com.example.pharmacysystem.utils.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,36 +15,40 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.example.pharmacysystem.utils.Constants.EMPTY_IMAGE;
 
+@Primary
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder = new PasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
     @Override
     public User saveUser(User user) {
         boolean found = isUsernameFound(user.getUsername());
         if (found) {
-            throw new UserRegistrationException("Username is already taken. Choose another one!");
+            throw new UserException("Username is already taken. Choose another one!");
         }
         if (!isValidUsername(user.getUsername())) {
-            throw new UserRegistrationException("Invalid username. Please follow the specified constraints.");
+            throw new UserException("Invalid username. Please follow the specified constraints.");
         } else if (!isValidPassword(user.getPassword())) {
-            throw new UserRegistrationException("Invalid password. Please follow the specified constraints.");
+            throw new UserException("Invalid password. Please follow the specified constraints.");
         } else if (!isValidZip(user.getZipCode())) {
-            throw new UserRegistrationException("Invalid zipcode. Please follow the specified constraints.");
+            throw new UserException("Invalid zipcode. Please follow the specified constraints.");
         } else if (!isValidPhone(user.getPhoneNumber())) {
-            throw new UserRegistrationException("Invalid phone number. Please follow the specified constraints.");
+            throw new UserException("Invalid phone number. Please follow the specified constraints.");
         }
         try {
+            user.setRole(User.Role.USER);
+            user.setProfilePicture(EMPTY_IMAGE);
             String encryptedPass = passwordEncoder.encryptPass(user.getPassword());
             user.setPassword(encryptedPass);
             return userRepository.save(user);
         } catch (Exception e) {
-            throw new UserRegistrationException("An error occurred while saving the user.");
+            throw new UserException("An error occurred while saving the user.");
         }
     }
 
@@ -121,7 +126,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public boolean isValidPhone(String phone) {
-        return phone == null || phone == "" || Pattern.matches("^\\d{11}$", phone) || phone.equals("");
+        return phone == null || phone.isEmpty() || Pattern.matches("^\\d{11}$", phone);
     }
 
     public static boolean isValidPassword(String pass) {
@@ -129,7 +134,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public static boolean isValidZip(String zip) {
-        return zip == null || zip == "" || Pattern.matches("^\\d{3,5}$", zip) || zip.equals("");
+        return zip == null || zip.isEmpty() || Pattern.matches("^\\d{3,5}$", zip);
     }
 
     @Override
@@ -141,7 +146,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = optionalUser.get();
-        if (!(currentPassword.equals(user.getPassword())))
+        if (!(passwordEncoder.isEqual(currentPassword, user.getPassword())))
             return false;
 
         // Update user data
@@ -180,7 +185,7 @@ public class UserServiceImpl implements UserService {
         if (userName == null || password == null) return null;
         User user = null;
         for (User u : Users) {
-            if (u.getUsername().equals(userName) && u.getPassword().equals(password)) {
+            if (u.getUsername().equals(userName) && u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                 user = u;
                 break;
             }
@@ -199,7 +204,7 @@ public class UserServiceImpl implements UserService {
         if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
             if (u.getUsername().equals(userName)) {
-                if (u.getPassword().equals(password)) {
+                if (u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                     return LoginStatus.USER_FOUND_CORRECT_PASSWORD;
                 }
                 return LoginStatus.USER_FOUND_INCORRECT_PASSWORD;
@@ -208,6 +213,12 @@ public class UserServiceImpl implements UserService {
         return LoginStatus.USER_NOT_FOUND;
     }
 
+    @Override
+    public boolean isAdmin(int adminId) {
+        User admin = userRepository.findById(adminId).orElse(null);
+        if (admin == null) return false;
+        return admin.getRole() == User.Role.ADMIN;
+    }
 }
 
 

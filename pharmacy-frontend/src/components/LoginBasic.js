@@ -39,8 +39,7 @@ const LoginBasic=({handleSuccessfulLogin})=>{
             } else if (data === 'INVALID_INPUT') {
                 alert("Invalid input");
             }
-            }
-        
+        }
     }
 
     return(

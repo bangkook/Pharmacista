@@ -1,7 +1,9 @@
 package com.example.pharmacysystem.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.sql.Date;
@@ -17,6 +19,8 @@ public class Product {
     private String description;
     private int quantity;
     private String name;
+    @Lob
+    @Column(length = 1000000) // Adjust the size as needed
     private String photo;
 
     public Product(String serialNumber, float price, Date productionDate, Date expiryDate, String description, int quantity, String name, String photo) {
@@ -33,12 +37,13 @@ public class Product {
     public Product() {
     }
 
+
     @ReadOnlyProperty
     public String getSerialNumber() {
         return serialNumber;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
@@ -95,16 +100,13 @@ public class Product {
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Serial Number: ").append(serialNumber).append("\n");
-        stringBuilder.append("Price: ").append(price).append("\n");
-        stringBuilder.append("Production Date: ").append(productionDate).append("\n");
-        stringBuilder.append("Expiry Date: ").append(expiryDate).append("\n");
-        stringBuilder.append("Description: ").append(description).append("\n");
-        stringBuilder.append("Quantity: ").append(quantity).append("\n");
-        stringBuilder.append("Name: ").append(name).append("\n");
-        stringBuilder.append("Photo: ").append(photo).append("\n");
-
-        return stringBuilder.toString();
+        return "Serial Number: " + serialNumber + "\n" +
+                "Price: " + price + "\n" +
+                "Production Date: " + productionDate + "\n" +
+                "Expiry Date: " + expiryDate + "\n" +
+                "Description: " + description + "\n" +
+                "Quantity: " + quantity + "\n" +
+                "Name: " + name + "\n" +
+                "Photo: " + photo + "\n";
     }
 }
