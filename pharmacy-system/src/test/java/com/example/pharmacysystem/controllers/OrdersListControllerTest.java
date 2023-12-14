@@ -92,7 +92,6 @@ public class OrdersListControllerTest {
         assertEquals(user2, resultOrders.get(2).getUserId());
         assertEquals(Date.valueOf("2023-03-31").toString(), resultOrders.get(2).getDateCreated().toString());
         assertEquals(50.0F, resultOrders.get(2).getTotalPrice(), 0);
-
     }
 
     @Test

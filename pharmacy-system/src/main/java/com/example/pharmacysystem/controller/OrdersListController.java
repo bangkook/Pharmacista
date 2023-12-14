@@ -25,7 +25,6 @@ public class OrdersListController {
     @GetMapping("/all")
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
-
     }
 
     @GetMapping("/{userId}")
