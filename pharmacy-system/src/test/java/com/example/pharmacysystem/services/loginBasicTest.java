@@ -3,6 +3,7 @@ package com.example.pharmacysystem.services;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
 import com.example.pharmacysystem.service.UserService;
+import com.example.pharmacysystem.utils.PasswordEncoder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -28,10 +29,10 @@ public class loginBasicTest {
 
     @Test
     public void getUser_ReturnWantedUser() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -44,10 +45,10 @@ public class loginBasicTest {
 
     @Test
     public void getUser_ReturnNullAsUserNotFound() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -61,10 +62,10 @@ public class loginBasicTest {
 
     @Test
     public void getUser_ReturnNullAsUserNameNull() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -78,10 +79,10 @@ public class loginBasicTest {
 
     @Test
     public void getUser_ReturnNullAsPasswordNull() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -95,10 +96,10 @@ public class loginBasicTest {
 
     @Test
     public void getUser_ReturnNullAsUserNamePasswordNull() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -112,10 +113,10 @@ public class loginBasicTest {
 
     @Test
     public void checkUser_ReturnUserNameAndPasswordCorrect() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -128,10 +129,10 @@ public class loginBasicTest {
 
     @Test
     public void checkUser_ReturnUserNameNotfound() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -145,10 +146,10 @@ public class loginBasicTest {
 
     @Test
     public void checkUser_ReturnWrongPassword() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
@@ -162,10 +163,10 @@ public class loginBasicTest {
 
     @Test
     public void checkUser_ReturnNullPasswordOrNameOrBoth() {
-        User firstUser = new User("eman", "123", "16 avennue", "newYork",
+        User firstUser = new User("eman", new PasswordEncoder().encryptPass("123"), "16 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");
-        User secondUser = new User("Neso", "3211",
+        User secondUser = new User("Neso", new PasswordEncoder().encryptPass("3211"),
                 "15 avennue", "newYork",
                 "usa", "1245", "01123186969",
                 "profile_picture_url");

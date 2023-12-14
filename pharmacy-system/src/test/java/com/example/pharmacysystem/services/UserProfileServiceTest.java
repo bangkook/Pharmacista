@@ -3,6 +3,7 @@ package com.example.pharmacysystem.services;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.repository.UserRepository;
 import com.example.pharmacysystem.service.UserService;
+import com.example.pharmacysystem.utils.PasswordEncoder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -92,7 +93,7 @@ class UserProfileServiceTest {
     void testChangePassword_Successfully() {
         // Mock data
         int userId = 1;
-        String encodedPass = "currentPassword";
+        String encodedPass = new PasswordEncoder().encryptPass("currentPassword");
         User existingProfile = new User("username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
@@ -100,15 +101,17 @@ class UserProfileServiceTest {
         boolean passwordChanged = userService.changePassword(userId, "currentPassword", "newPassword");
 
         assertTrue(passwordChanged);
+
+        String encodedNewPassword = new PasswordEncoder().encryptPass("newPassword");
         // Additional assertions to verify that the password has been changed in the system
-        assertEquals(("newPassword"), existingProfile.getPassword());
+        assertEquals(encodedNewPassword, existingProfile.getPassword());
     }
 
     @Test
     void testChangePassword_CurrentPasswordIsWrong() {
         // Mock data
         int userId = 1;
-        String encodedPass = "currentPassword";
+        String encodedPass = new PasswordEncoder().encryptPass("currentPassword");
         User existingProfile = new User("username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));
@@ -124,7 +127,7 @@ class UserProfileServiceTest {
     void testChangePassword_GivenPasswordIsNull() {
         // Mock data
         int userId = 1;
-        String encodedPass = "currentPassword";
+        String encodedPass = new PasswordEncoder().encryptPass("currentPassword");
         User existingProfile = new User("username", encodedPass, "street address", "city",
                 "country", "11111", "12345678911", "picture.jpg");
         when(userRepository.findById(userId)).thenReturn(java.util.Optional.of(existingProfile));

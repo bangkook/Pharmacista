@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder = new PasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
     @Override
     public User saveUser(User user) {
@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = optionalUser.get();
-        if (!(currentPassword.equals(user.getPassword())))
+        if (!(passwordEncoder.isEqual(currentPassword, user.getPassword())))
             return false;
 
         // Update user data
@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
         if (userName == null || password == null) return null;
         User user = null;
         for (User u : Users) {
-            if (u.getUsername().equals(userName) && u.getPassword().equals(password)) {
+            if (u.getUsername().equals(userName) && u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                 user = u;
                 break;
             }
@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
         if (userName == null || password == null) return LoginStatus.INVALID_INPUT;
         for (User u : Users) {
             if (u.getUsername().equals(userName)) {
-                if (u.getPassword().equals(password)) {
+                if (u.getPassword().equals(new PasswordEncoder().encryptPass(password))) {
                     return LoginStatus.USER_FOUND_CORRECT_PASSWORD;
                 }
                 return LoginStatus.USER_FOUND_INCORRECT_PASSWORD;
