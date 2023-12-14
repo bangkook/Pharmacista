@@ -113,7 +113,7 @@ class ListUsers extends Component {
                             <tbody>
                                 {this.state.users.map((user) => (
                                     <tr key={user.userId}>
-                                        <td className="profile-pic"> 
+                                        <td className="user-profile-box">
                                             <img src={user.profilePicture} className="profile-image"/>
                                         </td>
                                         <td>{user.username}</td>

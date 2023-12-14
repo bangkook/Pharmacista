@@ -25,8 +25,13 @@
     padding: 8px;
 }
 .profile-pic {
-    max-width: 23.7px; 
+    max-width: 24px; 
 }
+
+.user-profile-box {
+    max-width: 39px; 
+}
+
 .search-container {
     align-items: center;
     margin: 20px;

@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface AdminService {
 
-    List<UserInfo> manageUsers(int adminId);
+    List<UserInfo> getUsers(int adminId);
 
     List<UserInfo> getAdmins(int adminId);
 

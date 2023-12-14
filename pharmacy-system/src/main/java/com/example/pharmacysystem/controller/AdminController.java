@@ -28,9 +28,9 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/{adminId}/manageUsers")
+    @GetMapping("/{adminId}/getUsers")
     public List<UserInfo> getAllUsers(@PathVariable int adminId) {
-        return adminService.manageUsers(adminId);
+        return adminService.getUsers(adminId);
     }
 
     @GetMapping("/{adminId}/getAdmins")

@@ -16,7 +16,7 @@ public class AdminServiceImpl extends UserServiceImpl implements AdminService {
     private UserRepository userRepository;
 
     @Override
-    public List<UserInfo> manageUsers(int adminId) {
+    public List<UserInfo> getUsers(int adminId) {
         if (!isAdmin(adminId))
             throw new AdminException("User is not authorized to perform this action");
         List<User> users = userRepository.findByRole(User.Role.USER);

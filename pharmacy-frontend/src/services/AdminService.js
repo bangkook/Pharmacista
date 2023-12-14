@@ -4,7 +4,7 @@ const ADMIN_SERVICES_BASE_URL = `http://localhost:8088/admin`;
 
 class AdminService {
     getUsers(adminId) {
-        return axios.get(`${ADMIN_SERVICES_BASE_URL}/${adminId}/manageUsers`);
+        return axios.get(`${ADMIN_SERVICES_BASE_URL}/${adminId}/getUsers`);
     }
 
     getAdmins(adminId) {

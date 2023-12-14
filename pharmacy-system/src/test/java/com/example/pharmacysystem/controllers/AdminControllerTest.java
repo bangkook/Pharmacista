@@ -67,16 +67,16 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void manageUsers_Success() throws Exception {
+    public void getUsers_Success() throws Exception {
         int adminId = 1;
 
         UserInfo firstUser = new UserInfo(2, "Mary_Alfred", "01234567890", "pic1");
         UserInfo secondUser = new UserInfo(3, "John_Doe", "01237894560", "pic2");
         List<UserInfo> userInfoList = List.of(firstUser, secondUser);
 
-        given(adminService.manageUsers(adminId)).willReturn(userInfoList);
+        given(adminService.getUsers(adminId)).willReturn(userInfoList);
 
-        MvcResult result = mockMvc.perform(get("/admin/{adminId}/manageUsers", adminId))
+        MvcResult result = mockMvc.perform(get("/admin/{adminId}/getUsers", adminId))
                 .andExpect(status().isOk())
                 .andReturn();
 
