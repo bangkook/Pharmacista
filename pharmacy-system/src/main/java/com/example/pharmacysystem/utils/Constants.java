@@ -13,6 +13,16 @@ public class Constants {
     public static final String ROLE = "role";
     public static final String PICTURE = "profilePicture";
     public static final String ZIP_CODE = "zipCode";
+    public static final String SUCCESS_PURCHASE = "Success";
+    public static final String ZERO_QUANTITY = "empty";
+    public static final String PRODUCT_SN = "productSN";
+    public static final String QUANTITY = "quantity";
+    public static final String PRODUCT_NAME = "productName";
+    public static final String PRICE = "price";
+    public static final String PHOTO = "photo";
+    public static final String AMOUNT = "amount";
+    public static final String USER_ID = "userId";
+    public static final String SERIAL_NUMBER = "serialNumber";
 
     public static final String EMPTY_IMAGE = "https://img.favpng.com/22/0/21/computer-icons-user-profile-clip-art-png-favpng-MhMHJ0Fw21MJadYjpvDQbzu5S.jpg";
 }

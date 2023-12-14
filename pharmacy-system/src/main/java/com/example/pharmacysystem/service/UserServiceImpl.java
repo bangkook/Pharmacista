@@ -1,10 +1,10 @@
 package com.example.pharmacysystem.service;
 
-
 import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.model.UserBuilder;
 import com.example.pharmacysystem.repository.UserRepository;
+import com.example.pharmacysystem.utils.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private PasswordEncoder passwordEncoder = new PasswordEncoder();
+
     @Override
     public User saveUser(User user) {
         boolean found = isUsernameFound(user.getUsername());
@@ -42,6 +44,8 @@ public class UserServiceImpl implements UserService {
         try {
             user.setRole(User.Role.USER);
             user.setProfilePicture(EMPTY_IMAGE);
+            String encryptedPass = passwordEncoder.encryptPass(user.getPassword());
+            user.setPassword(encryptedPass);
             return userRepository.save(user);
         } catch (Exception e) {
             throw new UserException("An error occurred while saving the user.");
