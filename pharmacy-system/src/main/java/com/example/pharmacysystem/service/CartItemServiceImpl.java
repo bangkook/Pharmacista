@@ -21,8 +21,7 @@ public class CartItemServiceImpl implements CartItemService{
     public boolean saveCartItem(CartItem item) {
         try {
             CartItem result= cartItemRepository.save(item);
-            if(result !=null) return true;
-            else return false;
+            return result != null;
 //            return true;
         } catch (Exception e) {
             e.printStackTrace();
