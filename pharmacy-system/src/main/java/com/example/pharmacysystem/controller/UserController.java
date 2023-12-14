@@ -1,6 +1,6 @@
 package com.example.pharmacysystem.controller;
 
-import com.example.pharmacysystem.exceptions.UserRegistrationException;
+import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
 import com.example.pharmacysystem.utils.Constants;
@@ -26,7 +26,7 @@ public class UserController {
             userService.saveUser(user);
             // TODO: Add automatic login here
             return new ResponseEntity<>("New User is added successfully", HttpStatus.OK);
-        } catch (UserRegistrationException e) {
+        } catch (UserException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY); // Return the specific error message
         } catch (Exception e) {
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);

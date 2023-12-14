@@ -1,6 +1,6 @@
 package com.example.pharmacysystem.controllers;
 
-import com.example.pharmacysystem.exceptions.UserRegistrationException;
+import com.example.pharmacysystem.exceptions.UserException;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,7 +63,7 @@ public class UserRegisterControllerTest {
     public void addUser_Fail_DuplicateUserNames() throws Exception {
         String errorMessage = "Username is already taken. Choose another one!";
         User user = new User("username", "pass", "address", "city", "country", "zip", "01271676366", null);
-        doThrow(new UserRegistrationException(errorMessage))
+        doThrow(new UserException(errorMessage))
                 .when(userService).saveUser(any(User.class));
 
         MvcResult res = mockMvc.perform(post("/user/addUser")
@@ -78,7 +78,7 @@ public class UserRegisterControllerTest {
     public void addUser_Fail_InvalidUsername() throws Exception {
         String errorMessage = "Invalid username. Please follow the specified constraints.";
         User user = new User("2username", "pass", "address", "city", "country", "zip", "01271676366", null);
-        doThrow(new UserRegistrationException(errorMessage))
+        doThrow(new UserException(errorMessage))
                 .when(userService).saveUser(any(User.class));
 
         MvcResult res = mockMvc.perform(post("/user/addUser")

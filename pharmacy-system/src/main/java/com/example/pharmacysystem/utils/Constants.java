@@ -24,4 +24,5 @@ public class Constants {
     public static final String USER_ID = "userId";
     public static final String SERIAL_NUMBER = "serialNumber";
 
+    public static final String EMPTY_IMAGE = "https://img.favpng.com/22/0/21/computer-icons-user-profile-clip-art-png-favpng-MhMHJ0Fw21MJadYjpvDQbzu5S.jpg";
 }
