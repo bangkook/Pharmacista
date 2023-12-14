@@ -2,7 +2,6 @@ package com.example.pharmacysystem.services;
 
 import com.example.pharmacysystem.model.CartItem;
 import com.example.pharmacysystem.repository.CartItemRepository;
-import com.example.pharmacysystem.repository.UserRepository;
 import com.example.pharmacysystem.service.CartItemService;
 import com.example.pharmacysystem.utils.CartItemId;
 import org.junit.Assert;
@@ -36,6 +35,7 @@ public class CartItemServiceTest {
 
         Assert.assertTrue(cartItemService.saveCartItem(itemToSave));
     }
+
     @Test
     public void testSaveCartItem_Null() {
         CartItem itemToSave = new CartItem(1, "SN123", 2);

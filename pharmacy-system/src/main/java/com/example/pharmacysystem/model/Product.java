@@ -100,16 +100,13 @@ public class Product {
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Serial Number: ").append(serialNumber).append("\n");
-        stringBuilder.append("Price: ").append(price).append("\n");
-        stringBuilder.append("Production Date: ").append(productionDate).append("\n");
-        stringBuilder.append("Expiry Date: ").append(expiryDate).append("\n");
-        stringBuilder.append("Description: ").append(description).append("\n");
-        stringBuilder.append("Quantity: ").append(quantity).append("\n");
-        stringBuilder.append("Name: ").append(name).append("\n");
-        stringBuilder.append("Photo: ").append(photo).append("\n");
-
-        return stringBuilder.toString();
+        return "Serial Number: " + serialNumber + "\n" +
+                "Price: " + price + "\n" +
+                "Production Date: " + productionDate + "\n" +
+                "Expiry Date: " + expiryDate + "\n" +
+                "Description: " + description + "\n" +
+                "Quantity: " + quantity + "\n" +
+                "Name: " + name + "\n" +
+                "Photo: " + photo + "\n";
     }
 }

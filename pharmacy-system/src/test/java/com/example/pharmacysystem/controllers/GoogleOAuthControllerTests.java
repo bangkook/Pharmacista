@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -52,8 +51,8 @@ class GoogleOAuthControllerTests {
 
         // Perform the POST request
         mockMvc.perform(post("/login/oauth2/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(payload)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(payload)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("New User added newuser@example.com"));
     }
@@ -72,8 +71,8 @@ class GoogleOAuthControllerTests {
 
         // Perform the POST request
         mockMvc.perform(post("/login/oauth2/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(payload)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(payload)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Existing User existinguser@example.com"));
     }
