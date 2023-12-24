@@ -33,6 +33,7 @@ const MedicineInventory = () => {
   };
 
   const openModal = () => {
+    console.log("model opened")
     setModalOpen(true);
   };
 

@@ -45,7 +45,7 @@ export default function ShoppingCart({userId = 1}) {
   
   useEffect(() => {
     fetchMedicines();
-  }, []);
+  }, [userId]);
   
 
   const handleQuantityChange = async (serialNumber, newQuantity) => {

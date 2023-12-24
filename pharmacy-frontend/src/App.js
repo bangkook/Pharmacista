@@ -52,13 +52,33 @@ function App() {
           {currentUser && <Route path="/admin" element={<AdminNav adminId={currentUser.id} />} />}
           {currentUser && <Route path="/getUsers" element={<ListUsers />} />}
           {currentUser && <Route path="/getAdmins" element={<ListAdmins />} />}
-          {currentUser && <Route path='/home' element={<Home isAdmin={currentUser.role === "ADMIN"}/>}></Route>}
+          {currentUser && <Route path='/home' element={<Home userId={currentUser.id} isAdmin={currentUser.role === "ADMIN"}/>}></Route>}
           {currentUser && <Route path="/cart" element={<ShoppingCart userId={currentUser.id}/>}></Route>}
           {currentUser && <Route path="/orders" element={<Orders userId={currentUser.id} admin={currentUser.role === "ADMIN"}/>}></Route>}
-          <Route path="inventory" element={<MedicineInventory/>}></Route>
+          <Route path="/inventory" element={<MedicineInventory/>}></Route>
         </Routes>
       </div>
   );
 }
 
 export default App;
+
+// import React from 'react';
+// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import GoogleSignIn from './components/login';
+// import GoogleSignUp from './components/googleSignUp';
+// import LoginBasic from './components/LoginBasic';
+// import Signup from './components/signup';
+// import AccountSettings from './components/user_profile/UserProfile';
+// import ListOfMediciens from './components/listOfMediciens';
+// import MedicineInventory from './components/Inventory/Inventory';
+
+// function App() {
+//   return (
+//     <div className='App'>
+//     <MedicineInventory/>
+//     </div>
+//   );
+// }
+
+// export default App;

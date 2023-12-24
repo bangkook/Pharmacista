@@ -12,8 +12,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { wait } from "@testing-library/user-event/dist/utils";
 
-const ListOfMediciens=()=>{
-  const userId=1
+const ListOfMediciens=({userId})=>{
+  console.log(userId)
   const BaseUri = 'http://localhost:8088'
   const [initialMedicines, setInitialMedicines] = useState([])
   const [cart, setCart] = useState([])

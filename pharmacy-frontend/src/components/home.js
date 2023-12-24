@@ -3,6 +3,7 @@ import ListOfMediciens from "./listOfMediciens"
 import './home.css'
 
 const Home = ({userId = 1, isAdmin = false}) => {
+    console.log(userId)
     return (
         <div className="home">
             <div className="homein"> 
@@ -10,7 +11,7 @@ const Home = ({userId = 1, isAdmin = false}) => {
                 <Sidebar isAdmin={isAdmin}></Sidebar>
             </div>
             <div className="right">
-                <ListOfMediciens/>
+                <ListOfMediciens userId={userId}/>
             </div>
             </div>
         </div>
