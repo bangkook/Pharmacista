@@ -3,7 +3,7 @@ import React,{ useState, useRef, useEffect, useMemo} from 'react';
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
 
-const BaseUri = 'http://localhost:8081/api/user'
+const BaseUri = 'http://localhost:8088/user'
 const AccountSettings = ({userId}) => {
   const [country, setCountry] = useState('')
   const options = useMemo(() => countryList().getData(), [])
@@ -375,7 +375,7 @@ const ProfilePictureUploader = ({userId}) => {
       <input type="file" onChange={handleUpload} ref={fileInputRef}
         style={{ display: 'none' }} />
 
-      <img for="photo-upload" src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
+      <img src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
       alt="Profile" onClick={handleImageClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

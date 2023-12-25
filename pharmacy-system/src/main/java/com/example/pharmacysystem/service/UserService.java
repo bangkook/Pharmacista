@@ -26,11 +26,17 @@ public interface UserService {
 
     User saveUser(User user);
 
+    User saveUserGoogle(User user);
+
     List<String> findAllUsers();
 
     User getUser(String userName, String password);
 
+    User getUserByUserName(String userName);
+
     LoginStatus checkUser(String userName, String password);
+
+    boolean isAdmin(int adminId);
 
     enum LoginStatus {
         USER_FOUND_CORRECT_PASSWORD,

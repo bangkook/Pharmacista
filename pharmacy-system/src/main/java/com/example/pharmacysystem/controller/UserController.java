@@ -24,7 +24,6 @@ public class UserController {
     public ResponseEntity<String> addUser(@RequestBody User user) {
         try {
             userService.saveUser(user);
-            // TODO: Add automatic login here
             return new ResponseEntity<>("New User is added successfully", HttpStatus.OK);
         } catch (UserException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY); // Return the specific error message
@@ -93,5 +92,10 @@ public class UserController {
         UserService.LoginStatus loginStatus = userService.checkUser(userName, password);
         return ResponseEntity.ok(loginStatus.name());
     }
-    
+
+    @GetMapping("/get-user-by-username/{username}")
+    @ResponseBody
+    public User getUserByUserName(@PathVariable("username") String userName) {
+        return userService.getUserByUserName(userName);
+    }
 }

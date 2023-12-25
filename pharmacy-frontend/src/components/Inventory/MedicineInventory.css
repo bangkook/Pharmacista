@@ -1,0 +1,308 @@
+body {
+    background-color: rgb(255, 255, 255);
+    background-size: cover;
+    background-position: center;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .medicine-inventory-container {
+    max-width: 1200px; /* Increased max-width for the container */
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .medicine-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .medicine-table th,
+  .medicine-table td {
+    border: 1px solid #314e82;
+    padding: 12px; /* Adjusted padding */
+    text-align: left;
+  }
+  
+  .medicine-table th {
+    background-color: #314e82;
+    color: white;
+  }
+  
+
+  
+  .add-update-form button:hover {
+    background-color: #223448;
+  }
+  
+  .edit-btn,
+  .delete-btn {
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-btn {
+    background-color: #314e82;
+  }
+  
+  .delete-btn {
+    background-color: #f44336; /* Red color for delete button */
+  }
+  
+  .edit-btn:hover,
+  .delete-btn:hover {
+    background-color: #223448;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .addMedicineModal {
+    background-color: #fff;
+    padding: 30px;
+    border: 1px solid #314e82;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-update-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold; /* Bold label text */
+  }
+  
+  .addMedicineModal input,
+  .addMedicineModal textarea {
+    width: 100%;
+    padding: 10px; /* Decreased padding for a smaller size */
+    margin-bottom: 12px; 
+    box-sizing: border-box;
+    border: 1px solid #314e82;
+    border-radius: 5px; /* Added border-radius for rounded corners */
+  }
+  
+  .add-update-form label + input,
+  .add-update-form label + textarea {
+    margin-top: 8px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .action-btn,
+  .cancel-btn {
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .action-btn {
+    background-color: #4caf50;
+
+    color: white;
+  }
+  
+  .action-btn:hover {
+    background-color: #223448;
+  }
+  
+  .cancel-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  .add-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    position: absolute;
+    right: 165px; 
+    top: 80px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-btn:hover {
+    background-color: #45a049;
+  }
+  body {
+    background-color: rgb(255, 255, 255);
+    background-size: cover;
+    background-position: center;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .medicine-inventory-container {
+    max-width: 1200px; /* Increased max-width for the container */
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .medicine-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .medicine-table th,
+  .medicine-table td {
+    border: 1px solid #314e82;
+    padding: 12px; /* Adjusted padding */
+    text-align: left;
+  }
+  
+  .medicine-table th {
+    background-color: #314e82;
+    color: white;
+  }
+  
+
+  
+  .add-update-form button:hover {
+    background-color: #223448;
+  }
+  
+  .edit-btn,
+  .delete-btn {
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-btn {
+    background-color: #314e82;
+  }
+  
+  .delete-btn {
+    background-color: #f44336; /* Red color for delete button */
+  }
+  
+  .edit-btn:hover,
+  .delete-btn:hover {
+    background-color: #223448;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .addMedicineModal {
+    background-color: #fff;
+    padding: 30px;
+    border: 1px solid #314e82;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-update-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold; /* Bold label text */
+  }
+  
+  .addMedicineModal input,
+  .addMedicineModal textarea {
+    width: 100%;
+    padding: 10px; /* Decreased padding for a smaller size */
+    margin-bottom: 12px; 
+    box-sizing: border-box;
+    border: 1px solid #314e82;
+    border-radius: 5px; /* Added border-radius for rounded corners */
+  }
+  
+  .add-update-form label + input,
+  .add-update-form label + textarea {
+    margin-top: 8px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .action-btn,
+  .cancel-btn {
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .action-btn {
+    background-color: #4caf50;
+
+    color: white;
+  }
+  
+  .action-btn:hover {
+    background-color: #223448;
+  }
+  
+  .cancel-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  .add-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    position: absolute;
+    right: 165px; 
+    top: 80px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-btn:hover {
+    background-color: #45a049;
+  }
