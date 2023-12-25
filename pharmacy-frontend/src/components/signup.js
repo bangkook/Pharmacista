@@ -104,7 +104,7 @@ export default function Signup({ handleSuccessfulLogin }) {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://deeplor.s3.us-west-2.amazonaws.com/matting_original/2023/12/25/cbfbc137ba814895bd2879c12c914a2a.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20231225T125811Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAROYXHKZUSZONTWIG%2F20231225%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=98a369c5490c18ec9cfb602881dc1a0559427522765972cb4aca80aa1b61f5f7)',
+            backgroundImage: 'url(https://www.pharmacyplanet.com/media/wysiwyg/is-online-pharmacy-safe-for-buying-erectile-dysfunction-medications.jpeg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
