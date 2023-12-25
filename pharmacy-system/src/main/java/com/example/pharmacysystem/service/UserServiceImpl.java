@@ -41,6 +41,8 @@ public class UserServiceImpl implements UserService {
         } else if (!isValidPhone(user.getPhoneNumber())) {
             throw new UserException("Invalid phone number. Please follow the specified constraints.");
         }
+        // Set the role explicitly
+        user.setRole(User.Role.USER);
         try {
             user.setRole(User.Role.USER);
             user.setProfilePicture(EMPTY_IMAGE);
