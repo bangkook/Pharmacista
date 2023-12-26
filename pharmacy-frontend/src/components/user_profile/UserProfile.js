@@ -371,11 +371,11 @@ const ProfilePictureUploader = ({userId}) => {
   };
 
   return (
-    <div className="img-wrap">
+    <div className="img-wrapp">
       <input type="file" onChange={handleUpload} ref={fileInputRef}
         style={{ display: 'none' }} />
 
-      <img src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
+      <img class = 'image' src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
       alt="Profile" onClick={handleImageClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -389,38 +389,19 @@ const ProfilePictureUploader = ({userId}) => {
   );
 };
 
-const SingleBanner = ({bannerimage, heading}) => {
-  return (
-    <div className='singlebanner'>
-        <div className='bannerimgfilter'></div>
-        <img className='bannerimg' src={bannerimage} alt='noimg' />
-        <div className='bannerheading'>
-            <h1>{heading}</h1>
-        </div>
-    </div>
-  )
-}
-
-const UserProfile = ({userId = 1}) => {
+const UserProfile = ({ userId = 1 }) => {
   return (
     <div className='userprofile'>
-      <SingleBanner 
-        heading={`My Profile`}
-        bannerimage = 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=1880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' 
-        />
-    
-        <div className='userprofilein'>
-          <div className='left'>
-            <AccountSettings userId={userId}/>
-            <ChangePassword userId={userId}/>
-          </div>
-          <div className='right'>
-          <ProfilePictureUploader userId={userId}/>
-          </div>
-        </div>
-        
-        </div>
-  )
-}
+      <div className='userprofilein'>
+
+          <AccountSettings userId={userId} />
+          <ProfilePictureUploader userId={userId} />
+          <ChangePassword userId={userId} />
+      </div>
+      
+    </div>
+  );
+};
+
 
 export default UserProfile

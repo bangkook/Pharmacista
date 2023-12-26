@@ -146,12 +146,6 @@ const deleteMedicine = async (serialNumber) => {
 
   return (
     <div className="medicine-inventory-container">
-      {/* Navigation Bar */}
-      <nav className="navbar">
-        <div className="nav-item">Inventory</div>
-        <div className="nav-item">Profile</div>
-      </nav>
-
       <h1>Medicine Inventory</h1>
 
       <table className="medicine-table">

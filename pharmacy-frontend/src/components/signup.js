@@ -1,7 +1,5 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
@@ -96,7 +94,7 @@ export default function Signup({ handleSuccessfulLogin }) {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" >
         <CssBaseline />
         <Grid
           item
@@ -219,13 +217,8 @@ export default function Signup({ handleSuccessfulLogin }) {
                   />
                 </Grid>
               </Grid>
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  {/* Place the "Sign Up" button and GoogleSignUp button beside each other */}
                   <Grid container spacing={2}>
                     <Grid item xs>
                       <Button
@@ -238,13 +231,12 @@ export default function Signup({ handleSuccessfulLogin }) {
                       </Button>
                     </Grid>
                     <Grid item xs >
-                    <Box mt={3}> {/* Adjust the margin or spacing here */}
+                    <Box mt={3}>
                         <GoogleSignUp handleSuccessfulLogin={handleSuccessfulLogin} />
                       </Box>
                     </Grid>
                   </Grid>
                 </Grid>
-                {/* Adjust the Grid item properties as needed */}
                 <Grid item xs>
                   <Typography> Already have an account?
                         <Link  href="#" variant="body2" to='/LoginBasic'>
