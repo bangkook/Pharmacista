@@ -42,10 +42,7 @@ public class FavoriteListServiceImpl implements FavoriteListService {
     }
 
     @Override
-    public List<FavoriteItem> findByUserIdSorted(int userId, boolean ascending) {
-        if (ascending) {
-            return favoriteItemRepository.findByUserIdOrderByProductNameAsc(userId);
-        }
-        return favoriteItemRepository.findByUserIdOrderByProductNameDesc(userId);
+    public List<FavoriteItem> findByUserIdSorted(int userId) {
+        return favoriteItemRepository.findByUserIdOrderByProductNameAsc(userId);
     }
 }

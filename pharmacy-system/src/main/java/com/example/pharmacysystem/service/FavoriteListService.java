@@ -12,6 +12,6 @@ public interface FavoriteListService {
 
     List<FavoriteItem> findByUserId(int userId);
 
-    List<FavoriteItem> findByUserIdSorted(int userId, boolean ascending);
+    List<FavoriteItem> findByUserIdSorted(int userId);
 
 }

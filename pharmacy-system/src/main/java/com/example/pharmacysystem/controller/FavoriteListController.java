@@ -45,7 +45,7 @@ public class FavoriteListController {
     @GetMapping("/get-sorted/{userId}")
     @ResponseBody
     public List<FavoriteItem> findByUserIdSortedAsc(@PathVariable("userId") int userId) {
-        return favoriteListService.findByUserIdSorted(userId, true);
+        return favoriteListService.findByUserIdSorted(userId);
     }
 
 }

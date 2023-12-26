@@ -179,7 +179,7 @@ public class FavoriteListControllerTest {
         FavoriteItem favoriteItem2 = new FavoriteItem(user1, productSN2);
 
         // Mocking the repository behavior
-        when(favoriteListService.findByUserIdSorted(user1, true)).thenReturn(Arrays.asList(favoriteItem2, favoriteItem1));
+        when(favoriteListService.findByUserIdSorted(user1)).thenReturn(Arrays.asList(favoriteItem2, favoriteItem1));
 
         // Performing the request
         MvcResult result = mockMvc.perform(get("/favorites/get-sorted/{user1}", user1))
@@ -202,7 +202,7 @@ public class FavoriteListControllerTest {
         int user1 = 1;
 
         // Mocking the repository behavior
-        when(favoriteListService.findByUserIdSorted(user1, true)).thenReturn(Collections.emptyList());
+        when(favoriteListService.findByUserIdSorted(user1)).thenReturn(Collections.emptyList());
 
         // Performing the request
         MvcResult result = mockMvc.perform(get("/favorites/get-sorted/{user1}", user1))

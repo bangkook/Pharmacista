@@ -1,7 +1,6 @@
 package com.example.pharmacysystem.services;
 
 import com.example.pharmacysystem.model.FavoriteItem;
-import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.repository.FavoriteItemRepository;
 import com.example.pharmacysystem.service.FavoriteListService;
 import com.example.pharmacysystem.utils.FavoriteItemId;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Date;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -155,13 +153,10 @@ public class FavoriteListServiceTest {
         FavoriteItem favoriteItem1 = new FavoriteItem(user1, productSN1);
         FavoriteItem favoriteItem2 = new FavoriteItem(user1, productSN2);
 
-        Product product1 = new Product(productSN2, 2.3F, new Date(2), new Date(2), "product", 5, "first", "url");
-        Product product2 = new Product(productSN1, 2.3F, new Date(2), new Date(2), "product", 5, "second", "url");
-
         // Mocking the repository behavior
         when(favoriteItemRepository.findByUserIdOrderByProductNameAsc(user1)).thenReturn(Arrays.asList(favoriteItem2, favoriteItem1));
 
-        List<FavoriteItem> result = favoriteListService.findByUserIdSorted(user1, true);
+        List<FavoriteItem> result = favoriteListService.findByUserIdSorted(user1);
         List<FavoriteItem> expectedResult = Arrays.asList(favoriteItem2, favoriteItem1);
 
         // Assert
@@ -176,7 +171,7 @@ public class FavoriteListServiceTest {
         // Mocking the repository behavior
         when(favoriteItemRepository.findByUserIdOrderByProductNameAsc(user1)).thenReturn(Collections.emptyList());
 
-        List<FavoriteItem> result = favoriteListService.findByUserIdSorted(user1, true);
+        List<FavoriteItem> result = favoriteListService.findByUserIdSorted(user1);
 
         // Assert
         assertTrue(result.isEmpty());
