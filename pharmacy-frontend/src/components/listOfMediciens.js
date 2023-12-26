@@ -130,46 +130,47 @@ const ListOfMediciens=({userId})=>{
       }
     }
   }
-
   return (
-  <div>
+    <div>
       <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: '#2e2d88' }}>
-      <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Medicines
-          </Typography>
-          <IconButton size="medium" edge="start" color="inherit" aria-label="menu" sx={{ mr: 1 }}>
-          <ShoppingCartIcon />
-          </IconButton>
-          <IconButton size="medium" edge="start" color="inherit" aria-label="menu" sx={{ ml: 1, mr: 1 }}>
-          <AccountCircleIcon />
-          </IconButton>
-      </Toolbar>
-      </AppBar>
-  </Box>
-      <ImageList sx={{ width: '100%', height: '100%'}} cols={5}>
-      {initialMedicines.map((item) => (
+        <AppBar position="static" sx={{ backgroundColor: '#2e2d88' }}>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+              Medicines List
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <ImageList sx={{ width: '100%', height: '100%' }} cols={5} gap={8}>
+        {initialMedicines.map((item) => (
           <ImageListItem key={item.serialNumber}>
-          <img src={item.photo} alt={item.name} style={{ Width: '248px', Height: '230px'}} />
-          <ImageListItemBar title={item.name} subtitle={<span>Price: {item.price}</span>} position="below" />
-          <Button
-              onClick={() => addToCart(item.serialNumber)}
-              variant="contained"
-              style={{
-              color: 'white',
-              backgroundColor: cart.some((cartItem) => cartItem === item.serialNumber)
-                  ? '#a6192e'
-                  : '#2e2d88',
-              }}
-          >
-              {cart.some((cartItem) => cartItem=== item.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
-          </Button>
+            <Paper elevation={3} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img
+                src={item.photo}
+                alt={item.name}
+                className="medicine-image"
+                style={{ maxWidth: '100%', maxHeight: '150px' }}
+              />
+              <ImageListItemBar title={item.name} subtitle={<span>Price: {item.price}</span>} position="below" />
+              <Button
+                onClick={() => addToCart(item.serialNumber)}
+                variant="contained"
+                size="small"
+                style={{
+                  color: 'white',
+                  backgroundColor: cart.some((cartItem) => cartItem === item.serialNumber) ? '#a6192e' : '#2e2d88',
+                }}
+              >
+                {cart.some((cartItem) => cartItem === item.serialNumber) ? 'Remove' : 'Add'}
+              </Button>
+            </Paper>
           </ImageListItem>
-      ))}
+        ))}
       </ImageList>
-  </div>
+    </div>
   );
-}
+};
+
+
 
 export default ListOfMediciens

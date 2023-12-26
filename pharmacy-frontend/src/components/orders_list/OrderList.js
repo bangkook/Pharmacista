@@ -92,17 +92,6 @@ const OrderDetails = ({ orderId, total = 299}) => {
     );
   };
 
-  const SingleBanner = ({bannerimage, heading}) => {
-    return (
-      <div className='singlebanner'>
-          <div className='bannerimgfilter'></div>
-          <img className='bannerimg' src={bannerimage} alt='noimg' />
-          <div className='bannerheading'>
-              <h1>{heading}</h1>
-          </div>
-      </div>
-    )
-  }
 
   const Orders = ({userId = 1, admin = true}) => {
     const [selectedOrderId, setSelectedOrderId] = useState(null);
@@ -121,10 +110,6 @@ const OrderDetails = ({ orderId, total = 299}) => {
 
     return (
       <div>
-        <SingleBanner 
-        heading={`Orders`}
-        bannerimage = 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=1880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' 
-        />
         <OrderList userId={userId} onSelectOrder={handleSelectOrder} admin={admin}/>
         {<Popup open={popup} modal nested> 
         {close => (
