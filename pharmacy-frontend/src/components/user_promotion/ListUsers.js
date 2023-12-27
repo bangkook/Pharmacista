@@ -3,14 +3,20 @@ import AdminService from "../../services/AdminService";
 import "./ListUsersAndAdmins.css"; // Import the CSS file
 import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import CustomAlert from '../Alert/CustomAlert';
+import ConfirmAlert from '../Alert/ConfirmAlert';
+
 
 class ListUsers extends Component {
     constructor(props) {
         super(props);
+        // Add this to your state
         this.state = {
-            users: [],
-            searchQuery: '',
+           users: [],
+           searchQuery: '',
+           isConfirmationOpen: false,
+           userIdToPromote: null,
         };
+  
     }
 
     showAlert = (message) => {
@@ -69,36 +75,65 @@ class ListUsers extends Component {
         });
     };
 
-    handlePromote = (userId) => {
-        const { userId: adminId } = this.props;
-        const isConfirmed = window.confirm("Are you sure you want to promote this user to admin?");
-
-        // If the admin confirms, proceed with the promotion
+    handleConfirmationClose = () => {
+        console.log('Closing confirmation');
+        this.setState({
+          isConfirmationOpen: false,
+          userIdToPromote: null,
+        });
+      };
+      
+      handlePromote = (userId) => {
+        console.log('Opening confirmation for user:', userId);
+        this.setState({
+          isConfirmationOpen: true,
+          userIdToPromote: userId,
+        });
+      };
+      
+      
+      
+      // Add a new method to handle confirmation
+      handleConfirmation = (isConfirmed) => {
+        // Close the confirmation modal
+        this.setState({
+          isConfirmationOpen: false,
+          userIdToPromote: null,
+        });
+      
+        // If the user confirms, proceed with the promotion
         if (isConfirmed) {
-            console.log("userID: ", userId);
-            // Call the promoteUserToAdmin function with the adminId and userId
-            AdminService.promoteUserToAdmin(adminId, userId)
-                .then((response) => {
-                    // Handle the success response if needed
-                    console.log('User promoted to admin successfully!', response);
-                    this.setState({ searchQuery: '' });
-                    this.fetchUsers(adminId); // Assuming you have a fetchUsers function to update the user list
-                })
-                .catch((error) => {
-                    // Handle the error appropriately
-                    console.error('Error promoting user to admin:', error);
-                });
+          const { userId: adminId } = this.props;
+          const { userIdToPromote } = this.state;
+      
+          console.log("userID: ", userIdToPromote);
+          // Call the promoteUserToAdmin function with the adminId and userId
+          AdminService.promoteUserToAdmin(adminId, userIdToPromote)
+            .then((response) => {
+              // Handle the success response if needed
+              console.log('User promoted to admin successfully!', response);
+              this.setState({ searchQuery: '' });
+              this.fetchUsers(adminId); // Assuming you have a fetchUsers function to update the user list
+            })
+            .catch((error) => {
+              // Handle the error appropriately
+              console.error('Error promoting user to admin:', error);
+            });
         }
-    };
+      };
+      
+      
 
     
-    render() {
-        const { userId } = this.props; // Get userId from props
+      render() {
+        const { userId } = this.props;
+        const { isConfirmationOpen } = this.state;
+
         return (
             <Fragment>
                 <div className="user-list-container">
                     <h2 className="text-center">Users List</h2>
-    
+
                     <div className="search-container">
                         <div className="search-bar-container">
                             <TextField
@@ -109,12 +144,12 @@ class ListUsers extends Component {
                                 onChange={this.handleSearchInputChange}
                             />
                         </div>
-    
+
                         <Button className="search-button" variant="contained" onClick={this.handleSearch}>
                             Search
                         </Button>
                     </div>
-    
+
                     <TableContainer component={Paper}>
                         <Table>
                             <TableHead>
@@ -148,10 +183,20 @@ class ListUsers extends Component {
                         </Table>
                     </TableContainer>
                 </div>
+
+                {/* CustomAlert component */}
                 {this.state.customAlert}
+
+                {/* Confirmation Modal */}
+                <ConfirmAlert
+      message="Are you sure you want to promote this user to admin?"
+      onConfirm={this.handleConfirmation.bind(this, true)}
+      onCancel={this.handleConfirmationClose}
+      open={isConfirmationOpen}
+    />
             </Fragment>
         );
     }
-}    
+}
 
 export default ListUsers;

@@ -8,12 +8,10 @@ const AdminNav = ({userId = 1}) => {
   const [showAdminList, setShowAdminList] = useState(false);
 
   const handleToggleAdminList = () => {
-    console.log("userId: "+userId);
     setShowAdminList(true);
   };
 
   const handleToggleUserList = () => {
-    console.log("userId: "+userId);
     setShowAdminList(false);
   };
 
