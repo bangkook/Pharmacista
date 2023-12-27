@@ -11,8 +11,8 @@ public interface FavoriteItemRepository extends JpaRepository<FavoriteItem, Favo
 
     List<FavoriteItem> findByUserId(int userId);
 
-    @Query(value = "SELECT user_id, productsn FROM favorite_items INNER JOIN (SELECT serial_number, name FROM product) " +
-            "ON favorite_items.productsn = serial_number WHERE user_id = ? ORDER BY name ASC",
+    @Query(value = "SELECT favorite_items.user_id, favorite_items.productsn FROM favorite_items INNER JOIN (SELECT serial_number, product.name FROM product) AS R " +
+            "ON favorite_items.productsn = R.serial_number WHERE favorite_items.user_id = ? ORDER BY R.name ASC",
             nativeQuery = true)
     List<FavoriteItem> findByUserIdOrderByProductNameAsc(int userId);
 
