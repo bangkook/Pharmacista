@@ -1,25 +1,12 @@
 import React, { useState, useEffect,useMemo  } from "react";
-import { Button, TextField } from "@mui/material";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { Grid, Paper,Avatar, TextField, Button,  Card, CardContent, Modal, Typography ,Link} from "@mui/material";
-import React, { useState }  from "react";
-import { useEffect } from 'react';
-import IconButton from '@mui/material/IconButton';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import AppBar from '@mui/material/AppBar';
+import { Button, CardContent, Modal, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { wait } from "@testing-library/user-event/dist/utils";
-import { styled } from '@mui/system';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
