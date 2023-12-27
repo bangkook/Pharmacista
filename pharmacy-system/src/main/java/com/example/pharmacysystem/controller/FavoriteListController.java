@@ -49,26 +49,35 @@ public class FavoriteListController {
     @GetMapping("/get/{userId}")
     @ResponseBody
     public List<FavoriteItemDTO> findByUserId(@PathVariable("userId") int userId) {
-        List<FavoriteItem> favoriteItems = favoriteListService.findByUserId(userId);
+        try {
+            List<FavoriteItem> favoriteItems = favoriteListService.findByUserId(userId);
 
-        return favoriteItems.stream()
-                .map(favoriteItem ->
-                        favoriteItemMapper.toDTO(favoriteItem,
-                                productService.getProductBySerialNumber(favoriteItem.getProductSN())))
-                .collect(Collectors.toList());
+            return favoriteItems.stream()
+                    .map(favoriteItem ->
+                            favoriteItemMapper.toDTO(favoriteItem,
+                                    productService.getProductBySerialNumber(favoriteItem.getProductSN())))
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            System.out.println("Error in favorites list controller findByUserId()");
+            return null;
+        }
     }
 
     @GetMapping("/get-sorted/{userId}")
     @ResponseBody
     public List<FavoriteItemDTO> findByUserIdSortedAsc(@PathVariable("userId") int userId) {
-        List<FavoriteItem> favoriteItems = favoriteListService.findByUserIdSorted(userId);
+        try {
+            List<FavoriteItem> favoriteItems = favoriteListService.findByUserIdSorted(userId);
 
-        return favoriteItems.stream()
-                .map(favoriteItem ->
-                        favoriteItemMapper.toDTO(favoriteItem,
-                                productService.getProductBySerialNumber(favoriteItem.getProductSN())))
-                .collect(Collectors.toList());
-
+            return favoriteItems.stream()
+                    .map(favoriteItem ->
+                            favoriteItemMapper.toDTO(favoriteItem,
+                                    productService.getProductBySerialNumber(favoriteItem.getProductSN())))
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            System.out.println("Error in favorites list controller findByUserIdSortedAsc()");
+            return null;
+        }
     }
 
 }

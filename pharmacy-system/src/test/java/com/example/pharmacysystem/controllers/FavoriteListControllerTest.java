@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -188,19 +189,22 @@ public class FavoriteListControllerTest {
         assertTrue(mappedResults.isEmpty());
     }
 
-//    @Test
-//    public void findByUserIdTest_Exception() throws Exception {
-//        int user1 = 1;
-//
-//        // Mocking the repository behavior
-//        when(favoriteListService.findByUserId(user1)).thenThrow(new Exception());
-//
-//        // Performing the request
-//        List<FavoriteItemDTO> result = favoriteListController.findByUserId(user1);
-//
-//        // Assert
-//        assertNull(result);
-//    }
+    @Test
+    public void findByUserIdTest_Exception() {
+        int user1 = 1;
+        String productSN1 = "abc123";
+        FavoriteItem favoriteItem1 = new FavoriteItem(user1, productSN1);
+
+        // Mocking the service behavior
+        when(favoriteListService.findByUserIdSorted(user1)).thenReturn(Collections.singletonList(favoriteItem1));
+
+        // Performing the request
+        // Should throw exception because product is null
+        List<FavoriteItemDTO> result = favoriteListController.findByUserIdSortedAsc(user1);
+
+        // Assert
+        assertNull(result);
+    }
 
     @Test
     public void findByUserIdSortedAscTest_Exists() throws Exception {
@@ -254,18 +258,21 @@ public class FavoriteListControllerTest {
         assertTrue(mappedResults.isEmpty());
     }
 
-//    @Test
-//    public void findByUserIdSortedAscTest_Exception() throws Exception {
-//        int user1 = 1;
-//
-//        // Mocking the repository behavior
-//        when(productService.getProductBySerialNumber(anyString())).thenThrow(new RuntimeException());
-//
-//        // Performing the request
-//        List<FavoriteItemDTO> result = favoriteListController.findByUserIdSortedAsc(user1);
-//
-//        // Assert
-//        assertNull(result);
-//    }
+    @Test
+    public void findByUserIdSortedAscTest_WhenExceptionReturnNull() {
+        int user1 = 1;
+        String productSN1 = "abc123";
+        FavoriteItem favoriteItem1 = new FavoriteItem(user1, productSN1);
+
+        // Mocking the service behavior
+        when(favoriteListService.findByUserIdSorted(user1)).thenReturn(Collections.singletonList(favoriteItem1));
+
+        // Performing the request
+        // Should throw exception because product is null
+        List<FavoriteItemDTO> result = favoriteListController.findByUserIdSortedAsc(user1);
+
+        // Assert
+        assertNull(result);
+    }
 
 }
