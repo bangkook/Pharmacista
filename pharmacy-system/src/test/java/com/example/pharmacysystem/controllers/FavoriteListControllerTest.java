@@ -1,8 +1,12 @@
 package com.example.pharmacysystem.controllers;
 
 import com.example.pharmacysystem.controller.FavoriteListController;
+import com.example.pharmacysystem.dto.FavoriteItemDTO;
 import com.example.pharmacysystem.model.FavoriteItem;
+import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.service.FavoriteListService;
+import com.example.pharmacysystem.service.ProductService;
+import com.example.pharmacysystem.utils.FavoriteItemMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +40,9 @@ public class FavoriteListControllerTest {
     @Autowired
     FavoriteListController favoriteListController;
 
+    @Autowired
+    private FavoriteItemMapper favoriteItemMapper;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private MockMvc mockMvc;
@@ -44,6 +52,9 @@ public class FavoriteListControllerTest {
 
     @MockBean
     FavoriteListService favoriteListService;
+
+    @MockBean
+    ProductService productService;
 
     @Before
     public void setUp() {
@@ -133,8 +144,13 @@ public class FavoriteListControllerTest {
         FavoriteItem favoriteItem1 = new FavoriteItem(user1, productSN1);
         FavoriteItem favoriteItem2 = new FavoriteItem(user1, productSN2);
 
-        // Mocking the repository behavior
+        Product product1 = new Product(productSN1, 2.3F, new Date(2), new Date(2), "product", 5, "first", "url");
+        Product product2 = new Product(productSN2, 2.3F, new Date(2), new Date(2), "product", 5, "second", "url");
+
+        // Mocking the service behavior
         when(favoriteListService.findByUserId(user1)).thenReturn(Arrays.asList(favoriteItem1, favoriteItem2));
+        when(productService.getProductBySerialNumber(productSN1)).thenReturn(product1);
+        when(productService.getProductBySerialNumber(productSN2)).thenReturn(product2);
 
         // Performing the request
         MvcResult result = mockMvc.perform(get("/favorites/get/{user1}", user1))
@@ -143,13 +159,14 @@ public class FavoriteListControllerTest {
 
         // Verifying the response
         MockHttpServletResponse response = result.getResponse();
-        List<FavoriteItem> mappedResults = Arrays.asList(objectMapper.readValue(response.getContentAsString(), FavoriteItem[].class));
+        List<FavoriteItemDTO> mappedResults = Arrays.asList(objectMapper.readValue(response.getContentAsString(), FavoriteItemDTO[].class));
 
         // Verifying that the service method was called
         verify(favoriteListService, times(1)).findByUserId(user1);
+
         assertEquals(mappedResults.size(), 2);
-        assertTrue(mappedResults.contains(favoriteItem1));
-        assertTrue(mappedResults.contains(favoriteItem2));
+        assertTrue(mappedResults.contains(favoriteItemMapper.toDTO(favoriteItem1, product1)));
+        assertTrue(mappedResults.contains(favoriteItemMapper.toDTO(favoriteItem2, product2)));
     }
 
     @Test
@@ -171,6 +188,20 @@ public class FavoriteListControllerTest {
         assertTrue(mappedResults.isEmpty());
     }
 
+//    @Test
+//    public void findByUserIdTest_Exception() throws Exception {
+//        int user1 = 1;
+//
+//        // Mocking the repository behavior
+//        when(favoriteListService.findByUserId(user1)).thenThrow(new Exception());
+//
+//        // Performing the request
+//        List<FavoriteItemDTO> result = favoriteListController.findByUserId(user1);
+//
+//        // Assert
+//        assertNull(result);
+//    }
+
     @Test
     public void findByUserIdSortedAscTest_Exists() throws Exception {
         int user1 = 1;
@@ -178,8 +209,13 @@ public class FavoriteListControllerTest {
         FavoriteItem favoriteItem1 = new FavoriteItem(user1, productSN1);
         FavoriteItem favoriteItem2 = new FavoriteItem(user1, productSN2);
 
-        // Mocking the repository behavior
+        Product product1 = new Product(productSN2, 2.3F, new Date(2), new Date(2), "product", 5, "first", "url");
+        Product product2 = new Product(productSN1, 2.3F, new Date(2), new Date(2), "product", 5, "second", "url");
+
+        // Mocking the service behavior
         when(favoriteListService.findByUserIdSorted(user1)).thenReturn(Arrays.asList(favoriteItem2, favoriteItem1));
+        when(productService.getProductBySerialNumber(productSN1)).thenReturn(product2);
+        when(productService.getProductBySerialNumber(productSN2)).thenReturn(product1);
 
         // Performing the request
         MvcResult result = mockMvc.perform(get("/favorites/get-sorted/{user1}", user1))
@@ -188,9 +224,10 @@ public class FavoriteListControllerTest {
 
         // Verifying the response
         MockHttpServletResponse response = result.getResponse();
-        List<FavoriteItem> mappedResults = Arrays.asList(objectMapper.readValue(response.getContentAsString(), FavoriteItem[].class));
+        List<FavoriteItemDTO> mappedResults = Arrays.asList(objectMapper.readValue(response.getContentAsString(), FavoriteItemDTO[].class));
 
-        List<FavoriteItem> expectedResult = Arrays.asList(favoriteItem2, favoriteItem1);
+        List<FavoriteItemDTO> expectedResult = Arrays.asList(favoriteItemMapper.toDTO(favoriteItem2, product1),
+                favoriteItemMapper.toDTO(favoriteItem1, product2));
 
         // Assert
         assertEquals(mappedResults.size(), 2);
@@ -211,10 +248,24 @@ public class FavoriteListControllerTest {
 
         // Verifying the response
         MockHttpServletResponse response = result.getResponse();
-        List<FavoriteItem> mappedResults = Arrays.asList(objectMapper.readValue(response.getContentAsString(), FavoriteItem[].class));
+        List<FavoriteItemDTO> mappedResults = Arrays.asList(objectMapper.readValue(response.getContentAsString(), FavoriteItemDTO[].class));
 
         // Assert
         assertTrue(mappedResults.isEmpty());
     }
+
+//    @Test
+//    public void findByUserIdSortedAscTest_Exception() throws Exception {
+//        int user1 = 1;
+//
+//        // Mocking the repository behavior
+//        when(productService.getProductBySerialNumber(anyString())).thenThrow(new RuntimeException());
+//
+//        // Performing the request
+//        List<FavoriteItemDTO> result = favoriteListController.findByUserIdSortedAsc(user1);
+//
+//        // Assert
+//        assertNull(result);
+//    }
 
 }

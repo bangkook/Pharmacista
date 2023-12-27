@@ -2,16 +2,16 @@ package com.example.pharmacysystem.controller;
 
 import com.example.pharmacysystem.dto.FavoriteItemDTO;
 import com.example.pharmacysystem.model.FavoriteItem;
-import com.example.pharmacysystem.model.Product;
 import com.example.pharmacysystem.service.FavoriteListService;
 import com.example.pharmacysystem.service.ProductService;
+import com.example.pharmacysystem.utils.FavoriteItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequestMapping("/favorites")
@@ -24,6 +24,9 @@ public class FavoriteListController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private FavoriteItemMapper favoriteItemMapper;
 
     @PostMapping("/add")
     public ResponseEntity<Boolean> save(@RequestBody FavoriteItem favoriteItem) {
@@ -46,43 +49,26 @@ public class FavoriteListController {
     @GetMapping("/get/{userId}")
     @ResponseBody
     public List<FavoriteItemDTO> findByUserId(@PathVariable("userId") int userId) {
-        try {
-            List<FavoriteItem> favoriteItems = favoriteListService.findByUserId(userId);
+        List<FavoriteItem> favoriteItems = favoriteListService.findByUserId(userId);
 
-            List<FavoriteItemDTO> favoriteItemDTOS = new ArrayList<>();
-
-            for (FavoriteItem favoriteItem : favoriteItems) {
-                Product product = productService.getProductBySerialNumber(favoriteItem.getProductSN());
-                favoriteItemDTOS.add(new FavoriteItemDTO(favoriteItem.getUserId(), product.getSerialNumber(),
-                        product.getName(), product.getPrice(), product.getPhoto()));
-            }
-
-            return favoriteItemDTOS;
-        } catch (Exception ex) {
-            System.out.println("Error in favorites list controller findByUserId()");
-            return null;
-        }
+        return favoriteItems.stream()
+                .map(favoriteItem ->
+                        favoriteItemMapper.toDTO(favoriteItem,
+                                productService.getProductBySerialNumber(favoriteItem.getProductSN())))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/get-sorted/{userId}")
     @ResponseBody
     public List<FavoriteItemDTO> findByUserIdSortedAsc(@PathVariable("userId") int userId) {
-        try {
-            List<FavoriteItem> favoriteItems = favoriteListService.findByUserIdSorted(userId);
+        List<FavoriteItem> favoriteItems = favoriteListService.findByUserIdSorted(userId);
 
-            List<FavoriteItemDTO> favoriteItemDTOS = new ArrayList<>();
+        return favoriteItems.stream()
+                .map(favoriteItem ->
+                        favoriteItemMapper.toDTO(favoriteItem,
+                                productService.getProductBySerialNumber(favoriteItem.getProductSN())))
+                .collect(Collectors.toList());
 
-            for (FavoriteItem favoriteItem : favoriteItems) {
-                Product product = productService.getProductBySerialNumber(favoriteItem.getProductSN());
-                favoriteItemDTOS.add(new FavoriteItemDTO(favoriteItem.getUserId(), product.getSerialNumber(),
-                        product.getName(), product.getPrice(), product.getPhoto()));
-            }
-
-            return favoriteItemDTOS;
-        } catch (Exception ex) {
-            System.out.println("Error in favorites list controller findByUserIdSortedAsc()");
-            return null;
-        }
     }
 
 }
