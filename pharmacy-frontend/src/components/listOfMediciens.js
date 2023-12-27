@@ -1,3 +1,11 @@
+import React, { useState, useEffect,useMemo  } from "react";
+import { Button, TextField } from "@mui/material";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
 import { Grid, Paper,Avatar, TextField, Button,  Card, CardContent, Modal, Typography ,Link} from "@mui/material";
 import React, { useState }  from "react";
 import { useEffect } from 'react';
@@ -11,8 +19,43 @@ import Toolbar from '@mui/material/Toolbar';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { wait } from "@testing-library/user-event/dist/utils";
-
 import { styled } from '@mui/system';
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha('#2e2d88', 0.15),
+  '&:hover': {
+    backgroundColor: alpha('#2e2d88', 0.25),
+  },
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#2e2d88', // Set the color of the search icon to white
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  width: '100%', // Make the search bar take the full width
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width')
+  },
+}));
+
 const StyledImage = styled('img')({
   width: '100%',
   height: '210px',
@@ -26,11 +69,12 @@ const StyledImage = styled('img')({
 });
 
 const ListOfMediciens=({userId})=>{
-  console.log(userId)
   const BaseUri = 'http://localhost:8088'
-  const [initialMedicines, setInitialMedicines] = useState([])
+  const [initialMedicines, setInitialMedicines] = useState([]);
+  const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [cart, setCart] = useState([])
   const [products, setProducts] = useState([])
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   
   const handleMedicineClick = (medicine) => {
@@ -47,6 +91,7 @@ const ListOfMediciens=({userId})=>{
       if (response.ok) {
         const data = await response.json();
         setInitialMedicines(data);
+        setFilteredMedicines(data);
         try {
           const responseCart = await fetch(`${BaseUri}/cartItem/ProductFromCart/${userId}`);
           if (responseCart.ok) {
@@ -68,13 +113,19 @@ const ListOfMediciens=({userId})=>{
   
   useEffect(() => {
     getListOfMediciens();
-  }, []);
+  }, [userId]);
   
-  // Use another useEffect to update cart when products change
   useEffect(() => {
     setCart([...cart, ...products]);
   }, [products]);
-  
+
+  const handleInputChange = (event) => {
+    console.log(event.target.value);
+    const filteredMedicines = initialMedicines.filter(
+      (medicine) => medicine.name.toLowerCase().includes(event.target.value.toLowerCase())
+    );
+    setFilteredMedicines(filteredMedicines); // Update the list on each input change
+  };
 
   const addItemToCart = async (serialNumber) => {
     try {
@@ -114,9 +165,7 @@ const ListOfMediciens=({userId})=>{
       console.error('Erorr deleting:', error.message)
     }
   };
-  
-
- 
+   
   const isAvailableProducts = async (serialNumber) => {
     try {
       const response = await fetch(`${BaseUri}/product/isAvailableProducts/${serialNumber}`)
@@ -133,7 +182,6 @@ const ListOfMediciens=({userId})=>{
     }
   };
   
-
   const addToCart = async (medicine) => {
     const isAlreadyInCart = cart.some((item) => item === medicine)
     if (isAlreadyInCart) {
@@ -152,9 +200,19 @@ const ListOfMediciens=({userId})=>{
     }
   }
   return (
-    <div>
+  <div>
+      <Search>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInputBase
+          placeholder="Search…"
+          inputProps={{ 'aria-label': 'search' }}
+          onInput={handleInputChange}
+        />
+      </Search>
         <ImageList sx={{ width: '100%', height: '100%'}} cols={5}>
-        {initialMedicines.map((item) => (
+        {filteredMedicines.map((item) => (
             <ImageListItem key={item.serialNumber}>
             <StyledImage
               src={item.photo}
@@ -234,7 +292,5 @@ const ListOfMediciens=({userId})=>{
     );
   }
   
-
-
 
 export default ListOfMediciens
