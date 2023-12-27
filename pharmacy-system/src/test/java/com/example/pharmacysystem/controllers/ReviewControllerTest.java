@@ -1,5 +1,6 @@
 package com.example.pharmacysystem.controllers;
 
+import com.example.pharmacysystem.dto.ReviewDTO;
 import com.example.pharmacysystem.model.Review;
 import com.example.pharmacysystem.service.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -97,13 +98,17 @@ public class ReviewControllerTest {
         verify(reviewService, times(1)).saveReview(any(Review.class));
     }
 
-    private static List<Review> getReviewsByProductSN(String productSN, Date reviewDate, String anotherProductSN) {
+    private static List<ReviewDTO> getReviewsByProductSN(String productSN, Date reviewDate, String anotherProductSN) {
         Review r1 = new Review(1, productSN, Review.Rate.FOUR_STARS, "Very good product!", reviewDate);
         Review r2 = new Review(2, anotherProductSN, Review.Rate.FOUR_STARS, "Very good product!", reviewDate);
         Review r3 = new Review(100, productSN, Review.Rate.FOUR_STARS, "Very good product!", reviewDate);
         Review r4 = new Review(54, anotherProductSN, Review.Rate.FOUR_STARS, "Very good product!", reviewDate);
-        List<Review> reviewList = Arrays.asList(r1, r3);
-        return reviewList;
+
+        // Convert Reviews to ReviewDTOs
+        return Arrays.asList(
+                new ReviewDTO(1, 1, productSN, Review.Rate.FOUR_STARS, "Very good product!", reviewDate, "user1"),
+                new ReviewDTO(3, 100, productSN, Review.Rate.FOUR_STARS, "Very good product!", reviewDate, "user3")
+        );
     }
 
     @Test
@@ -112,10 +117,9 @@ public class ReviewControllerTest {
         String productSN = "123456789123456858";
         String anotherProductSN = "147258369asdfghjk1";
         Date reviewDate = Date.valueOf(LocalDate.now());
-        List<Review> reviewList = getReviewsByProductSN(productSN, reviewDate, anotherProductSN);
-
+        List<ReviewDTO> reviewDTOList = getReviewsByProductSN(productSN, reviewDate, anotherProductSN);
         // Mock the service behavior
-        when(reviewService.getReviewsForProduct(productSN)).thenReturn(reviewList);
+        when(reviewService.getReviewsForProduct(productSN)).thenReturn(reviewDTOList);
 
         // Performing the request
         MvcResult result = mockMvc.perform(get("/reviews/product/{productSN}", productSN))
@@ -124,28 +128,30 @@ public class ReviewControllerTest {
 
         // Verifying the response
         MockHttpServletResponse response = result.getResponse();
-        List<Review> resultReviews = Arrays.asList(
-                objectMapper.readValue(response.getContentAsString(), Review[].class));
+        List<ReviewDTO> resultReviews = Arrays.asList(
+                objectMapper.readValue(response.getContentAsString(), ReviewDTO[].class));
 
         // Verifying that the service method was called
         verify(reviewService, times(1)).getReviewsForProduct(productSN);
 
         // Asserting the result
-        assertEquals(reviewList.size(), resultReviews.size());
+        assertEquals(reviewDTOList.size(), resultReviews.size());
 
         // Asserting each attribute of the first review in the result
-        assertEquals(reviewList.get(0).getUserId(), resultReviews.get(0).getUserId());
-        assertEquals(reviewList.get(0).getProductSN(), resultReviews.get(0).getProductSN());
-        assertEquals(reviewList.get(0).getRating(), resultReviews.get(0).getRating());
-        assertEquals(reviewList.get(0).getComment(), resultReviews.get(0).getComment());
-        assertEquals(reviewList.get(0).getReviewDate().toString(), resultReviews.get(0).getReviewDate().toString());
+        assertEquals(reviewDTOList.get(0).getUserId(), resultReviews.get(0).getUserId());
+        assertEquals(reviewDTOList.get(0).getProductSN(), resultReviews.get(0).getProductSN());
+        assertEquals(reviewDTOList.get(0).getRating(), resultReviews.get(0).getRating());
+        assertEquals(reviewDTOList.get(0).getComment(), resultReviews.get(0).getComment());
+        assertEquals(reviewDTOList.get(0).getReviewDate().toString(), resultReviews.get(0).getReviewDate().toString());
+        assertEquals(reviewDTOList.get(0).getUsername(),  resultReviews.get(0).getUsername());
 
         // Asserting each attribute of the second review in the result
-        assertEquals(reviewList.get(1).getUserId(), resultReviews.get(1).getUserId());
-        assertEquals(reviewList.get(1).getProductSN(), resultReviews.get(1).getProductSN());
-        assertEquals(reviewList.get(1).getRating(), resultReviews.get(1).getRating());
-        assertEquals(reviewList.get(1).getComment(), resultReviews.get(1).getComment());
-        assertEquals(reviewList.get(1).getReviewDate().toString(), resultReviews.get(1).getReviewDate().toString());
+        assertEquals(reviewDTOList.get(1).getUserId(), resultReviews.get(1).getUserId());
+        assertEquals(reviewDTOList.get(1).getProductSN(), resultReviews.get(1).getProductSN());
+        assertEquals(reviewDTOList.get(1).getRating(), resultReviews.get(1).getRating());
+        assertEquals(reviewDTOList.get(1).getComment(), resultReviews.get(1).getComment());
+        assertEquals(reviewDTOList.get(1).getReviewDate().toString(), resultReviews.get(1).getReviewDate().toString());
+        assertEquals(reviewDTOList.get(1).getUsername(), resultReviews.get(1).getUsername());
     }
 
     @Test
