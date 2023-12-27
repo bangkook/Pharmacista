@@ -4,6 +4,8 @@ import Select from 'react-select'
 import countryList from 'react-select-country-list'
 
 const BaseUri = 'http://localhost:8088/user'
+var ProfilePic = ''
+
 const AccountSettings = ({userId}) => {
   const [country, setCountry] = useState('')
   const options = useMemo(() => countryList().getData(), [])
@@ -12,6 +14,7 @@ const AccountSettings = ({userId}) => {
     username: '',
     phoneNumber: '',
     streetAddress: '',
+    profilePicture: '',
     city: '',
     country: '',
     zipCode: '',
@@ -34,6 +37,7 @@ const AccountSettings = ({userId}) => {
           const userData = await response.json();
           console.log(userData)
           setFormData(userData);
+          ProfilePic = userData.profilePicture
           setCountry({'label': userData.country, 'value': countryList().getValue(userData.country)})
         } else {
           console.error('Failed to fetch user data');
@@ -349,7 +353,7 @@ const ChangePassword = ({userId}) => {
   );
 };
 
-const ProfilePictureUploader = ({userId}) => {
+const ProfilePictureUploader = ({ userId }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const fileInputRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -366,28 +370,59 @@ const ProfilePictureUploader = ({userId}) => {
     const reader = new FileReader();
     reader.onloadend = (e) => {
       setImageUrl(e.target.result);
+  
+      uploadProfilePicture(e.target.result); // Call the uploadProfilePicture function
     };
     reader.readAsDataURL(event.target.files[0]);
   };
 
+  const uploadProfilePicture = async (profilePicture) => {
+    try {
+      const response = await fetch(`http://localhost:8088/user/upload-profile-picture/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          profilePicture: profilePicture,
+        }),
+      });
+
+      if (response.ok) {
+        alert('Profile picture uploaded successfully');
+        ProfilePic = profilePicture;
+      } else {
+        const errorText = await response.text();
+        alert(`Failed to upload profile picture. Error: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      alert('An unexpected error occurred');
+    }
+  };
+
   return (
     <div className="img-wrapp">
-      <input type="file" onChange={handleUpload} ref={fileInputRef}
-        style={{ display: 'none' }} />
+      <input type="file" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
 
-      <img class = 'image' src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
-      alt="Profile" onClick={handleImageClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        cursor: 'pointer',
-        opacity: isHovered ? 0.7 : 1, // Change opacity on hover
-      }}
+      <img
+        className="image"
+        src={ProfilePic || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'}
+        alt="Profile"
+        onClick={handleImageClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          cursor: 'pointer',
+          opacity: isHovered ? 0.7 : 1, // Change opacity on hover
+        }}
       />
       {imageUrl}
     </div>
   );
 };
+
+
 
 const UserProfile = ({ userId = 1 }) => {
   return (

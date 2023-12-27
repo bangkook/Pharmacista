@@ -1,9 +1,6 @@
 package com.example.pharmacysystem.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
 @Entity
@@ -18,6 +15,8 @@ public class User {
     private String country;
     private String zipCode;
     private String phoneNumber;
+    @Lob
+    @Column(length = 1000000) // Adjust the size as needed
     private String profilePicture;
     private Role role;
 

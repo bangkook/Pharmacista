@@ -3,6 +3,7 @@ package com.example.pharmacysystem.controllers;
 import com.example.pharmacysystem.controller.UserController;
 import com.example.pharmacysystem.model.User;
 import com.example.pharmacysystem.service.UserService;
+import com.example.pharmacysystem.utils.Constants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -117,32 +118,35 @@ public class UserProfileControllerTest {
         // Mock data
         int userId = 1;
 
-        String profilePicture = "picture.jpg";
+        Map<String, String> profilePictureMap = new HashMap<>();
+        profilePictureMap.put(Constants.PICTURE, "picture.jpg");
 
         // Mock the service
-        when(userService.uploadProfilePicture(userId, profilePicture))
+        when(userService.uploadProfilePicture(userId, profilePictureMap.get(Constants.PICTURE)))
                 .thenReturn(true);
 
         // Test controller methods
-        ResponseEntity<String> responseEntity = userController.uploadProfilePicture(userId, profilePicture);
+        ResponseEntity<String> responseEntity = userController.uploadProfilePicture(userId, profilePictureMap);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("Profile picture uploaded successfully", responseEntity.getBody());
-
     }
+
+
 
     @Test
     public void testUploadProfilePicture_UserNotFound() {
         // Mock data
         int nonExistentUserId = 1;
 
-        String profilePicture = "picture.jpg";
+        Map<String, String> profilePictureMap = new HashMap<>();
+        profilePictureMap.put(Constants.PICTURE, "picture.jpg");
 
         // Mock the service
-        when(userService.uploadProfilePicture(nonExistentUserId, profilePicture))
+        when(userService.uploadProfilePicture(nonExistentUserId, String.valueOf(profilePictureMap)))
                 .thenReturn(false);
 
         // Test controller methods
-        ResponseEntity<String> responseEntity = userController.uploadProfilePicture(nonExistentUserId, profilePicture);
+        ResponseEntity<String> responseEntity = userController.uploadProfilePicture(nonExistentUserId, profilePictureMap);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("Failed to upload. User not found", responseEntity.getBody());
     }

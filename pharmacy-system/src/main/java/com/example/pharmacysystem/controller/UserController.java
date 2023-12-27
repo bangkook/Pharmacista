@@ -61,8 +61,8 @@ public class UserController {
 
     @PatchMapping("/upload-profile-picture/{id}")
     public ResponseEntity<String> uploadProfilePicture(@PathVariable("id") int userId,
-                                                       @RequestParam String profilePicture) {
-        boolean uploaded = userService.uploadProfilePicture(userId, profilePicture);
+                                                       @RequestBody Map<String, String> profilePicture) {
+        boolean uploaded = userService.uploadProfilePicture(userId, profilePicture.get(Constants.PICTURE));
         if (uploaded) {
             return new ResponseEntity<>("Profile picture uploaded successfully", HttpStatus.OK);
         } else {
