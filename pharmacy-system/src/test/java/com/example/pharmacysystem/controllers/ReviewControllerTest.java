@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -173,6 +174,26 @@ public class ReviewControllerTest {
         assertTrue(resultReviews.isEmpty());
 
         // Verifying that the service method was called
+        verify(reviewService, times(1)).getReviewsForProduct(productSN);
+    }
+
+    @Test
+    public void getReviewsForProduct_ExceptionThrown_ReturnsNotFound() throws Exception {
+        // Arrange
+        String productSN = "123456789123456858";
+
+        // Mock the service behavior to throw an exception
+        when(reviewService.getReviewsForProduct(productSN)).thenThrow(new RuntimeException("Test exception"));
+
+        // Act
+        MvcResult result = mockMvc.perform(get("/reviews/product/{productSN}", productSN))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        // Assert
+        assertTrue(result.getResponse().getContentAsString().isEmpty());
+
+        // Verify that the service method was called
         verify(reviewService, times(1)).getReviewsForProduct(productSN);
     }
 }

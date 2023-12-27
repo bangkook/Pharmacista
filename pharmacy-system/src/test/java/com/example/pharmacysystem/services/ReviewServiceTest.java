@@ -19,8 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -111,5 +110,24 @@ public class ReviewServiceTest {
         Review r4 = new Review(100, anotherProductSN, Review.Rate.FOUR_STARS, "Very good product!", reviewDate);
         List<Review> reviewList = Arrays.asList(r1, r3);
         return reviewList;
+    }
+
+    @Test
+    public void convertToDTO_UserNotFound_ReturnsNull() {
+        // Arrange
+        Date reviewDate = Date.valueOf(LocalDate.now());
+        Review review = new Review(1, "123456789123456858", Review.Rate.FOUR_STARS, "Very good product!", reviewDate);
+
+        // Mock the userRepository behavior to return Optional.empty()
+        when(userRepository.findById(review.getUserId())).thenReturn(Optional.empty());
+
+        // Act
+        ReviewDTO resultDTO = reviewService.convertToDTO(review);
+
+        // Assert
+        assertNull(resultDTO);
+
+        // Verify that userRepository.findById was called
+        verify(userRepository, times(1)).findById(review.getUserId());
     }
 }
