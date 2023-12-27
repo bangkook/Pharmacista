@@ -1,7 +1,5 @@
 package com.example.pharmacysystem.dto;
 
-import java.util.Objects;
-
 public class FavoriteItemDTO {
 
     private int userId;
@@ -9,6 +7,9 @@ public class FavoriteItemDTO {
     private String productName;
     private float productPrice;
     private String productPhoto;
+
+    public FavoriteItemDTO() {
+    }
 
     public FavoriteItemDTO(int userId, String productSN, String productName, float productPrice, String productPhoto) {
         this.userId = userId;
@@ -65,9 +66,5 @@ public class FavoriteItemDTO {
         FavoriteItemDTO that = (FavoriteItemDTO) o;
         return userId == that.userId && Float.compare(that.productPrice, productPrice) == 0 && productSN.equals(that.productSN) && productName.equals(that.productName) && productPhoto.equals(that.productPhoto);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, productSN, productName, productPrice, productPhoto);
-    }
+    
 }
