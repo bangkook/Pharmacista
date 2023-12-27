@@ -1,24 +1,52 @@
-import React from "react";
-
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { AppBar, Toolbar, Button, Typography } from "@mui/material";
 import ListAdmins from "./user_promotion/ListAdmins";
 import ListUsers from "./user_promotion/ListUsers";
-import { Button } from "@mui/material";
 
-const AdminNav = ({adminId = 4}) => {
-    return (
-      <div className="admin-nav">
-        <h1>Admin Navigation Bar</h1>
-        <div className="button-container">
-          <Link to="/getUsers" element={<ListUsers/>}>
-            <Button className="button" variant="contained">Get Users List</Button>
-          </Link>
-          <Link to="/getAdmins" element={<ListAdmins/>}>
-            <Button className="button" variant="contained">Get Admins List</Button>
-          </Link>
-        </div>
-      </div>
-    );
+const AdminNav = ({userId = 1}) => {
+  const [showAdminList, setShowAdminList] = useState(false);
+
+  const handleToggleAdminList = () => {
+    console.log("userId: "+userId);
+    setShowAdminList(true);
   };
+
+  const handleToggleUserList = () => {
+    console.log("userId: "+userId);
+    setShowAdminList(false);
+  };
+
+  return (
+    <div>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Admin Navigation Bar
+          </Typography>
+          <div className="button-container">
+            <Button
+              color="inherit"
+              variant="contained"
+              onClick={handleToggleUserList}
+              style={{ marginRight: '8px', backgroundColor: '#4CAF50', color: 'white' }}
+            >
+              Show Users List
+            </Button>
+            <Button
+              color="inherit"
+              variant="contained"
+              onClick={handleToggleAdminList}
+              style={{ backgroundColor: '#2196F3', color: 'white' }}
+            >
+              Show Admins List
+            </Button>
+          </div>
+        </Toolbar>
+      </AppBar>
+      {showAdminList ? <ListAdmins userId={userId} /> : <ListUsers userId={userId} />}
+    </div>
+  );
+};
 
 export default AdminNav;

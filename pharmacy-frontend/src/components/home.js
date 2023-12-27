@@ -10,13 +10,14 @@ import OrderList from './orders_list/OrderList';
 import Cart from './cart';
 import Inventory from './Inventory/Inventory';
 import MedicinesList from './listOfMediciens';
+import AdminNav from './AdminNav'
 
 const Home = ({ userId = 1, isAdmin = false }) => {
   const [activePage, setActivePage] = useState('View Profile');
 
   const pharmacistaImage = 'https://cdn-icons-png.flaticon.com/512/4320/4320337.png'; // Replace with the actual path to the image
 
-  const menuItems = [
+  const menuItemsAdmin = [
     {
       text: 'View Profile',
       icon: <AccountCircleIcon />,
@@ -43,6 +44,25 @@ const Home = ({ userId = 1, isAdmin = false }) => {
     },
   ];
 
+  const menuItemsUser = [
+    {
+      text: 'View Profile',
+      icon: <AccountCircleIcon />,
+    },
+    {
+      text: 'Medicines List',
+      icon: <ViewModule />,
+    },
+    {
+      text: 'View Cart',
+      icon: <ShoppingCart />,
+    },
+    {
+      text: 'View Orders',
+      icon: <Assignment />,
+    },
+  ];
+
   const renderComponent = () => {
     switch (activePage) {
       case 'View Profile':
@@ -51,10 +71,12 @@ const Home = ({ userId = 1, isAdmin = false }) => {
         return <Cart userId={userId} />;
       case 'View Orders':
         return <OrderList userId={userId} />;
+        case 'Manage Users':
+          return <AdminNav userId={userId} />;
       case 'Manage Inventory':
         return <Inventory />;
       case 'Medicines List':
-        return <MedicinesList />;
+        return <MedicinesList userId={userId}/>;
       default:
         return null;
     }
@@ -77,7 +99,7 @@ const Home = ({ userId = 1, isAdmin = false }) => {
             <hr className="line" />
 
             <List>
-              {menuItems.map((item) => (
+              {menuItemsAdmin.map((item) => (
                 <Button
                   key={item.text}
                   variant="text"
