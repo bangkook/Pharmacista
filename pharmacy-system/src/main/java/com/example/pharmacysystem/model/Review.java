@@ -3,15 +3,16 @@ package com.example.pharmacysystem.model;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+
 @Entity
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
 
-    int userId;
+    private int userId;
 
-    String productSN;
+    private String productSN;
 
     private Rate rating;
 
@@ -22,6 +23,7 @@ public class Review {
     public enum Rate {
         ZERO_STAR, ONE_STAR, TWO_STARS, THREE_STARS, FOUR_STARS, FIVE_STARS
     }
+
 
     public Review() {
     }

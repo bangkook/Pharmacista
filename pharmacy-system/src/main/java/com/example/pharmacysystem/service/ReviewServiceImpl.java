@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
+
     @Autowired
     private ReviewRepository reviewRepository;
 
@@ -35,17 +36,16 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewDTO convertToDTO(Review review) {
         User user = userRepository.findById(review.getUserId()).orElse(null);
-        if (user != null) {
-            return new ReviewDTO(
-                    review.getReviewId(),
-                    review.getUserId(),
-                    review.getProductSN(),
-                    review.getRating(),
-                    review.getComment(),
-                    review.getReviewDate(),
-                    user.getUsername());
-        } else {
+        if (user == null) {
             return null;
         }
+        return new ReviewDTO(
+                review.getReviewId(),
+                review.getUserId(),
+                review.getProductSN(),
+                review.getRating(),
+                review.getComment(),
+                review.getReviewDate(),
+                user.getUsername());
     }
 }
