@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CustomAlert from './Alert/CustomAlert';
+import { Button, Container, Paper, Typography } from '@mui/material';
 
 export default function ShoppingCart({userId = 1}) {
   //const serialNumbers = [1, 2, 3];
@@ -7,7 +9,14 @@ export default function ShoppingCart({userId = 1}) {
   const [cart, setCart] = useState([]);
   const [isCartEmpty, setIsCartEmpty] = useState(true); 
   const [totalPrice, setTotalPrice] = useState(0);
+  const [customAlert, setCustomAlert] = useState(null);
 
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+  
+  
+  
   const fetchMedicines = async () => {
     
     try {
@@ -54,20 +63,25 @@ export default function ShoppingCart({userId = 1}) {
       const maxAmountResponse = await axios.get(`http://localhost:8088/get-max-amount?serialNumber=${serialNumber}`);
       const maxAmount = maxAmountResponse.data;
       console.log(maxAmount)
+      if(newQuantity == 0){
+        newQuantity = 1;
+      }
       
       if(maxAmount == 0){
         handleDeleteItem(serialNumber);
-        alert(`This product is out-of-stock`);
+        showAlert(`This product is out-of-stock`);
       }
       else{
 
         if(newQuantity > maxAmount){
           newQuantity = maxAmount
-          alert(`Cannot exceed the maximum amount: ${maxAmount}`);
+          //alert("here");
+          showAlert(`Cannot exceed the maximum amount: ${maxAmount}`);
         }
       
         // Check if the new quantity exceeds the max amount
         if (newQuantity <= maxAmount) {
+          
           setCart((prevCart) =>
             prevCart.map((item) =>
               item.serialNumber === serialNumber ? { ...item, quantity: newQuantity } : item
@@ -95,8 +109,9 @@ export default function ShoppingCart({userId = 1}) {
         } 
       
         else {
+         
           console.log(`Cannot exceed the maximum amount: ${maxAmount}`);
-          alert(`Cannot exceed the maximum amount: ${maxAmount}`);
+         // showAlert(`Cannot exceed the maximum amount: ${maxAmount}`);
         }
       }
       } catch (error) {
@@ -146,12 +161,16 @@ export default function ShoppingCart({userId = 1}) {
   
       // Compare the current cart with the updated cart to check for changes
       const cartChanges = cart.some((item) => {
-        const updatedItem = updatedCart.find((updatedItem) => updatedItem.productSN === item.productSN);
-        return !updatedItem || updatedItem.quantity < item.quantity;
+      const updatedItem = updatedCart.find((updatedItem) => updatedItem.productSN === item.productSN);
+        
+        // Check if the quantity in the cart is higher than the quantity available in the inventory
+      const quantityExceedsInventory = updatedItem && item.quantity > updatedItem.amount;
+
+      return !updatedItem || updatedItem.quantity < item.quantity || quantityExceedsInventory;
       });
-  
+
       if (cartChanges) {
-        alert('Cart has been updated. Please review your items before confirming the purchase.');
+        showAlert('Cart has been updated. Please review your items before confirming the purchase.');
         fetchMedicines(); // Refresh the cart to reflect the changes
         return;
       }
@@ -193,16 +212,16 @@ export default function ShoppingCart({userId = 1}) {
                         console.log(updateResponse.status);
                         console.log(updateResponse.data);
                         if(updateResponse.data == "empty"){
-                          alert(`${item.productName} only has amount = ${item.quantity}`)
+                          showAlert(`${item.productName} only has amount = ${item.quantity}`);
                           fetchMedicines();
 
                         }
                         else if(updateResponse.data == "outOfStock"){
-                          alert(`${item.productName} is outOfStock`)
+                          showAlert(`${item.productName} is outOfStock`)
                           handleDeleteItem(item.productSN);
                         }
                         else{
-                          alert(`successfully Purchase!`)
+                          showAlert(`successfully Purchase!`)
                           handleDeleteItem(item.productSN);
                         }
 
@@ -233,55 +252,83 @@ export default function ShoppingCart({userId = 1}) {
   
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', textAlign: 'center', maxWidth: '800px', margin: 'auto' }}>
-      <h2 style={{ color: '#4CAF50' }}>your Shopping Cart</h2>
-      <div style={{ overflowY: 'scroll', maxHeight: '400px', border: '1px solid #ddd', borderRadius: '8px', padding: '20px' }}>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {cart.map((item) => (
-            <li
-              key={item.productSN} // Assuming productSN is a unique identifier
-              style={{ marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px', display: 'flex', alignItems: 'center' }}
-            >
-              <div>
-                <img src={item.photo} alt={item.productName} style={{ maxWidth: '150px', maxHeight: '150px', marginRight: '20px', borderRadius: '8px' }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <p>Name: {item.productName}</p>
-                <p>Price: ${item.price}</p>
-                <label>
-                  Quantity:
-                  <input
-                    type="number"
-                    min="1"
-                    max={item.maxAmount}
-                    value={item.quantity}
-                    onChange={(e) => handleQuantityChange(item.productSN, parseInt(e.target.value, 10))}
-                    style={{ marginLeft: '10px', padding: '5px', borderRadius: '5px' }}
+    <Container style={{ marginTop: '20px' }}>
+      <Paper elevation={3} style={{ padding: '20px', borderRadius: '8px' }}>
+        <Typography variant="h4" style={{ color: '#4CAF50', marginBottom: '20px' }}>
+          Your Shopping Cart
+        </Typography>
+
+        <div style={{ overflowY: 'scroll', maxHeight: '400px', marginBottom: '20px' }}>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {cart.map((item) => (
+              <li
+                key={item.productSN}
+                style={{
+                  marginBottom: '20px',
+                  borderBottom: '1px solid #ddd',
+                  paddingBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <img
+                    src={item.photo}
+                    alt={item.productName}
+                    style={{ maxWidth: '150px', maxHeight: '150px', marginRight: '20px', borderRadius: '8px' }}
                   />
-                </label>
-              </div>
-              <button onClick={() => handleDeleteItem(item.productSN)} style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}>
-                X
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <p style={{ marginTop: '10px' }}>Total Price: ${calculateTotalPrice().toFixed(2)}</p>
-      <button
-  onClick={handleConfirmPurchase}
-  style={{
-    backgroundColor: isCartEmpty ? 'gray' : '#4CAF50',
-    color: 'white',
-    padding: '10px',
-    borderRadius: '8px',
-    cursor: isCartEmpty ? 'not-allowed' : 'pointer',
-    marginTop: '20px',
-  }}
-  disabled={isCartEmpty}
->
-  Confirm Purchase
-</button>
-    </div>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <Typography variant="h6">Name: {item.productName}</Typography>
+                  <Typography variant="body1">Price: ${item.price}</Typography>
+                  <label>
+                    Quantity:
+                    <input
+                      type="number"
+                      min="1"
+                      max={item.maxAmount}
+                      value={item.quantity}
+                      onChange={(e) => handleQuantityChange(item.productSN, parseInt(e.target.value, 10))}
+                      style={{ marginLeft: '10px', padding: '5px', borderRadius: '5px' }}
+                    />
+                  </label>
+                </div>
+                <Button
+                  onClick={() => handleDeleteItem(item.productSN)}
+                  style={{
+                    marginLeft: '10px',
+                    backgroundColor: '#f44336',
+                    color: 'white',
+                    padding: '5px',
+                    borderRadius: '5px',
+                  }}
+                >
+                  X
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <Typography variant="h6" style={{ marginTop: '10px' }}>
+          Total Price: ${calculateTotalPrice().toFixed(2)}
+        </Typography>
+        <Button
+          onClick={handleConfirmPurchase}
+          variant="contained"
+          style={{
+            backgroundColor: isCartEmpty ? '#9e9e9e' : '#4CAF50',
+            color: 'white',
+            padding: '10px',
+            borderRadius: '8px',
+            cursor: isCartEmpty ? 'not-allowed' : 'pointer',
+            marginTop: '20px',
+          }}
+          disabled={isCartEmpty}
+        >
+          Confirm Purchase
+        </Button>
+        {customAlert}
+      </Paper>
+    </Container>
   );
 }
