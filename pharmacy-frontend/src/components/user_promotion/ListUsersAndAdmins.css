@@ -46,9 +46,9 @@
 }
 
 .search-bar {
-    
     /* margin: auto; */
-    margin-right: 10px;
+    width: 430px; 
+    right: 270px;
 }
 
 .search-button {
