@@ -1,7 +1,6 @@
 package com.example.pharmacysystem.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.sql.Date;
 @Entity
