@@ -37,16 +37,21 @@ const ReviewForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Submitted feedback:', feedback);
-    try {
-      await reviewService.saveReview(feedback);
-      console.log('Review saved successfully!');
-    } catch (error) {
-      console.error('Error saving review:', error);
+    if(feedback.rating === '0' && feedback.comment ===''){
+      console.log("I am here!!");
+      alert("The review is empty! Can't review");
+    } else {
+      try {
+        await reviewService.saveReview(feedback);
+        alert('Review saved successfully!');
+      } catch (error) {
+        alert('Error saving review:', error);
+      }
     }
   };
 
   return (
-    <div className="container">
+    <div className="review-container">
       {!isModalOpen && <button onClick={openModal}>Open Feedback Form</button>}
       {isModalOpen && (
         <div className="modal-overlay">
