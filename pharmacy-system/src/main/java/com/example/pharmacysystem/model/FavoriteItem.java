@@ -6,8 +6,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "favorite_items")
 @IdClass(FavoriteItemId.class)
@@ -42,14 +40,11 @@ public class FavoriteItem {
         this.productSN = productSN;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FavoriteItem that = (FavoriteItem) o;
         return userId == that.userId && productSN.equals(that.productSN);
-    }
-
-    public int hashCode() {
-        return Objects.hash(userId, productSN);
     }
 }
