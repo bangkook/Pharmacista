@@ -28,6 +28,11 @@ const FavoritesList = ({userId}) => {
       if (response.ok) {
         const data = await response.text()
         console.log(data)
+        // Re-fetch list
+        fetch(`${BaseUri}/favorites/get/${userId}`)
+        .then(response => response.json())
+        .then(data => setFavorites(data))
+        .catch(error => console.error("Error fetching user favorites list:", error));
       } else {
         console.error('Failed to add item:', response.statusText)
       }
@@ -110,7 +115,7 @@ const FavoritesList = ({userId}) => {
               <tr key = {item.productSN}>
                   <td data-label='Image'>{item.productPhoto}</td>
                   <td data-label='SerialNumber'>{item.productSN}</td>
-                  <td data-label='Name'>${item.productName}</td>
+                  <td data-label='Name'>{item.productName}</td>
                   <td data-label='Price'>${item.productPrice}</td>
                   <td data-label='Action'>
                       <button className='mainbutton1' onClick={() => deleteItemFromList(item.productSN)}>Remove From Favorites</button>
