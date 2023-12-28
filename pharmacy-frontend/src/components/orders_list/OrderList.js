@@ -66,12 +66,12 @@ const OrderDetails = ({ orderId, total = 299}) => {
   
     return (
       <div style={{ fontFamily: 'Arial, sans-serif', textAlign: 'center', maxWidth: '800px', margin: 'auto' }}>
-      <div style={{ overflowY: 'scroll', maxHeight: '400px', border: '1px solid #ddd', borderRadius: '8px', padding: '20px' }}>
+      <div style={{ overflowY: 'scroll', maxHeight: '400px', border: '1px solid white', borderRadius: '8px', padding: '20px' }}>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {orderDetails.map(details => (
             <li
               key={[orderId, details.product.productSN]} // Assuming productSN is a unique identifier
-              style={{ marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px', display: 'flex', alignItems: 'center' }}
+              style={{ marginBottom: '20px', borderBottom: '1px solid black', paddingBottom: '10px', display: 'flex', alignItems: 'center' }}
             >
               <div>
                 <img src={details.product.photo} alt={"Product Photo"} style={{ maxWidth: '150px', maxHeight: '150px', marginRight: '20px', borderRadius: '8px' }} />

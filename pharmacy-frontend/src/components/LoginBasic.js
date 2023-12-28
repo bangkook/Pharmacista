@@ -6,6 +6,7 @@ import { Grid, Paper,Avatar, TextField, Button, Typography} from "@mui/material"
 import { useState } from "react";
 import { Link } from 'react-router-dom'
 import GoogleSignIn from './login';
+import CustomAlert from './Alert/CustomAlert';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -16,10 +17,17 @@ export default function LoginBasic ({handleSuccessfulLogin}) {
     const BaseUri = 'http://localhost:8088/user'
     const [userNameinput,setUserName]=useState('')
     const [passwordInput,setPassword]=useState('')
+    const [customAlert, setCustomAlert] = useState(null);
 
-  const signInButton= async (e)=>{
-    if(userNameinput==='' ||passwordInput==='' ){
-        alert("Please fill all required fileds")
+    const showAlert = (message) => {
+      return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+    };
+    
+
+    const signInButton = async (e) => {
+      e.preventDefault(); // Prevent the default form submission behavior
+      if (userNameinput === "" || passwordInput === "") {
+        showAlert("Please fill all required fields");
     }else{
         const response = await fetch(`${BaseUri}/checkUser?`+ new URLSearchParams({
             userName: userNameinput,
@@ -36,11 +44,11 @@ export default function LoginBasic ({handleSuccessfulLogin}) {
             console.log(userData)
             handleSuccessfulLogin(userNameinput)
         } else if (data === 'USER_FOUND_INCORRECT_PASSWORD') {
-            alert("Wrong password");
+          showAlert("Wrong password");
         } else if (data === 'USER_NOT_FOUND') {
-            alert("You don't have an account");
+          showAlert("You don't have an account");
         } else if (data === 'INVALID_INPUT') {
-            alert("Invalid input");
+          showAlert("Invalid input");
         }
     }
 }
@@ -72,9 +80,9 @@ return (
               alignItems: 'center',
             }}
           >
-            <Typography sx={{ m: 1 }} component="h1" variant="h5">
+            {/* <Typography sx={{ m: 1 }} component="h1" variant="h5">
               Welcome back to Pharmacista
-            </Typography>
+            </Typography> */}
             <Box component="form" noValidate onSubmit={signInButton} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
@@ -116,6 +124,7 @@ return (
           </Box>
         </Grid>
       </Grid>
+      {customAlert}
     </ThemeProvider>
   );
 }
