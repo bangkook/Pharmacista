@@ -28,14 +28,14 @@
 .home .homein .right {
     width: 80%;
     height: 100%;
-    margin-left: 20px;
+    margin-left: 5px;
 }
 .usersidebar {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: aliceblue;
+    background-color: rgb(255, 255, 255);
 }
 
 .flex-container {

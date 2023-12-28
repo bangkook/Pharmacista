@@ -122,6 +122,7 @@ const Home = ({ userId = 1, isAdmin = false }) => {
                   variant="text"
                   onClick={() => setActivePage(item.text)}
                   style={{
+                    width: '100%',
                     backgroundColor: activePage === item.text ? 'lightblue' : 'transparent',
                     fontWeight: activePage === item.text ? 'bold' : 'normal',
                   }}
