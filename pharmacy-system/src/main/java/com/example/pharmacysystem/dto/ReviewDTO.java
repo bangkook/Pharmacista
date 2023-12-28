@@ -5,6 +5,7 @@ import com.example.pharmacysystem.model.User;
 
 import java.sql.Date;
 public class ReviewDTO {
+
     private int reviewId;
     private int userId;
     private String productSN;

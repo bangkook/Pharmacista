@@ -78,7 +78,7 @@ const ReviewForm = (info) => {
 
   return (
     <div className="add-review-container">
-      {!isModalOpen && <button onClick={openModal}>Open Feedback Form</button>}
+      {!isModalOpen && <button onClick={openModal}>Open Review Form</button>}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
