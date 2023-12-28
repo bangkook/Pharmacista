@@ -9,6 +9,7 @@ import Cart from './cart';
 import Inventory from './Inventory/Inventory';
 import MedicinesList from './listOfMediciens';
 import AdminNav from './AdminNav'
+import FavoritesList from './favorites_list/FavoritesList';
 
 const Home = ({ userId = 1, isAdmin = false }) => {
   const [activePage, setActivePage] = useState('View Profile');
@@ -60,6 +61,10 @@ const Home = ({ userId = 1, isAdmin = false }) => {
       text: 'View Orders',
       icon: <Assignment />,
     },
+    {
+      text: 'Favorites List',
+      icon: <Assignment />,
+    }
   ];
 
   
@@ -83,6 +88,8 @@ const Home = ({ userId = 1, isAdmin = false }) => {
         return <Inventory />;
       case 'Medicines List':
         return <MedicinesList userId={userId}/>;
+      case 'Favorites List':
+        return <FavoritesList userId={userId}/>;
       default:
         return null;
     }

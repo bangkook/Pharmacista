@@ -3,11 +3,13 @@ import '../orders_list/OrderList.css'
 import '../user_profile/UserProfile.css'
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import ConfirmAlert from '../Alert/ConfirmAlert';
 
 const BaseUri = 'http://localhost:8088'
 
 const FavoritesList = ({userId}) => {
   const [favorites, setFavorites] = useState([]);
+  const [isConfirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     // Fetch user favorites list when the component mounts
@@ -43,6 +45,7 @@ const FavoritesList = ({userId}) => {
 
   const deleteItemFromList = async (serialNumber) => {
     // Display a confirmation prompt
+    setConfirmOpen(true);
     const confirmDelete = window.confirm("Are you sure you want to remove this item from list?");
 
     if(!confirmDelete)
@@ -71,6 +74,8 @@ const FavoritesList = ({userId}) => {
       }
     } catch (error) {
       console.error('Erorr deleting:', error.message)
+    } finally {
+      setConfirmOpen(false);
     }
   };
 
@@ -93,7 +98,12 @@ const FavoritesList = ({userId}) => {
       } catch (error) {
         console.error('Unexpected error: ', error.message)
       }
-  }
+  };
+
+  const handleCancel = () => {
+    // Close the confirmation modal without deleting
+    setConfirmOpen(false);
+  };
 
   return (
     <div>

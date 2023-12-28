@@ -64,6 +64,7 @@ const ListOfMediciens=({userId})=>{
   const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [cart, setCart] = useState([])
   const [products, setProducts] = useState([])
+  const [favorites, setFavorites] = useState([])
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -195,7 +196,52 @@ const ListOfMediciens=({userId})=>{
         getListOfMediciens()
       }
     }
-  }
+  };
+
+  const addItemToList = async (serialNumber) => {
+    try {
+      const response = await fetch(`${BaseUri}/favorites/add`,{                
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({userId: userId, productSN: serialNumber})
+      })
+
+      if (response.ok) {
+        const data = await response.text()
+        console.log(data)
+        setFavorites([...favorites, serialNumber])
+      } else {
+        console.error('Failed to add item:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error adding item:', error.message)
+    }
+  };
+
+  const deleteItemFromList = async (serialNumber) => {
+    try {
+      console.log(JSON.stringify({userId: userId, productSN: serialNumber}))
+      const response = await fetch(`${BaseUri}/favorites/delete`,{
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({userId: userId, productSN: serialNumber})
+      })
+
+      if (response.ok) {
+        const data = await response.text()
+        console.log(data)
+        const updatedList = favorites.filter((item) => item !== serialNumber)
+        setFavorites(updatedList)
+      } else {
+        console.error('Item not found or deletion failed:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Erorr deleting:', error.message)
+    }
+  };
+
   return (
     <div>
         <Search>
@@ -262,6 +308,18 @@ const ListOfMediciens=({userId})=>{
                 >
                   {cart.some((cartItem) => cartItem === selectedMedicine.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
                 </Button>
+                <Button
+                  onClick={() => favorites.some((favItem) => favItem === selectedMedicine.serialNumber) ?  deleteItemFromList(selectedMedicine.serialNumber) : addItemToList(selectedMedicine.serialNumber)}
+                  variant="contained"
+                  style={{
+                  color: 'white',
+                  backgroundColor: favorites.some((favItem) => favItem === selectedMedicine.serialNumber)
+                      ? '#a6192e'
+                      : '#2e2d88',
+                  }}
+              >
+              {favorites.some((favItem) => favItem === selectedMedicine.serialNumber) ? 'Remove from Favorites' : 'Add to Favorites'}
+              </Button>
               </Box>
               <CardContent>
                 <Typography variant="h5" component="div" style={{ marginBottom: '12px' }}>
