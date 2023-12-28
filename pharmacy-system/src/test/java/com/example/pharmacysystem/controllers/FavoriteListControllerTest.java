@@ -196,11 +196,11 @@ public class FavoriteListControllerTest {
         FavoriteItem favoriteItem1 = new FavoriteItem(user1, productSN1);
 
         // Mocking the service behavior
-        when(favoriteListService.findByUserIdSorted(user1)).thenReturn(Collections.singletonList(favoriteItem1));
+        when(favoriteListService.findByUserId(user1)).thenReturn(Collections.singletonList(favoriteItem1));
 
         // Performing the request
         // Should throw exception because product is null
-        List<FavoriteItemDTO> result = favoriteListController.findByUserIdSortedAsc(user1);
+        List<FavoriteItemDTO> result = favoriteListController.findByUserId(user1);
 
         // Assert
         assertNull(result);
