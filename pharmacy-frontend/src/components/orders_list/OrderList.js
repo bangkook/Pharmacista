@@ -66,12 +66,12 @@ const OrderDetails = ({ orderId, total = 299}) => {
   
     return (
       <div style={{ fontFamily: 'Arial, sans-serif', textAlign: 'center', maxWidth: '800px', margin: 'auto' }}>
-      <div style={{ overflowY: 'scroll', maxHeight: '400px', border: '1px solid #ddd', borderRadius: '8px', padding: '20px' }}>
+      <div style={{ overflowY: 'scroll', maxHeight: '400px', border: '1px solid white', borderRadius: '8px', padding: '20px' }}>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {orderDetails.map(details => (
             <li
               key={[orderId, details.product.productSN]} // Assuming productSN is a unique identifier
-              style={{ marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px', display: 'flex', alignItems: 'center' }}
+              style={{ marginBottom: '20px', borderBottom: '1px solid black', paddingBottom: '10px', display: 'flex', alignItems: 'center' }}
             >
               <div>
                 <img src={details.product.photo} alt={"Product Photo"} style={{ maxWidth: '150px', maxHeight: '150px', marginRight: '20px', borderRadius: '8px' }} />
@@ -92,17 +92,6 @@ const OrderDetails = ({ orderId, total = 299}) => {
     );
   };
 
-  const SingleBanner = ({bannerimage, heading}) => {
-    return (
-      <div className='singlebanner'>
-          <div className='bannerimgfilter'></div>
-          <img className='bannerimg' src={bannerimage} alt='noimg' />
-          <div className='bannerheading'>
-              <h1>{heading}</h1>
-          </div>
-      </div>
-    )
-  }
 
   const Orders = ({userId = 1, admin = true}) => {
     const [selectedOrderId, setSelectedOrderId] = useState(null);
@@ -121,10 +110,6 @@ const OrderDetails = ({ orderId, total = 299}) => {
 
     return (
       <div>
-        <SingleBanner 
-        heading={`Orders`}
-        bannerimage = 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=1880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' 
-        />
         <OrderList userId={userId} onSelectOrder={handleSelectOrder} admin={admin}/>
         {<Popup open={popup} modal nested> 
         {close => (

@@ -2,16 +2,26 @@ import './UserProfile.css'
 import React,{ useState, useRef, useEffect, useMemo} from 'react';
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
+import CustomAlert from '../Alert/CustomAlert';
+
 
 const BaseUri = 'http://localhost:8088/user'
+var ProfilePic = ''
+
 const AccountSettings = ({userId}) => {
   const [country, setCountry] = useState('')
   const options = useMemo(() => countryList().getData(), [])
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
 
   const [formData, setFormData] = useState({
     username: '',
     phoneNumber: '',
     streetAddress: '',
+    profilePicture: '',
     city: '',
     country: '',
     zipCode: '',
@@ -34,6 +44,7 @@ const AccountSettings = ({userId}) => {
           const userData = await response.json();
           console.log(userData)
           setFormData(userData);
+          ProfilePic = userData.profilePicture
           setCountry({'label': userData.country, 'value': countryList().getValue(userData.country)})
         } else {
           console.error('Failed to fetch user data');
@@ -118,13 +129,13 @@ const AccountSettings = ({userId}) => {
 
       
       if (response.ok) {
-        alert('User data updated successfully');
+        showAlert('User data updated successfully');
       } else {
-        alert('Error: Failed to update');
+        showAlert('Error: Failed to update');
       }
     } catch (error) {
-      console.error('Error sending data to the backend:', error);
-      alert('Error:', error.message);
+      console.log('Error sending data to the backend:', error);
+      showAlert('Something went wrong, Try again!');
     }
   };
   return (
@@ -207,12 +218,20 @@ const AccountSettings = ({userId}) => {
           Save Changes
         </button>
       </form>
+      {customAlert}
     </div>
   );
 };
   
 
 const ChangePassword = ({userId}) => {
+
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+
   const [formData, setFormData] = useState({
     curpass: '',
     newpass: '',
@@ -262,6 +281,8 @@ const ChangePassword = ({userId}) => {
   };
 
   const handleSubmit = async (e) => {
+
+
     e.preventDefault();
     // Validate the form before submitting
     if (!validateForm()) {
@@ -281,13 +302,13 @@ const ChangePassword = ({userId}) => {
       });
       setFormData({cnewpass:'', curpass: '', newpass: ''})
       if (response.ok) {
-        window.alert('Password changed successfully');
+        showAlert('Password changed successfully');
       } else {
-        window.alert('Current password is wrong');
+        showAlert('Current password is wrong');
       }
     } catch (error) {
       console.error('Error changing password:', error);
-      window.alert('An unexpected error occurred');
+      showAlert('An unexpected error occurred');
     }
   };
 
@@ -345,11 +366,12 @@ const ChangePassword = ({userId}) => {
           Save Changes
         </button>
       </form>
+      {customAlert}
     </div>
   );
 };
 
-const ProfilePictureUploader = ({userId}) => {
+const ProfilePictureUploader = ({ userId }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const fileInputRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -366,61 +388,73 @@ const ProfilePictureUploader = ({userId}) => {
     const reader = new FileReader();
     reader.onloadend = (e) => {
       setImageUrl(e.target.result);
+  
+      uploadProfilePicture(e.target.result); // Call the uploadProfilePicture function
     };
     reader.readAsDataURL(event.target.files[0]);
   };
 
-  return (
-    <div className="img-wrap">
-      <input type="file" onChange={handleUpload} ref={fileInputRef}
-        style={{ display: 'none' }} />
+  const uploadProfilePicture = async (profilePicture) => {
+    try {
+      const response = await fetch(`http://localhost:8088/user/upload-profile-picture/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          profilePicture: profilePicture,
+        }),
+      });
 
-      <img src={imageUrl || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'} 
-      alt="Profile" onClick={handleImageClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        cursor: 'pointer',
-        opacity: isHovered ? 0.7 : 1, // Change opacity on hover
-      }}
+      if (response.ok) {
+        alert('Profile picture uploaded successfully');
+        ProfilePic = profilePicture;
+      } else {
+        const errorText = await response.text();
+        alert(`Failed to upload profile picture. Error: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      alert('An unexpected error occurred');
+    }
+  };
+
+  return (
+    <div className="img-wrapp">
+      <input type="file" onChange={handleUpload} ref={fileInputRef} style={{ display: 'none' }} />
+
+      <img
+        className="image"
+        src={ProfilePic || 'https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true'}
+        alt="Profile"
+        onClick={handleImageClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          cursor: 'pointer',
+          opacity: isHovered ? 0.7 : 1, // Change opacity on hover
+        }}
       />
       {imageUrl}
     </div>
   );
 };
 
-const SingleBanner = ({bannerimage, heading}) => {
-  return (
-    <div className='singlebanner'>
-        <div className='bannerimgfilter'></div>
-        <img className='bannerimg' src={bannerimage} alt='noimg' />
-        <div className='bannerheading'>
-            <h1>{heading}</h1>
-        </div>
-    </div>
-  )
-}
 
-const UserProfile = ({userId = 1}) => {
+
+const UserProfile = ({ userId = 1 }) => {
   return (
     <div className='userprofile'>
-      <SingleBanner 
-        heading={`My Profile`}
-        bannerimage = 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=1880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' 
-        />
-    
-        <div className='userprofilein'>
-          <div className='left'>
-            <AccountSettings userId={userId}/>
-            <ChangePassword userId={userId}/>
-          </div>
-          <div className='right'>
-          <ProfilePictureUploader userId={userId}/>
-          </div>
-        </div>
-        
-        </div>
-  )
-}
+      <div className='userprofilein'>
+
+          <AccountSettings userId={userId} />
+          <ProfilePictureUploader userId={userId} />
+          <ChangePassword userId={userId} />
+      </div>
+      
+    </div>
+  );
+};
+
 
 export default UserProfile

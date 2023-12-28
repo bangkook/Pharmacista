@@ -24,3 +24,64 @@
     /* background-color: aqua; */
     height: 100vh;
 }
+.usersidebar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 20px;
+}
+
+.usersidebar .s1 svg {
+    width: 30px;
+    height: 30px;
+    color: gray;
+}
+
+.usersidebar .s2 svg {
+    width: 30px;
+    height: 30px;
+    color: rgb(255, 255, 255);
+}
+
+.usersidebar .s1:hover {
+    background-color: rgb(246, 246, 246);
+    border-radius: 5px;
+    cursor: pointer;
+    color: grey;
+}
+
+.usersidebar .s2 {
+    background-color: var(--col1);
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.img-wrap {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    right: 30px;
+}
+
+.name {
+    position: relative;
+    right: 60px;
+}
+
+.line {
+    width: 100%;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    border: 1px solid grey;
+}
