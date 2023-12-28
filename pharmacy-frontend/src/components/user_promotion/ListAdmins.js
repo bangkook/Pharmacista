@@ -76,7 +76,7 @@ class ListAdmins extends Component {
                     <h2 className="text-center">Admins List</h2>
 
                     <div className="search-container">
-                        <div className="search-bar-container">
+                        
                             <TextField
                                 className="search-bar"
                                 label="Search by Username"
@@ -84,11 +84,12 @@ class ListAdmins extends Component {
                                 value={this.state.searchQuery}
                                 onChange={this.handleSearchInputChange}
                             />
-                        </div>
-
-                        <Button className="search-button" variant="contained" onClick={this.handleSearch}>
+                            <Button className="search-button" variant="contained" onClick={this.handleSearch}>
                             Search
                         </Button>
+                       
+
+                        
                     </div>
 
                     <TableContainer component={Paper}>

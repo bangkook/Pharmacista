@@ -1,5 +1,6 @@
 .user-list-container, .admin-list-container {
     margin: 20px;
+
     /* display: flex; */
     justify-content: space-between;
 }
@@ -39,16 +40,13 @@
     display: flex;
 
 }
-.search-bar-container {
-    width: 15%;
-    float: left;
-    margin-right: 10px;
-}
+
 
 .search-bar {
     /* margin: auto; */
-    width: 430px; 
-    right: 270px;
+    width: 300px; 
+    margin: 10px;
+
 }
 
 .search-button {

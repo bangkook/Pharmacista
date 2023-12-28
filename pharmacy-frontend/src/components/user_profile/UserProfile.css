@@ -1,7 +1,10 @@
+
 .userprofile {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
+
   
   .userprofilein {
     display: flex;

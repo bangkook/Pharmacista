@@ -135,7 +135,7 @@ class ListUsers extends Component {
                     <h2 className="text-center">Users List</h2>
 
                     <div className="search-container">
-                        <div className="search-bar-container">
+                        
                             <TextField
                                 className="search-bar"
                                 label="Search by Username"
@@ -143,11 +143,12 @@ class ListUsers extends Component {
                                 value={this.state.searchQuery}
                                 onChange={this.handleSearchInputChange}
                             />
-                        </div>
+                            <Button className="search-button" variant="contained" onClick={this.handleSearch}>
+                               Search
+                            </Button>
+                        
 
-                        <Button className="search-button" variant="contained" onClick={this.handleSearch}>
-                            Search
-                        </Button>
+                        
                     </div>
 
                     <TableContainer component={Paper}>
