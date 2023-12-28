@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './reviewForm.css'; // Import the CSS file
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import reviewService from '../../services/ReviewService.js';
-import ListofReviews from './listOfReviews.js';
 // import CustomAlert from './Alert/CustomAlert';
 
 

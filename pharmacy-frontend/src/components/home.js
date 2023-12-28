@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ViewModule, ShoppingCart, Assignment, PeopleAlt, Storage } from '@mui/icons-material';
+import { ViewModule, ShoppingCart, Assignment, PeopleAlt, Storage,Favorite  } from '@mui/icons-material';
 import { Button, Avatar, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './home.css';
@@ -14,7 +14,7 @@ import FavoritesList from './favorites_list/FavoritesList';
 const Home = ({ userId = 1, isAdmin = false }) => {
   const [activePage, setActivePage] = useState('View Profile');
 
-  const pharmacistaImage = 'https://cdn-icons-png.flaticon.com/512/4320/4320337.png'; // Replace with the actual path to the image
+  const pharmacistaImage = 'https://cdn-icons-png.flaticon.com/512/4320/4320337.png';
 
 
   const menuItemsAdmin = [
@@ -63,7 +63,7 @@ const Home = ({ userId = 1, isAdmin = false }) => {
     },
     {
       text: 'Favorites List',
-      icon: <Assignment />,
+      icon: <Favorite />,
     }
   ];
 
