@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './reviewForm.css'; // Import the CSS file
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import reviewService from '../../services/ReviewService.js';
-// import CustomAlert from './Alert/CustomAlert';
+import CustomAlert from '../Alert/CustomAlert.js';
 
 
 const ReviewForm = (info) => {
@@ -30,7 +30,12 @@ const ReviewForm = (info) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
-  // const [customAlert, setCustomAlert] = useState(null);
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+ 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFeedback((prevFeedback) => ({ ...prevFeedback, [name]: value }));
@@ -55,18 +60,18 @@ const ReviewForm = (info) => {
     e.preventDefault();
     console.log('Submitted feedback:', feedback);
     if(feedback.rating === '0' && feedback.comment ===''){
-      alert("The review is empty! Can't review");
+      showAlert("The review is empty! Can't review");
     } else {
       try {
         await reviewService.saveReview(feedback);
-        alert('Review saved successfully!');
+        showAlert('Review saved successfully!');
         feedback.comment = '';
         feedback.rating = '';
         closeModal();
 
         handleReviewAdded();
       } catch (error) {
-        alert('Error saving review');
+        showAlert('Error saving review');
       }
     }
   };
@@ -112,6 +117,7 @@ const ReviewForm = (info) => {
           </div>
         </div>
       )}
+      {customAlert}
     </div>
   );
 };
