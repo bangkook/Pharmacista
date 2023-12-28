@@ -42,6 +42,10 @@ const Home = ({ userId = 1, isAdmin = false }) => {
       text: 'Manage Inventory',
       icon: <Storage />,
     },
+    {
+      text: 'Favorites List',
+      icon: <Favorite />,
+    }
   ];
 
   const menuItemsUser = [
