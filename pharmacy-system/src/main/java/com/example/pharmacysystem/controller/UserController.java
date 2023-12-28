@@ -82,13 +82,21 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getUserByName")
-    public User getUsersByName(@RequestParam String userName, @RequestParam String password) {
+    @PostMapping("/getUserByName")
+    public User getUsersByName(@RequestBody Map<String, String> request) {
+        String userName = request.get("userName");
+        String password = request.get("password");
+        System.out.println(userName);
+        System.out.println(password);
         return userService.getUser(userName, password);
     }
 
-    @GetMapping("/checkUser")
-    public ResponseEntity<String> checkUser(@RequestParam String userName, @RequestParam String password) {
+    @PostMapping("/checkUser")
+    public ResponseEntity<String> checkUser(@RequestBody Map<String, String> request) {
+        String userName = request.get("userName");
+        String password = request.get("password");
+        System.out.println(userName);
+        System.out.println(password);
         UserService.LoginStatus loginStatus = userService.checkUser(userName, password);
         return ResponseEntity.ok(loginStatus.name());
     }
