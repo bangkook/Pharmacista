@@ -2,6 +2,8 @@ import './UserProfile.css'
 import React,{ useState, useRef, useEffect, useMemo} from 'react';
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
+import CustomAlert from '../Alert/CustomAlert';
+
 
 const BaseUri = 'http://localhost:8088/user'
 var ProfilePic = ''
@@ -9,6 +11,11 @@ var ProfilePic = ''
 const AccountSettings = ({userId}) => {
   const [country, setCountry] = useState('')
   const options = useMemo(() => countryList().getData(), [])
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
 
   const [formData, setFormData] = useState({
     username: '',
@@ -122,13 +129,13 @@ const AccountSettings = ({userId}) => {
 
       
       if (response.ok) {
-        alert('User data updated successfully');
+        showAlert('User data updated successfully');
       } else {
-        alert('Error: Failed to update');
+        showAlert('Error: Failed to update');
       }
     } catch (error) {
-      console.error('Error sending data to the backend:', error);
-      alert('Error:', error.message);
+      console.log('Error sending data to the backend:', error);
+      showAlert('Something went wrong, Try again!');
     }
   };
   return (
@@ -211,12 +218,20 @@ const AccountSettings = ({userId}) => {
           Save Changes
         </button>
       </form>
+      {customAlert}
     </div>
   );
 };
   
 
 const ChangePassword = ({userId}) => {
+
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+
   const [formData, setFormData] = useState({
     curpass: '',
     newpass: '',
@@ -266,6 +281,8 @@ const ChangePassword = ({userId}) => {
   };
 
   const handleSubmit = async (e) => {
+
+
     e.preventDefault();
     // Validate the form before submitting
     if (!validateForm()) {
@@ -285,13 +302,13 @@ const ChangePassword = ({userId}) => {
       });
       setFormData({cnewpass:'', curpass: '', newpass: ''})
       if (response.ok) {
-        window.alert('Password changed successfully');
+        showAlert('Password changed successfully');
       } else {
-        window.alert('Current password is wrong');
+        showAlert('Current password is wrong');
       }
     } catch (error) {
       console.error('Error changing password:', error);
-      window.alert('An unexpected error occurred');
+      showAlert('An unexpected error occurred');
     }
   };
 
@@ -349,6 +366,7 @@ const ChangePassword = ({userId}) => {
           Save Changes
         </button>
       </form>
+      {customAlert}
     </div>
   );
 };

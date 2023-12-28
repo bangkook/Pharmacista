@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MedicineInventory.css'; // Import your CSS file
+import CustomAlert from '../Alert/CustomAlert';
+import ConfirmAlert from '../Alert/ConfirmAlert';
 
 const initialFormData = {
   name: '',
@@ -12,11 +14,19 @@ const initialFormData = {
   photo: '',
 };
 
+
+
 const MedicineInventory = () => {
   const [medicines, setMedicines] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
   const [editingId, setEditingId] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+  
 
   useEffect(() => {
     fetchMedicines();
@@ -52,7 +62,7 @@ const MedicineInventory = () => {
 
   const addMedicine = async () => {
     if (!formData.name || !formData.quantity || !formData.serialNumber || !formData.price || !formData.productionDate || !formData.expiryDate ) {
-        alert('All fields are required.');
+        showAlert('All fields are required.');
         return;
     }
   
@@ -73,11 +83,11 @@ const MedicineInventory = () => {
             fetchMedicines();
             closeModal();
             setTimeout(() => {
-              alert('Medicine added successfully.');
+              showAlert('Medicine added successfully.');
             }, 100);
         } else {
             const errorText = await response.text();
-            alert(`Failed to add medicine. Error: ${errorText}`);
+            showAlert(`Failed to add medicine. Error: ${errorText}`);
         }
     } catch (error) {
         console.error('Error adding medicine:', error);
@@ -86,29 +96,39 @@ const MedicineInventory = () => {
 
   
 
-const deleteMedicine = async (serialNumber) => {
-  // Display a confirmation prompt
-  const confirmDelete = window.confirm("Are you sure you want to delete this medicine?");
-  
-  // If the user confirms, proceed with deletion
-  if (confirmDelete) {
+const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [deleteSerialNumber, setDeleteSerialNumber] = useState(null);
+
+  const deleteMedicine = async (serialNumber) => {
+    // Set the serialNumber to delete and open the confirmation modal
+    setDeleteSerialNumber(serialNumber);
+    setConfirmOpen(true);
+  };
+
+  const handleConfirm = async () => {
     try {
-      const response = await fetch(`http://localhost:8088/products/${serialNumber}`, {
+      const response = await fetch(`http://localhost:8088/products/${deleteSerialNumber}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
         fetchMedicines();
-        alert('Medicine deleted successfully.');
-        
+        showAlert('Medicine deleted successfully.');
       } else {
-        alert('Failed to delete medicine.');
+        showAlert('Failed to delete medicine.');
       }
     } catch (error) {
       console.error('Error deleting medicine:', error);
+    } finally {
+      // Close the confirmation modal
+      setConfirmOpen(false);
     }
-  }
-};
+  };
+
+  const handleCancel = () => {
+    // Close the confirmation modal without deleting
+    setConfirmOpen(false);
+  };
 
 
   const editMedicine = (medicine) => {
@@ -132,11 +152,11 @@ const deleteMedicine = async (serialNumber) => {
         fetchMedicines();
         closeModal();
         setTimeout(() => {
-          alert('Medicine Updated successfully.');
+          showAlert('Medicine Updated successfully.');
         }, 100);
       } else {
         const errorText = await response.text();
-        alert(`Failed to update medicine. Error: ${errorText}`);
+        showAlert(`Failed to update medicine. Error: ${errorText}`);
       }
     } catch (error) {
       console.error('Error updating medicine:', error);
@@ -313,6 +333,13 @@ const deleteMedicine = async (serialNumber) => {
           </div>
         </div>
       )}
+       <ConfirmAlert
+        message="Are you sure you want to delete this medicine?"
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        open={isConfirmOpen}
+      />
+      {customAlert}
     </div>
   );
 };

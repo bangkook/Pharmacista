@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useMemo  } from "react";
+import React, { useState, useEffect} from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -7,6 +7,8 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { Button, CardContent, Modal, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
+import CustomAlert from './Alert/CustomAlert';
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -55,14 +57,21 @@ const StyledImage = styled('img')({
   }
 });
 
+
 const ListOfMediciens=({userId})=>{
   const BaseUri = 'http://localhost:8088'
   const [initialMedicines, setInitialMedicines] = useState([]);
   const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [cart, setCart] = useState([])
   const [products, setProducts] = useState([])
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  }
   
   const handleMedicineClick = (medicine) => {
     setSelectedMedicine(medicine);
@@ -180,104 +189,106 @@ const ListOfMediciens=({userId})=>{
         setCart([...cart, medicine])
         addItemToCart(medicine)
       }else{
-        alert("out of stock")
+        console.log("HERERERER");
+        showAlert("out of stock");
         setInitialMedicines([])
         getListOfMediciens()
       }
     }
   }
   return (
-  <div>
-      <Search>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          placeholder="Search…"
-          inputProps={{ 'aria-label': 'search' }}
-          onInput={handleInputChange}
-        />
-      </Search>
-        <ImageList sx={{ width: '100%', height: '100%'}} cols={5}>
-        {filteredMedicines.map((item) => (
-            <ImageListItem key={item.serialNumber}>
-            <StyledImage
-              src={item.photo}
-              alt={item.name}
-              onClick={() => handleMedicineClick(item)}
-            />
-            <ImageListItemBar title={item.name} subtitle={<span>Price: {item.price}</span>} position="below" />
-            <Button
-                onClick={() => addToCart(item.serialNumber)}
-                variant="contained"
-                style={{
-                color: 'white',
-                backgroundColor: cart.some((cartItem) => cartItem === item.serialNumber)
-                    ? '#a6192e'
-                    : '#2e2d88',
-                }}
-            >
-                {cart.some((cartItem) => cartItem=== item.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
-            </Button>
-            </ImageListItem>
-        ))}
-        </ImageList>
-        <Modal
-        open={Boolean(selectedMedicine)}
-        onClose={handleCloseModal}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-      <Box sx={{ width: '55%', height: '75%', bgcolor: 'background.paper', p: 2 }}>
-      {selectedMedicine && (
-        <div>
-          <Box display="flex">
-            <Box display="flex" flexDirection="column" alignItems="center">
-              <img
-                alt={selectedMedicine.name}
-                src={selectedMedicine.photo}
-                style={{ objectFit: 'cover', height: '250px', width: '250px', marginBottom: '12px' }}
+    <div>
+        <Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+            onInput={handleInputChange}
+          />
+        </Search>
+          <ImageList sx={{ width: '100%', height: '100%'}} cols={5}>
+          {filteredMedicines.map((item) => (
+              <ImageListItem key={item.serialNumber}>
+              <StyledImage
+                src={item.photo}
+                alt={item.name}
+                onClick={() => handleMedicineClick(item)}
               />
+              <ImageListItemBar title={item.name} subtitle={<span>Price: {item.price}</span>} position="below" />
               <Button
-                onClick={() => addToCart(selectedMedicine.serialNumber)}
-                variant="contained"
-                style={{
-                  width: '100%',
+                  onClick={() => addToCart(item.serialNumber)}
+                  variant="contained"
+                  style={{
                   color: 'white',
-                  backgroundColor: cart.some((cartItem) => cartItem === selectedMedicine.serialNumber) ? '#a6192e' : '#2e2d88',
-                }}
+                  backgroundColor: cart.some((cartItem) => cartItem === item.serialNumber)
+                      ? '#a6192e'
+                      : '#2e2d88',
+                  }}
               >
-                {cart.some((cartItem) => cartItem === selectedMedicine.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
+                  {cart.some((cartItem) => cartItem=== item.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
               </Button>
+              </ImageListItem>
+          ))}
+          </ImageList>
+          <Modal
+          open={Boolean(selectedMedicine)}
+          onClose={handleCloseModal}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+        <Box sx={{ width: '55%', height: '75%', bgcolor: 'background.paper', p: 2 }}>
+        {selectedMedicine && (
+          <div>
+            <Box display="flex">
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <img
+                  alt={selectedMedicine.name}
+                  src={selectedMedicine.photo}
+                  style={{ objectFit: 'cover', height: '250px', width: '250px', marginBottom: '12px' }}
+                />
+                <Button
+                  onClick={() => addToCart(selectedMedicine.serialNumber)}
+                  variant="contained"
+                  style={{
+                    width: '100%',
+                    color: 'white',
+                    backgroundColor: cart.some((cartItem) => cartItem === selectedMedicine.serialNumber) ? '#a6192e' : '#2e2d88',
+                  }}
+                >
+                  {cart.some((cartItem) => cartItem === selectedMedicine.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
+                </Button>
+              </Box>
+              <CardContent>
+                <Typography variant="h5" component="div" style={{ marginBottom: '12px' }}>
+                  {selectedMedicine.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Price: {selectedMedicine.price}
+                </Typography>
+                <Typography variant="body1" component="div" style={{ marginBottom: '12px' }}>
+                  {selectedMedicine.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Production date: {selectedMedicine.productionDate}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Expiry date: {selectedMedicine.expiryDate}
+                </Typography>
+              </CardContent>
             </Box>
-            <CardContent>
-              <Typography variant="h5" component="div" style={{ marginBottom: '12px' }}>
-                {selectedMedicine.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
-                Price: {selectedMedicine.price}
-              </Typography>
-              <Typography variant="body1" component="div" style={{ marginBottom: '12px' }}>
-                {selectedMedicine.description}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
-                Production date: {selectedMedicine.productionDate}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
-                Expiry date: {selectedMedicine.expiryDate}
-              </Typography>
-            </CardContent>
-          </Box>
-        </div>
-      )}
-    </Box>
-      </Modal>
-    </div>
-    );
+          </div>
+        )}
+      </Box>
+        </Modal>
+        {customAlert}
+      </div>
+      );
   }
-  
+
 
 export default ListOfMediciens

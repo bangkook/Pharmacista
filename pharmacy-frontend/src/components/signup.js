@@ -8,6 +8,7 @@ import { Link} from 'react-router-dom';
 import GoogleSignUp from './googleSignUp';
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import CustomAlert from './Alert/CustomAlert';
 
 const BaseUri = 'http://localhost:8088/user';
 const defaultTheme = createTheme();
@@ -36,6 +37,12 @@ export default function Signup({ handleSuccessfulLogin }) {
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+  
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -69,26 +76,26 @@ export default function Signup({ handleSuccessfulLogin }) {
       });
 
       if ((await response).ok) {
-        alert('Welcome to Pharmacista ' + user.username + '! Horray!!');
+        //alert('Welcome to Pharmacista ' + user.username + '! Horray!!');
         handleSuccessfulLogin(user.username);
       } else if ((await response).status === 422) {
-        alert("Username is already taken. Choose another one!");
+        showAlert("Username is already taken. Choose another one!");
       }
     } else if (!validUsername) {
-      alert("Username is at least 6 and at most 30 characters (letters or numbers) with _ only as special character. Spaces are not allowed. Start with an alphabet!");
+      showAlert("Username is at least 6 and at most 30 characters (letters or numbers) with _ only as special character. Spaces are not allowed. Start with an alphabet!");
     } else if (!passEqualsConfPass) {
       console.log("Password and Confirm Password are not the same");
       // Re-enter the password
-      alert("Password and Confirm Password are not the same");
+      showAlert("Password and Confirm Password are not the same");
       setRetypePassword("");
     } else if (!passCheck) {
-      alert("Password must be at least 8 characters and at most 16 characters");
+      showAlert("Password must be at least 8 characters and at most 16 characters");
       setPassword("");
       setRetypePassword("");
     } else if (!validPhone) {
-      alert("Phone number must be 11 digits!");
+      showAlert("Phone number must be 11 digits!");
     } else if (!validZip) {
-      alert("Zip code must be from 3 to 5 digits");
+      showAlert("Zip code must be from 3 to 5 digits");
     }
   };
 
@@ -249,6 +256,7 @@ export default function Signup({ handleSuccessfulLogin }) {
           </Box>
         </Grid>
       </Grid>
+      {customAlert}
     </ThemeProvider>
   );
 }
