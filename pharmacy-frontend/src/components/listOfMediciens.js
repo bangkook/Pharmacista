@@ -8,6 +8,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Button, CardContent, Modal, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
 import CustomAlert from './Alert/CustomAlert';
+import ReviewForm from "./Reviews/reviewForm";
+import ListofReviews from "./Reviews/listOfReviews";
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -69,7 +71,7 @@ const ListOfMediciens=({userId})=>{
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [customAlert, setCustomAlert] = useState(null);
-
+  
   const showAlert = (message) => {
     return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
   }
@@ -175,7 +177,7 @@ const ListOfMediciens=({userId})=>{
         return false;
       }
     } catch (error) {
-      console.error('Error fetching medicines:', error.message)
+      console.error('Error fetching medicines:', error.message);
     }
   };
   
@@ -287,7 +289,7 @@ const ListOfMediciens=({userId})=>{
             justifyContent: 'center',
           }}
         >
-        <Box sx={{ width: '55%', height: '75%', bgcolor: 'background.paper', p: 2 }}>
+        <Box sx={{ width: '55%', height: '75%', bgcolor: 'background.paper', p: 2, overflow: 'auto', }}>
         {selectedMedicine && (
           <div>
             <Box display="flex">
@@ -320,6 +322,14 @@ const ListOfMediciens=({userId})=>{
               >
               {favorites.some((favItem) => favItem === selectedMedicine.serialNumber) ? 'Remove from Favorites' : 'Add to Favorites'}
               </Button>
+              
+              <ListofReviews productSN={selectedMedicine.serialNumber} />
+
+              <ReviewForm 
+              productSN={selectedMedicine.serialNumber}
+              userId={userId}
+              />
+              
               </Box>
               <CardContent>
                 <Typography variant="h5" component="div" style={{ marginBottom: '12px' }}>

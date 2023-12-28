@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 @RestController
 @RequestMapping("/reviews")
@@ -21,6 +23,8 @@ public class ReviewController {
     @PostMapping("/save")
     public ResponseEntity<String> saveReview(@RequestBody Review review) {
         try {
+            Date reviewDate = Date.valueOf(LocalDate.now());
+            review.setReviewDate(reviewDate);
             reviewService.saveReview(review);
             return new ResponseEntity<>("Review saved Successfully!", HttpStatus.OK);
         } catch (Exception e) {

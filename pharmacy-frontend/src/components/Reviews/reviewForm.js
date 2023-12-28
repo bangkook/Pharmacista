@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './reviewForm.css'; // Import the CSS file
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import reviewService from '../../services/ReviewService.js';
- 
+import ListofReviews from './listOfReviews.js';
+// import CustomAlert from './Alert/CustomAlert';
 
-const ReviewForm = (productSN, userId) => {
+
+const ReviewForm = (info) => {
   const [feedback, setFeedback] = useState({
     rating: '0',
     comment: '',
-    productSN: productSN,
-    userId: userId
+    productSN: info.productSN,
+    userId: info.userId
   });
 
-  const [isModalOpen, setModalOpen] = useState(false);
+  const fetchReviewsForProduct = async (productSN) => {
+    try {
+      const reviews = await reviewService.getReviewsForProduct(info.productSN);
+      setReviews(reviews);
+      console.log('Fetched reviews:', reviews);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+  
+  const handleReviewAdded = () => {
+    // Call the function to fetch reviews after a new review is added
+    fetchReviewsForProduct(info.productSN);
+  };
 
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  // const [customAlert, setCustomAlert] = useState(null);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFeedback((prevFeedback) => ({ ...prevFeedback, [name]: value }));
@@ -43,8 +61,13 @@ const ReviewForm = (productSN, userId) => {
       try {
         await reviewService.saveReview(feedback);
         alert('Review saved successfully!');
+        feedback.comment = '';
+        feedback.rating = '';
+        closeModal();
+
+        handleReviewAdded();
       } catch (error) {
-        alert('Error saving review:', error);
+        alert('Error saving review');
       }
     }
   };

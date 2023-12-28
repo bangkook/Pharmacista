@@ -64,6 +64,11 @@ public class Review {
         return reviewDate;
     }
 
+
+    public void setReviewDate(Date reviewDate) {
+        this.reviewDate = reviewDate;
+    }
+
     public int getReviewId() {
         return reviewId;
     }
