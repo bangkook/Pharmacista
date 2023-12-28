@@ -12,12 +12,19 @@ import AdminNav from './components/AdminNav';
 import ShoppingCart from './components/cart';
 import Orders from './components/orders_list/OrderList';
 import MedicineInventory from './components/Inventory/Inventory'
+import CustomAlert from './components/Alert/CustomAlert';
 
 const BaseUri = 'http://localhost:8088/user'
+
 
 function App() {
   const [username, setUserName] = useState('')
   const [currentUser, setCurrrentUser] = useState(null);
+  const [customAlert, setCustomAlert] = useState(null);
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+
   const navigate = useNavigate();
 
   const handleSuccessfulLogin = async (username) => {
@@ -30,9 +37,9 @@ function App() {
       if (response.ok) {
         setCurrrentUser(userData)
         navigate("/home")
-        alert('User data retrieved successfully');
+        //alert('User data retrieved successfully');
       } else {
-        alert('Error: Failed to retrieve user');
+        showAlert('Error: Failed to retrieve user');
       }
     } catch (error) {
       console.error('Error sending data to the backend:', error);
@@ -57,6 +64,7 @@ function App() {
           {currentUser && <Route path="/orders" element={<Orders userId={currentUser.id} admin={currentUser.role === "ADMIN"}/>}></Route>}
           <Route path="/inventory" element={<MedicineInventory/>}></Route>
         </Routes>
+        {customAlert}
       </div>
   );
 }
