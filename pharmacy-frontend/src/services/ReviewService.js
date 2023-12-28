@@ -17,7 +17,13 @@ const reviewService = {
       const response = await axios.get(`${REVIEWS_BASE_URL}/product/${productSN}`);
       return response.data;
     } catch (error) {
-      throw error;
+      if (error.response && error.response.status === 404) {
+        // Handle NOT_FOUND (404) error
+        console.error('Reviews not found for product:', productSN);
+        return [];  // Or return some default value
+      } else {
+        throw error;  // Rethrow other errors
+      }
     }
   },
 };

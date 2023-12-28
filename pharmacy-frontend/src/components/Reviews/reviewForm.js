@@ -4,12 +4,12 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import reviewService from '../../services/ReviewService.js';
  
 
-const ReviewForm = () => {
+const ReviewForm = (productSN, userId) => {
   const [feedback, setFeedback] = useState({
     rating: '0',
     comment: '',
-    productSN: '123456789123456858',
-    userId: '1'
+    productSN: productSN,
+    userId: userId
   });
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -37,16 +37,20 @@ const ReviewForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Submitted feedback:', feedback);
-    try {
-      await reviewService.saveReview(feedback);
-      console.log('Review saved successfully!');
-    } catch (error) {
-      console.error('Error saving review:', error);
+    if(feedback.rating === '0' && feedback.comment ===''){
+      alert("The review is empty! Can't review");
+    } else {
+      try {
+        await reviewService.saveReview(feedback);
+        alert('Review saved successfully!');
+      } catch (error) {
+        alert('Error saving review:', error);
+      }
     }
   };
 
   return (
-    <div className="container">
+    <div className="add-review-container">
       {!isModalOpen && <button onClick={openModal}>Open Feedback Form</button>}
       {isModalOpen && (
         <div className="modal-overlay">

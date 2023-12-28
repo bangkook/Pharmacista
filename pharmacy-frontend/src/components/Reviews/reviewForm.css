@@ -1,20 +1,15 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7;
-    margin: 0;
+.add-review-container {
     display: flex;
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
-    height: 100vh;
-}
-  
-.container {
-    display: flex;
-    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 600px; /* 60%  */
+    width: 600px;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #0b97e8;
+    margin: auto; 
+    margin-top: 150px;
 }
 
 h2 {
@@ -38,7 +33,6 @@ label {
     margin-bottom: 8px;
 }
 
-select,
 textarea {
     width: 100%;
     padding: 8px;
@@ -46,10 +40,10 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    resize: none;
 }
 
 div {
-    /* display: flex; */
     flex-direction: column;
 }
 
@@ -76,7 +70,6 @@ button:hover {
 .star-rating {
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
     margin-bottom: 16px;
 }
 
