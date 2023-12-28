@@ -30,7 +30,6 @@ export default function Signup({ handleSuccessfulLogin }) {
   };
 
   const [username, setUN] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState("");
@@ -55,11 +54,10 @@ export default function Signup({ handleSuccessfulLogin }) {
 
     let user = {};
     if (passEqualsConfPass && validPhone && passCheck && validZip && validUsername) {
-      console.log(username, email, phone, password, retypePassword, streetAddress, city, country.label, zipCode);
+      console.log(username, phone, password, retypePassword, streetAddress, city, country.label, zipCode);
       const countryName = country.label;
       user = {
         username,
-        email,
         phone,
         password,
         streetAddress,
@@ -101,7 +99,7 @@ export default function Signup({ handleSuccessfulLogin }) {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" >
+      <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
           item
@@ -131,16 +129,7 @@ export default function Signup({ handleSuccessfulLogin }) {
               Welcome to Pharmacista
             </Typography>
             <Box component="form" noValidate onSubmit={handleClick} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-
+              
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <TextField
