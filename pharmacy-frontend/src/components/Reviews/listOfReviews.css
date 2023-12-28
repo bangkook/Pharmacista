@@ -5,7 +5,7 @@ body {
   }
   
   .review-container {
-    max-width: 800px;
+    width: 90%;
     margin: 50px auto;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -16,6 +16,7 @@ body {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
+    width: 100%;
   }
   
   h1 {

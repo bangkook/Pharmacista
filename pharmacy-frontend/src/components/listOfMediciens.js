@@ -326,14 +326,14 @@ const ListOfMediciens=({userId})=>{
         <Box sx={{ width: '55%', height: '75%', bgcolor: 'background.paper', p: 2, overflow: 'auto' }}>
           {selectedMedicine && (
             <div>
-              <Box display="flex">
+              <Box display="flex" style={{ height: 'auto' }}>
                 <Box display="flex" flexDirection="column" alignItems="center">
                   <img
                     alt={selectedMedicine.name}
                     src={selectedMedicine.photo}
                     style={{ objectFit: 'cover', height: '250px', width: '250px', marginBottom: '12px' }}
                   />
-                  <div style={{ display: 'flex', gap: '8px', width: '90%' }}>
+                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
                     <Button
                       onClick={() => addToCart(selectedMedicine.serialNumber)}
                       variant="contained"
@@ -353,28 +353,31 @@ const ListOfMediciens=({userId})=>{
                     >
                       {favorites.some((favItem) => favItem === selectedMedicine.serialNumber) ? 'Remove from Favorites' : 'Add to Favorites'}
                     </Favorite>
-                    <ListofReviews productSN={selectedMedicine.serialNumber} />
-                    <ReviewForm productSN={selectedMedicine.serialNumber} userId={userId} />
                   </div>
                 </Box>
-                <CardContent>
-                  <Typography variant="h5" component="div" style={{ marginBottom: '12px' }}>
-                    {selectedMedicine.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
-                    Price: {selectedMedicine.price}
-                  </Typography>
-                  <Typography variant="body1" component="div" style={{ marginBottom: '12px' }}>
-                    {selectedMedicine.description}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
-                    Production date: {selectedMedicine.productionDate}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
-                    Expiry date: {selectedMedicine.expiryDate}
-                  </Typography>
-                </CardContent>
+                <div>
+                <CardContent id="here" >
+                <Typography variant="h5" component="div" style={{ marginBottom: '12px' }}>
+                  {selectedMedicine.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Price: {selectedMedicine.price}
+                </Typography>
+                <Typography variant="body1" component="div" style={{ marginBottom: '12px' }}>
+                  {selectedMedicine.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Production date: {selectedMedicine.productionDate}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Expiry date: {selectedMedicine.expiryDate}
+                </Typography>
+              </CardContent>
+              </div>
+              
               </Box>
+              <ListofReviews productSN={selectedMedicine.serialNumber} />
+              <ReviewForm productSN={selectedMedicine.serialNumber} userId={userId} />
             </div>
           )}
         </Box>
