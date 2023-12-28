@@ -281,26 +281,26 @@ const ListOfMediciens=({userId})=>{
               onClick={() => handleMedicineClick(item)}
             />
             <ImageListItemBar
-              title={
-                <>
-                  <span>{item.name}</span>
-                  <Favorite
-                    onClick={() =>
-                      favorites.some((favItem) => favItem === item.serialNumber)
-                        ? deleteItemFromList(item.serialNumber)
-                        : addItemToList(item.serialNumber)
-                    }
-                    sx={{
-                      color: favorites.some((favItem) => favItem === item.serialNumber) ? '#a6192e' : '#2e2d88',
-                      marginLeft: '170px',
-                      cursor: 'pointer',
-                    }}
-                  />
-                </>
-              }
+              title={item.name}
               subtitle={<span>Price: {item.price}</span>}
               position="below"
+              actionIcon={
+                <Favorite
+                  onClick={() =>
+                    favorites.some((favItem) => favItem === item.serialNumber)
+                      ? deleteItemFromList(item.serialNumber)
+                      : addItemToList(item.serialNumber)
+                  }
+                  sx={{
+                    color: favorites.some((favItem) => favItem === item.serialNumber) ? '#a6192e' : '#2e2d88',
+                    position: 'absolute',
+                    right: '10px',
+                    cursor: 'pointer',
+                  }}
+                />
+              }
             />
+
             <Button
               onClick={() => addToCart(item.serialNumber)}
               variant="contained"
