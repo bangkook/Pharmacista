@@ -1,0 +1,35 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .review-container {
+    width: 90%;
+    margin: 50px auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reviewList {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  h3 {
+    color: #333;
+  }
+  
+  p {
+    color: #666;
+  }
+  .const-star-rating.active {
+    color: #ffcc00;
+} 

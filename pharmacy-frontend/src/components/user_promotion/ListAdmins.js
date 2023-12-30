@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import AdminService from "../../services/AdminService";
-import "./ListUsersAndAdmins.css"; // Import the CSS file
+import CustomAlert from '../Alert/CustomAlert';
 
 class ListAdmins extends Component {
     constructor(props) {
@@ -9,18 +9,34 @@ class ListAdmins extends Component {
         this.state = {
             admins: [],
             searchQuery: '',
+            customAlert: null,
         };
     }
 
-    componentDidMount() {
-        this.fetchAdmins();
-    }
+    showAlert = (message) => {
+        this.setState({ customAlert: <CustomAlert message={message} onClose={this.hideAlert} /> });
+    };
 
-    fetchAdmins() {
-        const adminId = 4; // Replace with the actual adminId, or get it from the state or props
-        AdminService.getAdmins(adminId).then((res) => {
-            this.setState({ admins: res.data });
-        });
+    hideAlert = () => {
+        this.setState({ customAlert: null });
+    };
+
+    componentDidMount() {
+        const { userId } = this.props;
+        console.log("userId in ListAdmins:", userId);
+        this.fetchAdmins(userId);  // Ensure that userId is passed to fetchAdmins
+    }
+    
+
+    fetchAdmins(adminId) {
+        AdminService.getAdmins(adminId)
+            .then((res) => {
+                this.setState({ admins: res.data });
+            })
+            .catch((error) => {
+                console.error("Error fetching admins:", error);
+                // Handle the error, possibly by showing an alert to the user
+            });
     }
 
     handleSearchInputChange = (event) => {
@@ -28,29 +44,29 @@ class ListAdmins extends Component {
     };
 
     handleSearch = () => {
-        const adminId = 4; // Replace with the actual adminId, or get it from the state or props
+        const { userId } = this.props;
+        console.log("adminId in ListAdmins (handleSearch):", userId);
         const { searchQuery } = this.state;
-
-        // Make sure to handle empty search query appropriately
+    
         if (!searchQuery.trim()) {
-            // If the search query is empty, fetch all admins
-            this.fetchAdmins();
+            this.fetchAdmins(userId);
             return;
         }
-
-        console.log("search query: " + searchQuery);
-        // Call the API to search admins by username
-        AdminService.searchByUsername(adminId, searchQuery).then((res) => {
-            console.log("data: ", res.data);
-            const searchedAdmin = res.data;
-            if (searchedAdmin) {
-                this.setState({ admins: [searchedAdmin] }); // Set the user in an array
-            } else {
-                // Handle case where no user is found
-                alert("There exist no user with this username!!");
-                this.setState({ searchQuery: '' });
-            }
-        });
+    
+        AdminService.searchByUsername(userId, searchQuery)
+            .then((res) => {
+                const searchedAdmin = res.data;
+                if (searchedAdmin) {
+                    this.setState({ admins: [searchedAdmin] });
+                } else {
+                    this.showAlert("There exist no user with this username!");
+                    this.setState({ searchQuery: '' });
+                }
+            })
+            .catch((error) => {
+                console.error("Error searching admins:", error);
+                // Handle the error, possibly by showing an alert to the user
+            });
     };
 
     render() {
@@ -58,46 +74,48 @@ class ListAdmins extends Component {
             <Fragment>
                 <div className="user-list-container">
                     <h2 className="text-center">Admins List</h2>
-                    
+
                     <div className="search-container">
-                        <div className="search-bar-container">
-                            <TextField className="search-bar"
+                        
+                            <TextField
+                                className="search-bar"
                                 label="Search by Username"
                                 variant="outlined"
-                                // fullWidth
                                 value={this.state.searchQuery}
                                 onChange={this.handleSearchInputChange}
                             />
-                        </div>
-                        
-                        <Button className="search-button" variant="contained" onClick={this.handleSearch}>
+                            <Button className="search-button" variant="contained" onClick={this.handleSearch}>
                             Search
                         </Button>
+                       
+
+                        
                     </div>
-                    
-                    <div className="row">
-                        <table className="table">
-                            <thead className="header">
-                                <tr>
-                                <th className="profile-pic text-center">Profile Picture</th>
-                                    <th className="text-center">Username</th>
-                                    <th className="text-center">Phone number</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell className="text-center">Profile Picture</TableCell>
+                                    <TableCell className="text-center">Username</TableCell>
+                                    <TableCell className="text-center">Phone number</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
                                 {this.state.admins.map((user) => (
-                                    <tr key={user.userId}>
-                                        <td className="profile-pic">
-                                            <img src={user.profilePicture} className="profile-image"/>
-                                        </td>
-                                        <td>{user.username}</td>
-                                        <td>{user.phoneNumber}</td>
-                                    </tr>
+                                    <TableRow key={user.userId}>
+                                        <TableCell className="profile-pic">
+                                            <img src={user.profilePicture} className="profile-image" alt="profile" />
+                                        </TableCell>
+                                        <TableCell>{user.username}</TableCell>
+                                        <TableCell>{user.phoneNumber}</TableCell>
+                                    </TableRow>
                                 ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </div>
+                {this.state.customAlert}
             </Fragment>
         );
     }

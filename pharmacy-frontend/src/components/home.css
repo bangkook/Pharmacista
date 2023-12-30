@@ -1,15 +1,21 @@
 .home {
     display: flex;
-    flex-direction: column;
-    align-items: center; /* Center content horizontally */
-    justify-content: flex-start; /* Align content to the top */
-}
-
-.homein {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVkaWNpbmVzfGVufDB8fDB8fHww'); /* Replace with the path to your background image */
+    background-size: cover;
+    backdrop-filter: blur(4px); /* Adjust the blur radius as needed */
+  }
+  
+  .homein {
     display: flex;
     width: 100%;
-    gap: 20px;
-}
+    height: 80%;
+    background-color: rgba(255, 255, 255, 0.9); /* Adjust the background color and opacity as needed */
+    border-radius: 10px;
+  }
+  
 
 .home .homein .left {
     width: 20%;
@@ -21,6 +27,68 @@
 
 .home .homein .right {
     width: 80%;
-    /* background-color: aqua; */
-    height: 100vh;
+    height: 100%;
+    margin-left: 5px;
+}
+.usersidebar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 20px;
+}
+
+.usersidebar .s1 svg {
+    width: 30px;
+    height: 30px;
+    color: gray;
+}
+
+.usersidebar .s2 svg {
+    width: 30px;
+    height: 30px;
+    color: rgb(255, 255, 255);
+}
+
+.usersidebar .s1:hover {
+    background-color: rgb(246, 246, 246);
+    border-radius: 5px;
+    cursor: pointer;
+    color: grey;
+}
+
+.usersidebar .s2 {
+    background-color: var(--col1);
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.img-wrap {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    right: 30px;
+}
+
+.name {
+    position: relative;
+    right: 60px;
+}
+
+.line {
+    width: 100%;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    border: 1px solid grey;
 }

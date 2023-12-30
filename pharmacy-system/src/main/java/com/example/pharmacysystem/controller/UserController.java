@@ -61,8 +61,8 @@ public class UserController {
 
     @PatchMapping("/upload-profile-picture/{id}")
     public ResponseEntity<String> uploadProfilePicture(@PathVariable("id") int userId,
-                                                       @RequestParam String profilePicture) {
-        boolean uploaded = userService.uploadProfilePicture(userId, profilePicture);
+                                                       @RequestBody Map<String, String> profilePicture) {
+        boolean uploaded = userService.uploadProfilePicture(userId, profilePicture.get(Constants.PICTURE));
         if (uploaded) {
             return new ResponseEntity<>("Profile picture uploaded successfully", HttpStatus.OK);
         } else {
@@ -82,13 +82,21 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getUserByName")
-    public User getUsersByName(@RequestParam String userName, @RequestParam String password) {
+    @PostMapping("/getUserByName")
+    public User getUsersByName(@RequestBody Map<String, String> request) {
+        String userName = request.get("userName");
+        String password = request.get("password");
+        System.out.println(userName);
+        System.out.println(password);
         return userService.getUser(userName, password);
     }
 
-    @GetMapping("/checkUser")
-    public ResponseEntity<String> checkUser(@RequestParam String userName, @RequestParam String password) {
+    @PostMapping("/checkUser")
+    public ResponseEntity<String> checkUser(@RequestBody Map<String, String> request) {
+        String userName = request.get("userName");
+        String password = request.get("password");
+        System.out.println(userName);
+        System.out.println(password);
         UserService.LoginStatus loginStatus = userService.checkUser(userName, password);
         return ResponseEntity.ok(loginStatus.name());
     }

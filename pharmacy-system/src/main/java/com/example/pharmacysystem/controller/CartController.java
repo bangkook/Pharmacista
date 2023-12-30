@@ -68,7 +68,7 @@ public class CartController {
                 productInfo.put(AMOUNT, product.getQuantity());
                 result.add(productInfo);
                 // Add more product information as needed
-            }else if (product == null){ //The product is deleted from the inventory
+            } else if (isDeleted(product)) { //The product is deleted from the inventory
                 cartItemService.deleteCartItemByproductSN(cartItem.getProductSN());
             }
 
@@ -76,6 +76,11 @@ public class CartController {
         System.out.println("result: "+ result);
         return result;
     }
+
+    private static boolean isDeleted(Product product) {
+        return product == null;
+    }
+
     @PutMapping("Update-Quantity")
     @ResponseBody
     public void updateQuantity(@RequestBody Map<String, Object> payload) {

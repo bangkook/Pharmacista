@@ -1,24 +1,91 @@
-import { Grid, Paper,Avatar, TextField, Button, Typography ,Link} from "@mui/material";
-import React, { useState }  from "react";
-import { useEffect } from 'react';
-import IconButton from '@mui/material/IconButton';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import AppBar from '@mui/material/AppBar';
+import React, { useState, useEffect} from "react";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, CardContent, Modal, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { wait } from "@testing-library/user-event/dist/utils";
+import CustomAlert from './Alert/CustomAlert';
+import ReviewForm from "./Reviews/reviewForm";
+import ListofReviews from "./Reviews/listOfReviews";
+import {Favorite} from '@mui/icons-material';
+
+
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha('#2e2d88', 0.15),
+  '&:hover': {
+    backgroundColor: alpha('#2e2d88', 0.25),
+  },
+  width: '100%',
+  marginTop: '20px',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#2e2d88', // Set the color of the search icon to white
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  width: '100%', // Make the search bar take the full width
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width')
+  },
+}));
+
+const StyledImage = styled('img')({
+  width: '100%',
+  height: '210px',
+  objectFit: 'cover',
+  transition: 'opacity 0.3s ease-in-out, filter 0.3s ease-in-out',
+  '&:hover': {
+    cursor: 'pointer',
+    opacity: 0.85,
+    filter: 'brightness(0.7)',
+  }
+});
+
 
 const ListOfMediciens=({userId})=>{
-  console.log(userId)
   const BaseUri = 'http://localhost:8088'
-  const [initialMedicines, setInitialMedicines] = useState([])
+  const [initialMedicines, setInitialMedicines] = useState([]);
+  const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [cart, setCart] = useState([])
   const [products, setProducts] = useState([])
+  const [favorites, setFavorites] = useState([])
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [customAlert, setCustomAlert] = useState(null);
+  
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  }
+  
+  const handleMedicineClick = (medicine) => {
+    setSelectedMedicine(medicine);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMedicine(null);
+  };
 
   const getListOfMediciens = async () => {
     try {
@@ -26,6 +93,7 @@ const ListOfMediciens=({userId})=>{
       if (response.ok) {
         const data = await response.json();
         setInitialMedicines(data);
+        setFilteredMedicines(data);
         try {
           const responseCart = await fetch(`${BaseUri}/cartItem/ProductFromCart/${userId}`);
           if (responseCart.ok) {
@@ -37,23 +105,42 @@ const ListOfMediciens=({userId})=>{
         } catch (error) {
           console.error('Error fetching products from cart:', error);
         }
+        try {
+          const responseFavorites = await fetch(`${BaseUri}/favorites/get/${userId}`);
+          if (responseFavorites.ok) {
+            const dataFavorites = await responseFavorites.json();
+            setFavorites(dataFavorites.map(x => x.productSN));
+          } else {
+            console.error('Failed to fetch medicines:', responseFavorites.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching products from cart:', error);
+        }
       } else {
         console.error('Failed to fetch medicines:', response.statusText);
       }
+      
     } catch (error) {
       console.error('Error fetching medicines:', error.message);
     }
+    
   };
   
   useEffect(() => {
     getListOfMediciens();
-  }, []);
+  }, [userId]);
   
-  // Use another useEffect to update cart when products change
   useEffect(() => {
     setCart([...cart, ...products]);
   }, [products]);
-  
+
+  const handleInputChange = (event) => {
+    console.log(event.target.value);
+    const filteredMedicines = initialMedicines.filter(
+      (medicine) => medicine.name.toLowerCase().includes(event.target.value.toLowerCase())
+    );
+    setFilteredMedicines(filteredMedicines); // Update the list on each input change
+  };
 
   const addItemToCart = async (serialNumber) => {
     try {
@@ -93,9 +180,7 @@ const ListOfMediciens=({userId})=>{
       console.error('Erorr deleting:', error.message)
     }
   };
-  
-
- 
+   
   const isAvailableProducts = async (serialNumber) => {
     try {
       const response = await fetch(`${BaseUri}/product/isAvailableProducts/${serialNumber}`)
@@ -108,11 +193,10 @@ const ListOfMediciens=({userId})=>{
         return false;
       }
     } catch (error) {
-      console.error('Error fetching medicines:', error.message)
+      console.error('Error fetching medicines:', error.message);
     }
   };
   
-
   const addToCart = async (medicine) => {
     const isAlreadyInCart = cart.some((item) => item === medicine)
     if (isAlreadyInCart) {
@@ -124,52 +208,184 @@ const ListOfMediciens=({userId})=>{
         setCart([...cart, medicine])
         addItemToCart(medicine)
       }else{
-        alert("out of stock")
+        console.log("HERERERER");
+        showAlert("out of stock");
         setInitialMedicines([])
         getListOfMediciens()
       }
     }
-  }
+  };
+
+  const addItemToList = async (serialNumber) => {
+    try {
+      const response = await fetch(`${BaseUri}/favorites/add`,{                
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({userId: userId, productSN: serialNumber})
+      })
+
+      if (response.ok) {
+        const data = await response.text()
+        console.log(data)
+        setFavorites([...favorites, serialNumber])
+      } else {
+        console.error('Failed to add item:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error adding item:', error.message)
+    }
+  };
+
+  const deleteItemFromList = async (serialNumber) => {
+    try {
+      console.log(JSON.stringify({userId: userId, productSN: serialNumber}))
+      const response = await fetch(`${BaseUri}/favorites/delete`,{
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({userId: userId, productSN: serialNumber})
+      })
+
+      if (response.ok) {
+        const data = await response.text()
+        console.log(data)
+        const updatedList = favorites.filter((item) => item !== serialNumber)
+        setFavorites(updatedList)
+      } else {
+        console.error('Item not found or deletion failed:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Erorr deleting:', error.message)
+    }
+  };
 
   return (
-  <div>
-      <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: '#2e2d88' }}>
-      <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Medicines
-          </Typography>
-          <IconButton size="medium" edge="start" color="inherit" aria-label="menu" sx={{ mr: 1 }}>
-          <ShoppingCartIcon />
-          </IconButton>
-          <IconButton size="medium" edge="start" color="inherit" aria-label="menu" sx={{ ml: 1, mr: 1 }}>
-          <AccountCircleIcon />
-          </IconButton>
-      </Toolbar>
-      </AppBar>
-  </Box>
-      <ImageList sx={{ width: '100%', height: '100%'}} cols={5}>
-      {initialMedicines.map((item) => (
+    <div>
+      <Search>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInputBase
+          placeholder="Search…"
+          inputProps={{ 'aria-label': 'search' }}
+          onInput={handleInputChange}
+        />
+      </Search>
+      <ImageList sx={{ width: '100%', height: '100%' }} cols={5}>
+        {filteredMedicines.map((item) => (
           <ImageListItem key={item.serialNumber}>
-          <img src={item.photo} alt={item.name} style={{ Width: '248px', Height: '230px'}} />
-          <ImageListItemBar title={item.name} subtitle={<span>Price: {item.price}</span>} position="below" />
-          <Button
+            <StyledImage
+              src={item.photo}
+              alt={item.name}
+              onClick={() => handleMedicineClick(item)}
+            />
+            <ImageListItemBar
+              title={item.name}
+              subtitle={<span>Price: {item.price}</span>}
+              position="below"
+              actionIcon={
+                <Favorite
+                  onClick={() =>
+                    favorites.some((favItem) => favItem === item.serialNumber)
+                      ? deleteItemFromList(item.serialNumber)
+                      : addItemToList(item.serialNumber)
+                  }
+                  sx={{
+                    color: favorites.some((favItem) => favItem === item.serialNumber) ? '#a6192e' : '#2e2d88',
+                    position: 'absolute',
+                    right: '10px',
+                    cursor: 'pointer',
+                  }}
+                />
+              }
+            />
+
+            <Button
               onClick={() => addToCart(item.serialNumber)}
               variant="contained"
               style={{
-              color: 'white',
-              backgroundColor: cart.some((cartItem) => cartItem === item.serialNumber)
-                  ? '#a6192e'
-                  : '#2e2d88',
+                color: 'white',
+                backgroundColor: cart.some((cartItem) => cartItem === item.serialNumber) ? '#a6192e' : '#2e2d88',
               }}
-          >
-              {cart.some((cartItem) => cartItem=== item.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
-          </Button>
+            >
+              {cart.some((cartItem) => cartItem === item.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
+            </Button>
           </ImageListItem>
-      ))}
+        ))}
       </ImageList>
-  </div>
+      <Modal
+        open={Boolean(selectedMedicine)}
+        onClose={handleCloseModal}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Box sx={{ width: '55%', height: '75%', bgcolor: 'background.paper', p: 2, overflow: 'auto' }}>
+          {selectedMedicine && (
+            <div>
+              <Box display="flex" style={{ height: 'auto' }}>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <img
+                    alt={selectedMedicine.name}
+                    src={selectedMedicine.photo}
+                    style={{ objectFit: 'cover', height: '250px', width: '250px', marginBottom: '12px' }}
+                  />
+                  <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                    <Button
+                      onClick={() => addToCart(selectedMedicine.serialNumber)}
+                      variant="contained"
+                      style={{
+                        flex: 1,
+                        color: 'white',
+                        backgroundColor: cart.some((cartItem) => cartItem === selectedMedicine.serialNumber) ? '#a6192e' : '#2e2d88',
+                      }}
+                    >
+                      {cart.some((cartItem) => cartItem === selectedMedicine.serialNumber) ? 'Remove from Cart' : 'Add to Cart'}
+                    </Button>
+                    <Favorite
+                      onClick={() => favorites.some((favItem) => favItem === selectedMedicine.serialNumber) ? deleteItemFromList(selectedMedicine.serialNumber) : addItemToList(selectedMedicine.serialNumber)}
+                      style={{
+                        color: favorites.some((favItem) => favItem === selectedMedicine.serialNumber) ? '#a6192e' : '#2e2d88',
+                      }}
+                    >
+                      {favorites.some((favItem) => favItem === selectedMedicine.serialNumber) ? 'Remove from Favorites' : 'Add to Favorites'}
+                    </Favorite>
+                  </div>
+                </Box>
+                <div>
+                <CardContent id="here" >
+                <Typography variant="h5" component="div" style={{ marginBottom: '12px' }}>
+                  {selectedMedicine.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Price: {selectedMedicine.price}
+                </Typography>
+                <Typography variant="body1" component="div" style={{ marginBottom: '12px' }}>
+                  {selectedMedicine.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Production date: {selectedMedicine.productionDate}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" style={{ marginBottom: '12px' }}>
+                  Expiry date: {selectedMedicine.expiryDate}
+                </Typography>
+              </CardContent>
+              </div>
+              
+              </Box>
+              <ListofReviews productSN={selectedMedicine.serialNumber} />
+              <ReviewForm productSN={selectedMedicine.serialNumber} userId={userId} />
+            </div>
+          )}
+        </Box>
+      </Modal>
+      {customAlert}
+    </div>
   );
-}
+   }
 
-export default ListOfMediciens
+
+export default ListOfMediciens;

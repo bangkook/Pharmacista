@@ -1,7 +1,5 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
@@ -10,6 +8,7 @@ import { Link} from 'react-router-dom';
 import GoogleSignUp from './googleSignUp';
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import CustomAlert from './Alert/CustomAlert';
 
 const BaseUri = 'http://localhost:8088/user';
 const defaultTheme = createTheme();
@@ -31,13 +30,18 @@ export default function Signup({ handleSuccessfulLogin }) {
   };
 
   const [username, setUN] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [customAlert, setCustomAlert] = useState(null);
+
+  const showAlert = (message) => {
+    return setCustomAlert(<CustomAlert message={message} onClose={() => setCustomAlert(null)} />);
+  };
+  
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -50,11 +54,10 @@ export default function Signup({ handleSuccessfulLogin }) {
 
     let user = {};
     if (passEqualsConfPass && validPhone && passCheck && validZip && validUsername) {
-      console.log(username, email, phone, password, retypePassword, streetAddress, city, country.label, zipCode);
+      console.log(username, phone, password, retypePassword, streetAddress, city, country.label, zipCode);
       const countryName = country.label;
       user = {
         username,
-        email,
         phone,
         password,
         streetAddress,
@@ -71,26 +74,26 @@ export default function Signup({ handleSuccessfulLogin }) {
       });
 
       if ((await response).ok) {
-        alert('Welcome to Pharmacista ' + user.username + '! Horray!!');
+        //alert('Welcome to Pharmacista ' + user.username + '! Horray!!');
         handleSuccessfulLogin(user.username);
       } else if ((await response).status === 422) {
-        alert("Username is already taken. Choose another one!");
+        showAlert("Username is already taken. Choose another one!");
       }
     } else if (!validUsername) {
-      alert("Username is at least 6 and at most 30 characters (letters or numbers) with _ only as special character. Spaces are not allowed. Start with an alphabet!");
+      showAlert("Username is at least 6 and at most 30 characters (letters or numbers) with _ only as special character. Spaces are not allowed. Start with an alphabet!");
     } else if (!passEqualsConfPass) {
       console.log("Password and Confirm Password are not the same");
       // Re-enter the password
-      alert("Password and Confirm Password are not the same");
+      showAlert("Password and Confirm Password are not the same");
       setRetypePassword("");
     } else if (!passCheck) {
-      alert("Password must be at least 8 characters and at most 16 characters");
+      showAlert("Password must be at least 8 characters and at most 16 characters");
       setPassword("");
       setRetypePassword("");
     } else if (!validPhone) {
-      alert("Phone number must be 11 digits!");
+      showAlert("Phone number must be 11 digits!");
     } else if (!validZip) {
-      alert("Zip code must be from 3 to 5 digits");
+      showAlert("Zip code must be from 3 to 5 digits");
     }
   };
 
@@ -126,16 +129,7 @@ export default function Signup({ handleSuccessfulLogin }) {
               Welcome to Pharmacista
             </Typography>
             <Box component="form" noValidate onSubmit={handleClick} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-
+              
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <TextField
@@ -219,13 +213,8 @@ export default function Signup({ handleSuccessfulLogin }) {
                   />
                 </Grid>
               </Grid>
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  {/* Place the "Sign Up" button and GoogleSignUp button beside each other */}
                   <Grid container spacing={2}>
                     <Grid item xs>
                       <Button
@@ -238,13 +227,12 @@ export default function Signup({ handleSuccessfulLogin }) {
                       </Button>
                     </Grid>
                     <Grid item xs >
-                    <Box mt={3}> {/* Adjust the margin or spacing here */}
+                    <Box mt={3}>
                         <GoogleSignUp handleSuccessfulLogin={handleSuccessfulLogin} />
                       </Box>
                     </Grid>
                   </Grid>
                 </Grid>
-                {/* Adjust the Grid item properties as needed */}
                 <Grid item xs>
                   <Typography> Already have an account?
                         <Link  href="#" variant="body2" to='/LoginBasic'>
@@ -257,6 +245,7 @@ export default function Signup({ handleSuccessfulLogin }) {
           </Box>
         </Grid>
       </Grid>
+      {customAlert}
     </ThemeProvider>
   );
 }
