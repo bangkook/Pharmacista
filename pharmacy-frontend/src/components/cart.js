@@ -252,13 +252,12 @@ export default function ShoppingCart({userId = 1}) {
   
 
   return (
-    <Container style={{ marginTop: '20px' }}>
-      <Paper elevation={3} style={{ padding: '20px', borderRadius: '8px' }}>
-        <Typography variant="h4" style={{ color: '#4CAF50', marginBottom: '20px' }}>
+    <Container style={{ marginTop: '20px', width: '1100px' }}>
+      <Paper elevation={3} style={{ padding: '20px', borderRadius: '8px', background: '#f9f9f9' }}>
+        <Typography variant="h4" style={{ color: '#4CAF50', marginBottom: '20px', textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
           Your Shopping Cart
         </Typography>
-
-        <div style={{ overflowY: 'scroll', maxHeight: '400px', marginBottom: '20px' }}>
+        <div style={{ overflowY: 'scroll', maxHeight: '450px', marginBottom: '20px' }}>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {cart.map((item) => (
               <li
@@ -269,19 +268,25 @@ export default function ShoppingCart({userId = 1}) {
                   paddingBottom: '10px',
                   display: 'flex',
                   alignItems: 'center',
+                  background: 'white',
+                  padding: '10px',
+                  borderRadius: '8px',
+                  fontFamily: 'Arial, sans-serif',
                 }}
               >
                 <div>
                   <img
                     src={item.photo}
                     alt={item.productName}
-                    style={{ maxWidth: '150px', maxHeight: '150px', marginRight: '20px', borderRadius: '8px' }}
+                    style={{ maxWidth: '180px', maxHeight: '150px', marginRight: '20px', borderRadius: '8px' }}
                   />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <Typography variant="h6">Name: {item.productName}</Typography>
-                  <Typography variant="body1">Price: ${item.price}</Typography>
-                  <label>
+                  <Typography variant="h6" style={{ marginBottom: '8px', fontFamily: 'Georgia, serif' }}>
+                    {item.productName}
+                  </Typography>
+                  <Typography variant="body1" style={{ fontFamily: 'Verdana, sans-serif' }}> Price: ${item.price}</Typography>
+                  <label style={{ display: 'block', marginTop: '10px' }}>
                     Quantity:
                     <input
                       type="number"
@@ -289,7 +294,13 @@ export default function ShoppingCart({userId = 1}) {
                       max={item.maxAmount}
                       value={item.quantity}
                       onChange={(e) => handleQuantityChange(item.productSN, parseInt(e.target.value, 10))}
-                      style={{ marginLeft: '10px', padding: '5px', borderRadius: '5px' }}
+                      style={{
+                        marginLeft: '10px',
+                        padding: '5px',
+                        borderRadius: '5px',
+                        width: '50px',
+                        textAlign: 'center',
+                      }}
                     />
                   </label>
                 </div>
@@ -299,17 +310,19 @@ export default function ShoppingCart({userId = 1}) {
                     marginLeft: '10px',
                     backgroundColor: '#f44336',
                     color: 'white',
-                    padding: '5px',
+                    padding: '8px',
                     borderRadius: '5px',
+                    cursor: 'pointer',
+                    fontFamily: 'Arial, sans-serif',
                   }}
                 >
-                  X
+                  Remove
                 </Button>
               </li>
             ))}
           </ul>
         </div>
-        <Typography variant="h6" style={{ marginTop: '10px' }}>
+        <Typography variant="h6" style={{ marginTop: '10px', textAlign: 'right', fontFamily: 'Arial, sans-serif' }}>
           Total Price: ${calculateTotalPrice().toFixed(2)}
         </Typography>
         <Button
@@ -318,10 +331,12 @@ export default function ShoppingCart({userId = 1}) {
           style={{
             backgroundColor: isCartEmpty ? '#9e9e9e' : '#4CAF50',
             color: 'white',
-            padding: '10px',
+            padding: '15px',
             borderRadius: '8px',
             cursor: isCartEmpty ? 'not-allowed' : 'pointer',
             marginTop: '20px',
+            width: '100%',
+            fontFamily: 'Arial, sans-serif',
           }}
           disabled={isCartEmpty}
         >

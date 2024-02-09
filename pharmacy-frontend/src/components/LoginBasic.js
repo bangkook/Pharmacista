@@ -138,7 +138,7 @@ return (
               <Grid container>
                 <Grid item xs>
                   <Typography> Don't have an account?  
-                      <Link to="/signup">Sign up</Link>
+                      <Link to="/signup" style={{ marginLeft: '5px' }}>Sign up</Link>
                   </Typography>
                 </Grid>
               </Grid>

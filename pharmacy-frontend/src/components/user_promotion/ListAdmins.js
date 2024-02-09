@@ -92,7 +92,7 @@ class ListAdmins extends Component {
                         
                     </div>
 
-                    <TableContainer component={Paper}>
+                    <div className="fixed-header">
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -101,6 +101,10 @@ class ListAdmins extends Component {
                                     <TableCell className="text-center">Phone number</TableCell>
                                 </TableRow>
                             </TableHead>
+                        </Table>
+                    </div>
+                    <TableContainer component={Paper} className="scrollable-paper">
+                        <Table>
                             <TableBody>
                                 {this.state.admins.map((user) => (
                                     <TableRow key={user.userId}>

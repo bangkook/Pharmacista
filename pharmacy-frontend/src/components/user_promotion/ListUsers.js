@@ -135,23 +135,19 @@ class ListUsers extends Component {
                     <h2 className="text-center">Users List</h2>
 
                     <div className="search-container">
-                        
-                            <TextField
-                                className="search-bar"
-                                label="Search by Username"
-                                variant="outlined"
-                                value={this.state.searchQuery}
-                                onChange={this.handleSearchInputChange}
-                            />
-                            <Button className="search-button" variant="contained" onClick={this.handleSearch}>
-                               Search
-                            </Button>
-                        
-
-                        
+                        <TextField
+                            className="search-bar"
+                            label="Search by Username"
+                            variant="outlined"
+                            value={this.state.searchQuery}
+                            onChange={this.handleSearchInputChange}
+                        />
+                        <Button className="search-button" variant="contained" onClick={this.handleSearch}>
+                            Search
+                        </Button>
                     </div>
 
-                    <TableContainer component={Paper}>
+                    <div className="fixed-header">
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -161,6 +157,11 @@ class ListUsers extends Component {
                                     <TableCell className="text-center">Actions</TableCell>
                                 </TableRow>
                             </TableHead>
+                        </Table>
+                    </div>
+
+                    <TableContainer component={Paper} className="scrollable-paper">
+                        <Table>
                             <TableBody>
                                 {this.state.users.map((user) => (
                                     <TableRow key={user.userId}>
@@ -190,14 +191,15 @@ class ListUsers extends Component {
 
                 {/* Confirmation Modal */}
                 <ConfirmAlert
-      message="Are you sure you want to promote this user to admin?"
-      onConfirm={this.handleConfirmation.bind(this, true)}
-      onCancel={this.handleConfirmationClose}
-      open={isConfirmationOpen}
-    />
+                    message="Are you sure you want to promote this user to admin?"
+                    onConfirm={this.handleConfirmation.bind(this, true)}
+                    onCancel={this.handleConfirmationClose}
+                    open={isConfirmationOpen}
+                />
             </Fragment>
         );
     }
 }
+
 
 export default ListUsers;

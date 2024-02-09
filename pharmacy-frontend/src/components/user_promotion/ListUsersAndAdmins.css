@@ -1,15 +1,29 @@
 .user-list-container, .admin-list-container {
     margin: 20px;
-
     /* display: flex; */
     justify-content: space-between;
+    overflow-y: auto;
+}
+
+.user-list-container .MuiPaper-root {
+    overflow: auto; /* Make sure that the Paper component inside TableContainer is also scrollable */
+  }
+
+  .scrollable-paper {
+    overflow: auto;
+    max-height: 400px; /* Set a maximum height or adjust according to your design */
+}
+
+.scrollable-table-body {
+    overflow-y: auto;
+    max-height: 350px; /* Adjust according to your design, ensuring it's less than the max-height of the Paper */
 }
 
 .table {
     width: 100%;
     /* border-collapse: collapse;  */
     margin-top: 20px;
-    border: 10px #9c390e; 
+    border: 10px #030100; 
     border-radius: 10px; 
     overflow: hidden;
 
@@ -18,9 +32,15 @@
 .text-center{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     /* font-style: italic; */
-    color: rgb(179, 3, 44);
+    color: rgb(1, 1, 1);
+    font-size: 30px;
+    font-weight: bold;
 }
-  
+.fixed-header .text-center{
+    font-size: 15px;
+    color: #000000;
+}
+
 .table th, .table td {
     border: 2px solid #8B4513;
     padding: 8px;
@@ -34,10 +54,11 @@
 }
 
 .search-container {
-    align-items: center;
-    margin: 20px;
-    justify-content: flex-end;
     display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  margin-left: 770px;
 
 }
 
@@ -47,11 +68,16 @@
     width: 300px; 
     margin: 10px;
 
+
 }
 
 .search-button {
     /* margin-left: auto; */
     float: right;
+    height: 54px; 
+    width: 100px; 
+
+
 }
 
 .profile-image {

@@ -198,6 +198,13 @@ const AccountSettings = ({userId}) => {
             options={options} 
             value={country} 
             onChange={handleCountryChange}
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                width: '445px',
+                padding: '0px', // Adjust the padding as needed
+              }),
+            }}
           />
           <span className='error'>{formErrors.country}</span>
         </div>
@@ -444,17 +451,20 @@ const ProfilePictureUploader = ({ userId }) => {
 
 const UserProfile = ({ userId = 1 }) => {
   return (
-    <div className='userprofile'>
-      <div className='userprofilein'>
-
-          <AccountSettings userId={userId} />
-          <ProfilePictureUploader userId={userId} />
-          <ChangePassword userId={userId} />
+    
+    <div className="profile-container">
+      <div className="left-column">
+        <AccountSettings userId={userId} />
       </div>
-      
+      <div className="right-column">
+        <ProfilePictureUploader userId={userId} />
+        <ChangePassword userId={userId} />
+      </div>
     </div>
   );
 };
+
+
 
 
 export default UserProfile

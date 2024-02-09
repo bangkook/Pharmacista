@@ -198,7 +198,17 @@ export default function Signup({ handleSuccessfulLogin }) {
                     options={options}
                     country={country}
                     onChange={countryHandler}
-                    styles={selectStyle}
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        left: '5px',
+                        top: '5px',
+                        width: '280px', // Set the width to 100% or adjust it to your desired width
+                        height: '56px'
+                      }),
+                      // Add other custom styles if needed
+                    }}
+                    
                     placeholder="Select your country"
                   />
                 </Grid>
@@ -221,21 +231,22 @@ export default function Signup({ handleSuccessfulLogin }) {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                        sx={{ mt: 3, mb: 2, width: '280px', left: '5px'}}
+                        
                       >
                         Sign Up
                       </Button>
                     </Grid>
-                    <Grid item xs >
-                    <Box mt={3}>
+                    
+                    <Box mt={3} >
                         <GoogleSignUp handleSuccessfulLogin={handleSuccessfulLogin} />
                       </Box>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item xs>
+                
+                <Grid item xs sx={{ marginLeft: '10px' }}>
                   <Typography> Already have an account?
-                        <Link  href="#" variant="body2" to='/LoginBasic'>
+                        <Link  href="#" variant="body2" to='/LoginBasic' style={{ marginLeft: '5px' }}>
                         Log in
                         </Link>
                     </Typography>

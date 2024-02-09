@@ -39,8 +39,8 @@ export default function GoogleSignIn({handleSuccessfulLogin}) {
   });
 
   return (
-    <div className="center-container">
-      <button type="button" className="google-sign-in-button" onClick={login}>
+    <div className="center-container2">
+      <button type="button" className="google-sign-in-button2" onClick={login}>
         Sign in with Google
       </button>
     </div>

@@ -13,7 +13,7 @@ const FavoritesList = ({ userId }) => {
 
   useEffect(() => {
     // Fetch user favorites list when the component mounts
-    fetch(`${BaseUri}/favorites/get/${userId}`)
+    fetch(`${BaseUri}/favorites/get-sorted/${userId}`)
       .then(response => response.json())
       .then(data => setFavorites(data))
       .catch(error => console.error("Error fetching user favorites list:", error));
@@ -104,11 +104,9 @@ const FavoritesList = ({ userId }) => {
   };
 
   return (
-    <div>
-      <div> <button className='mainbutton1' onClick={fetchSortedList} >Sort</button> </div>
+    // <button className='mainbutton1' onClick={fetchSortedList} >Sort</button>
       <div className='yourorders'>
-        <table className='yourorderstable'>
-          <thead>
+        <thead className="yourorderstable2">
             <tr>
               <th scope='col'>Product</th>
               <th scope='col'>Serial Number</th>
@@ -117,7 +115,8 @@ const FavoritesList = ({ userId }) => {
               <th scope='col'>Action</th>
             </tr>
           </thead>
-
+      <div className="scrollable-container">
+        <table className='yourorderstable'>
           <tbody>
             {favorites.map(item => (
               <tr key={item.productSN}>
@@ -133,14 +132,14 @@ const FavoritesList = ({ userId }) => {
               </tr>
             ))}
           </tbody>
+          <ConfirmAlert
+            message="Are you sure you want to remove this item from the list?"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            open={isConfirmOpen}
+          />
         </table>
       </div>
-      <ConfirmAlert
-        message="Are you sure you want to remove this item from the list?"
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
-        open={isConfirmOpen}
-      />
     </div>
   );
 };

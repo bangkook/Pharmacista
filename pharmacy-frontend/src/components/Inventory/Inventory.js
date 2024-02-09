@@ -167,8 +167,8 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
   return (
     <div className="medicine-inventory-container">
       <h1>Medicine Inventory</h1>
-
-      <table className="medicine-table">
+      <div className="medicine-table-container">
+        <table className="medicine-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -199,16 +199,18 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
               </td>
               <td>
                 <button className="edit-btn" onClick={() => editMedicine(medicine)}>
-                  Edit
+                  <i className="fas fa-edit"></i>
                 </button>
                 <button className="delete-btn" onClick={() => deleteMedicine(medicine.serialNumber)}>
-                  Delete
+                  <i className="fas fa-trash-alt"></i>
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+        </div>
+      
 
       <div className="add-update-form">
         <button className="add-btn" type="button" onClick={openModal}>
@@ -222,7 +224,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
             <h2>{editingId ? 'Update Medicine' : 'Add Medicine'}</h2>
             <form>
               <label>
-                Medicine Name:
+                Medicine Name *
                 <input
                   type="text"
                   name="name"
@@ -232,7 +234,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
               </label>
 
               <label>
-                Quantity:
+                Quantity *
                 <input
                   type="number"
                   name="quantity"
@@ -242,7 +244,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
               </label>
 
               <label>
-                Serial Number:
+                Serial Number *
                 <input
                   type="text"
                   name="serialNumber"
@@ -253,7 +255,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
               </label>
 
               <label>
-                Price:
+                Price *
                 <input
                   type="number"
                   name="price"
@@ -263,7 +265,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
               </label>
 
               <label>
-                Production Date:
+                Production Date *
                 <input
                   type="date"
                   name="productionDate"
@@ -273,7 +275,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
               </label>
 
               <label>
-                Expiry Date:
+                Expiry Date *
                 <input
                   type="date"
                   name="expiryDate"
@@ -283,7 +285,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
               </label>
 
               <label>
-            Description<span className="optional-text">(optional)</span>:
+            Description<span className="optional-text"></span>:
             <textarea
                 name="description"
                 value={formData.description}
@@ -294,7 +296,7 @@ const [isConfirmOpen, setConfirmOpen] = useState(false);
 
 
               <label>
-                Photo:
+                Photo *
                 <input
                   type="file"
                   name="photo"
